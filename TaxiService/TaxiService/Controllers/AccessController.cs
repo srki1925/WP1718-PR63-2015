@@ -37,12 +37,15 @@ namespace TaxiService.Controllers
         }
         [HttpPost]
         [Route("api/access/logout")]
-        public void Logout([FromBody] string userHash)
+        public IHttpActionResult Logout([FromBody]ApiRequest data)
         {
-            if (Repository.Instance.LoggedInUsers.ContainsKey(userHash))
+            if (data.UserHash == null)
+                return NotFound();
+            if (Repository.Instance.LoggedInUsers.ContainsKey(data.UserHash))
             {
-                Repository.Instance.LoggedInUsers.Remove(userHash);
+                Repository.Instance.LoggedInUsers.Remove(data.UserHash);
             }
+            return Ok();
         }
     }
 }

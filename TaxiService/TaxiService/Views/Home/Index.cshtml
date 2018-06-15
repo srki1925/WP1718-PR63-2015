@@ -10,6 +10,7 @@
 </div>
 
 <script>
+    var userHash;
     function execute() {
         $.post("/api/access/login",
             {
@@ -18,6 +19,7 @@
             }
         ).done((data) => {
             console.log(data);
+            userHash = data;
         })
         .catch(() => {
                 console.log("Error with request");
@@ -36,8 +38,7 @@
     }
 
     function logout() {
-        $.post("api/access/logout", {
-            userHash : 'hash123'
-        });
+
+        $.post('api/access/logout', { userhash: userHash }).catch(() => { console.log('error');})
     }
 </script>

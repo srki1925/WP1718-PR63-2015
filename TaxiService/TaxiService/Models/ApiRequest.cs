@@ -11,4 +11,9 @@ namespace TaxiService.Models
         public string UserHash { get; set; }
         public T Data { get; set; }
     }
+
+    public class ApiRequest
+    {
+        public string UserHash { get; set; }
+    }
 }
