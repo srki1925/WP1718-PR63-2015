@@ -16,6 +16,8 @@ namespace TaxiService.Controllers
         {
             if (Repository.Instance.UserExists(newUser.Username))
                 return Conflict();
+            if (newUser.Role == UserRole.Dispatcher)
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Forbidden));
 
             Repository.Instance.TaxiServiceRepository.Users.Add(newUser);
             Repository.Instance.TaxiServiceRepository.SaveChanges();

@@ -8,7 +8,6 @@
     <button id="execute" onclick="register()">Register</button>
     <button id="execute" onclick="logout()">Logout</button>
 </div>
-
 <script>
     var userHash;
     function execute() {
@@ -21,24 +20,20 @@
             console.log(data);
             userHash = data;
         })
-        .catch(() => {
+            .catch(() => {
                 console.log("Error with request");
-        })
+            })
     }
 
     function register() {
         $.post("api/registration",
             {
-            username: 'john',
-            password: 'cena'
+                username: 'john',
+                password: 'cena'
             }
         ).catch(() => {
             console.log('failed');
         })
     }
 
-    function logout() {
-
-        $.post('api/access/logout', { userhash: userHash }).catch(() => { console.log('error');})
-    }
 </script>

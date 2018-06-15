@@ -22,8 +22,8 @@ namespace TaxiService.Controllers
             var foundUser = Repository.Instance.TaxiServiceRepository.Users.FirstOrDefault(x => x.Username.Equals(username) && x.Password.Equals(password));
             if (foundUser == null)
                 return Unauthorized();
-            if (foundUser.Blocked)
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            /*if (foundUser.Blocked)
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Forbidden));*/
 
             var str = string.Concat(username, password);
             var shastr = AuthorizationService.ComputeSha512(str);

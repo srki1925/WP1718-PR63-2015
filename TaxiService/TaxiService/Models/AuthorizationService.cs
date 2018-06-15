@@ -30,11 +30,6 @@ namespace TaxiService.Models
                 return false;
             user.Blocked = true;
             Repository.Instance.TaxiServiceRepository.SaveChanges();
-            var userSha = ComputeSha512(user.Username + user.Password);
-            if (Repository.Instance.LoggedInUsers.ContainsKey(userSha))
-            {
-                Repository.Instance.LoggedInUsers.Remove(userSha);
-            }
             return true;
         }
 
