@@ -26,10 +26,17 @@
     }
 
     function register() {
-        $.post("api/registration",
+        $.ajax(
             {
-                username: 'john',
-                password: 'cena'
+                method:'PUT',
+                url:"api/rides",
+                data:
+                    {
+                        userhash: 'fuisadhfiusah',
+                        data: {
+                            cartype: 'Van',
+                        }
+                    }
             }
         ).catch(() => {
             console.log('failed');

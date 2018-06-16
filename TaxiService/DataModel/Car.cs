@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataModel
 {
-    public enum CarType { Sedan, Van}
+    public enum CarType { Sedan, Van, Undefined}
     public class Car
     {
         [Key]
