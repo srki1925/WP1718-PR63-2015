@@ -211,6 +211,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AngularApp\TaxiServiceSPA\dist\TaxiServiceSPA\main.js" />
+    <Content Include="AngularApp\TaxiServiceSPA\dist\TaxiServiceSPA\polyfills.js" />
+    <Content Include="AngularApp\TaxiServiceSPA\dist\TaxiServiceSPA\runtime.js" />
+    <Content Include="AngularApp\TaxiServiceSPA\dist\TaxiServiceSPA\styles.js" />
+    <Content Include="AngularApp\TaxiServiceSPA\dist\TaxiServiceSPA\vendor.js" />
     <Content Include="App_Data\TaxiServiceDB.mdf" />
     <Content Include="App_Data\TaxiServiceDB_log.ldf">
       <DependentUpon>TaxiServiceDB.mdf</DependentUpon>
