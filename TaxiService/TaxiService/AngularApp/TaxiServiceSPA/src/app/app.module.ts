@@ -11,6 +11,8 @@ import { HomeComponent } from './components/home/home.component';
 import { CookieService } from './services/cookie.service';
 import { HeaderComponent } from './components/header/header.component';
 import { DropdownDirective } from './directives/dropdown.directive';
+import { UsersComponent } from './components/users/users.component';
+import { RegistrationComponent } from './components/users/registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { DropdownDirective } from './directives/dropdown.directive';
     LoginComponent,
     HomeComponent,
     HeaderComponent,
-    DropdownDirective
+    DropdownDirective,
+    UsersComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,45 @@
+<div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+        <form [formGroup]="registrationForm" (submit)="onRegistration()">
+          <div class="form-group">
+            <label for="username">Username*</label>
+            <input type="text" id="username" formControlName="username" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="password">Password*</label>
+            <input type="password" id="password" formControlName="password" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="email">Email*</label>
+            <input type="email" id="email" formControlName="email" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" formControlName="name" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="lastname">Lastname</label>
+            <input type="text" id="lastname" formControlName="lastname" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="jmbg">JMBG</label>
+            <input type="text" id="jmbg" formControlName="jmbg" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" formControlName="phone" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="usertype">UserType</label>
+            <select id="type" formControlName="type" class="form-control">
+              <option value="1">Customer</option>
+              <option value="2">Driver</option>
+            </select>
+          </div>
+          <span *ngIf="failed" class="help-block">Invalid username or password!</span>
+          <button [disabled]="!registrationForm.valid" type="submit" class="btn btn-default">Login</button>
+        </form>
+      </div>
+    </div>
+  </div>

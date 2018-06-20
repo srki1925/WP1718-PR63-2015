@@ -6,28 +6,37 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" style="cursor:pointer">Taxi Service</a>
+            <a routerLink="/home" class="navbar-brand" style="cursor:pointer">Taxi Service</a>
         </div>
         <div class="navbar-collapse collapse" #responsiveNavbar collapse="navCollapsed" >
             <ul class="nav navbar-nav">
+                <li routerLinkActive="active" *ngIf="!userType || userType === 0">
+                    <a routerLink="/login" style="cursor: pointer;">Login</a>
+                </li>
+                <li routerLinkActive="active" class="dropdown" appDropdown *ngIf="userType || userType === 0">
+                    <a class="dropdown-toggle" role="button" style="cursor: pointer;" >Registration<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a routerLink="/registration" [queryParams]="{type: 'customer'}" style="cursor: pointer;">New Customer</a></li>
+                        <li><a routerLink="/registration" [queryParams]="{type: 'driver'}" style="cursor: pointer;">New Driver</a></li>
+                    </ul>
+                </li>
                 <li class="dropdown" appDropdown *ngIf="userType && userType !== 0">
                     <a class="dropdown-toggle" role="button" style="cursor: pointer;" >Rides<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a style="cursor: pointer;">Crate New</a></li>
+                        <li><a style="cursor: pointer;">Add New</a></li>
                         <li><a style="cursor: pointer;">All Rides</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" appDropdown *ngIf="userType === 3">
                     <a class="dropdown-toggle" role="button" style="cursor: pointer;" >Users<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a style="cursor: pointer;">Crate New</a></li>
                         <li><a style="cursor: pointer;">All Users</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" appDropdown *ngIf="userType === 3">
                         <a class="dropdown-toggle" role="button" style="cursor: pointer;" >Cars<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a style="cursor: pointer;">Crate New</a></li>
+                            <li><a style="cursor: pointer;">Add New</a></li>
                             <li><a style="cursor: pointer;">All Cars</a></li>
                         </ul>
                     </li>
