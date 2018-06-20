@@ -3,16 +3,21 @@
       <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
         <form [formGroup]="registrationForm" (submit)="onRegistration()">
           <div class="form-group">
-            <label for="username">Username*</label>
+            <label for="username">Username *</label>
             <input type="text" id="username" formControlName="username" class="form-control">
+            <span class="help-block" *ngIf="registrationForm.get('username').touched && registrationForm.get('username').invalid">This fields is required</span>
+            <span></span>
           </div>
           <div class="form-group">
-            <label for="password">Password*</label>
+            <label for="password">Password *</label>
             <input type="password" id="password" formControlName="password" class="form-control">
+            <span class="help-block" *ngIf="registrationForm.get('password').touched && registrationForm.get('password').invalid">This fields is required</span>
           </div>
           <div class="form-group">
-            <label for="email">Email*</label>
+            <label for="email">Email *</label>
             <input type="email" id="email" formControlName="email" class="form-control">
+            <span class="help-block" *ngIf="registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['required']">This fields is required</span>
+            <span class="help-block" *ngIf="registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['email']">Invalid email format</span>
           </div>
           <div class="form-group">
             <label for="name">Name</label>
@@ -27,16 +32,18 @@
             <input type="text" id="jmbg" formControlName="jmbg" class="form-control">
           </div>
           <div class="form-group">
-            <label for="phone">Phone</label>
+            <label for="phone">Phone *</label>
             <input type="text" id="phone" formControlName="phone" class="form-control">
+            <span class="help-block" *ngIf="registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['required']">This fields is required.</span>
+            <span class="help-block" *ngIf="registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['pattern']">Phone can contain only numbers.</span>
           </div>
-          <div class="form-group">
-            <label for="usertype">UserType</label>
-            <select id="type" formControlName="type" class="form-control">
-              <option value="1">Customer</option>
-              <option value="2">Driver</option>
+          <div class="form-group" *ngIf="isDriver">
+            <label for="carNumber">Car Number</label>
+            <select type="text" id="carNumber" formControlName="carNumber" class="form-control">
+              <option *ngFor="let car of freeCars" [value]="car.carNumber">{{car.carNumber}}</option>
             </select>
           </div>
+          <span class="help-block">Fields marked with * are required.</span>
           <span *ngIf="failed" class="help-block">Invalid username or password!</span>
           <button [disabled]="!registrationForm.valid" type="submit" class="btn btn-default">Login</button>
         </form>

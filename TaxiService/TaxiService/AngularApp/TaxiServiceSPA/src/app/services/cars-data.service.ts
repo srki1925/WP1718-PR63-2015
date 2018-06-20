@@ -6,17 +6,16 @@ import { ICar, CarType } from './interfaces';
 })
 export class CarsDataService implements OnInit {
 
-  private cars:ICar[];
+  private cars:ICar[] = [
+    {carNumber:10, carType:CarType.sedan, registration:'ns-111-aa',  driverId:null, year:2010},
+    {carNumber:11, carType:CarType.van, registration:'ns-112-aa',  driverId:1, year:2011},
+    {carNumber:12, carType:CarType.sedan, registration:'ns-113-aa',  driverId:null, year:2012},
+    {carNumber:13, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
+  ];
 
   constructor() { }
 
   ngOnInit(){
-    this.cars = [
-      {carNumber:10, carType:CarType.sedan, registration:'ns-111-aa',  driverId:-1, year:2010},
-      {carNumber:11, carType:CarType.van, registration:'ns-112-aa',  driverId:-1, year:2011},
-      {carNumber:12, carType:CarType.sedan, registration:'ns-113-aa',  driverId:-1, year:2012},
-      {carNumber:13, carType:CarType.van, registration:'ns-114-aa',  driverId:-1, year:2013},
-    ];
   }
 
   addNewCar(newCar:ICar){
@@ -41,5 +40,15 @@ export class CarsDataService implements OnInit {
 
   getAllCars(){
     return this.cars.slice();
+  }
+
+  getFreeCars(){
+    let retCars : ICar[] = [];
+    this.cars.forEach((car:ICar) =>{
+      if(!car.driverId){
+        retCars.push(car);
+      }
+    });
+    return retCars;
   }
 }
