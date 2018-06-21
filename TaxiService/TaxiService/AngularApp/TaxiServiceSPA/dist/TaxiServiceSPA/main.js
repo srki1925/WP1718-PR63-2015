@@ -40,6 +40,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _route_guards_auth_guard__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../route-guards/auth.guard */ "./src/app/route-guards/auth.guard.ts");
 /* harmony import */ var _components_users_users_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/users/users.component */ "./src/app/components/users/users.component.ts");
 /* harmony import */ var _route_guards_login_guard__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../route-guards/login.guard */ "./src/app/route-guards/login.guard.ts");
+/* harmony import */ var _components_users_registration_registration_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../components/users/registration/registration.component */ "./src/app/components/users/registration/registration.component.ts");
+/* harmony import */ var _route_guards_registration_guard__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../route-guards/registration.guard */ "./src/app/route-guards/registration.guard.ts");
+/* harmony import */ var _components_errors_no_cars_error_no_cars_error_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../components/errors/no-cars-error/no-cars-error.component */ "./src/app/components/errors/no-cars-error/no-cars-error.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -53,9 +56,14 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
+
+
+
 var appRoutes = [
     { path: 'login', component: _components_login_login_component__WEBPACK_IMPORTED_MODULE_2__["LoginComponent"], canActivate: [_route_guards_login_guard__WEBPACK_IMPORTED_MODULE_6__["LoginGuard"]] },
-    { path: 'home', component: _components_home_home_component__WEBPACK_IMPORTED_MODULE_3__["HomeComponent"], canActivate: [_route_guards_auth_guard__WEBPACK_IMPORTED_MODULE_4__["AuthGuard"]], canActivateChild: [_route_guards_auth_guard__WEBPACK_IMPORTED_MODULE_4__["AuthGuard"]], children: [
+    { path: 'registration', component: _components_users_registration_registration_component__WEBPACK_IMPORTED_MODULE_7__["RegistrationComponent"], canActivate: [_route_guards_login_guard__WEBPACK_IMPORTED_MODULE_6__["LoginGuard"], _route_guards_registration_guard__WEBPACK_IMPORTED_MODULE_8__["RegistrationGuard"]] },
+    { path: 'driver-registration-error', component: _components_errors_no_cars_error_no_cars_error_component__WEBPACK_IMPORTED_MODULE_9__["NoCarsErrorComponent"] },
+    { path: 'home', component: _components_home_home_component__WEBPACK_IMPORTED_MODULE_3__["HomeComponent"], canActivate: [_route_guards_auth_guard__WEBPACK_IMPORTED_MODULE_4__["AuthGuard"]], children: [
             { path: 'users', component: _components_users_users_component__WEBPACK_IMPORTED_MODULE_5__["UsersComponent"] }
         ] },
     { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -163,12 +171,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _directives_dropdown_directive__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./directives/dropdown.directive */ "./src/app/directives/dropdown.directive.ts");
 /* harmony import */ var _components_users_users_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/users/users.component */ "./src/app/components/users/users.component.ts");
 /* harmony import */ var _components_users_registration_registration_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/users/registration/registration.component */ "./src/app/components/users/registration/registration.component.ts");
+/* harmony import */ var _components_errors_no_cars_error_no_cars_error_component__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/errors/no-cars-error/no-cars-error.component */ "./src/app/components/errors/no-cars-error/no-cars-error.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -195,7 +205,8 @@ var AppModule = /** @class */ (function () {
                 _components_header_header_component__WEBPACK_IMPORTED_MODULE_10__["HeaderComponent"],
                 _directives_dropdown_directive__WEBPACK_IMPORTED_MODULE_11__["DropdownDirective"],
                 _components_users_users_component__WEBPACK_IMPORTED_MODULE_12__["UsersComponent"],
-                _components_users_registration_registration_component__WEBPACK_IMPORTED_MODULE_13__["RegistrationComponent"]
+                _components_users_registration_registration_component__WEBPACK_IMPORTED_MODULE_13__["RegistrationComponent"],
+                _components_errors_no_cars_error_no_cars_error_component__WEBPACK_IMPORTED_MODULE_14__["NoCarsErrorComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -214,6 +225,69 @@ var AppModule = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/components/errors/no-cars-error/no-cars-error.component.css":
+/*!*****************************************************************************!*\
+  !*** ./src/app/components/errors/no-cars-error/no-cars-error.component.css ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/components/errors/no-cars-error/no-cars-error.component.html":
+/*!******************************************************************************!*\
+  !*** ./src/app/components/errors/no-cars-error/no-cars-error.component.html ***!
+  \******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<h1>We are currently not accepting new drivers!</h1>"
+
+/***/ }),
+
+/***/ "./src/app/components/errors/no-cars-error/no-cars-error.component.ts":
+/*!****************************************************************************!*\
+  !*** ./src/app/components/errors/no-cars-error/no-cars-error.component.ts ***!
+  \****************************************************************************/
+/*! exports provided: NoCarsErrorComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NoCarsErrorComponent", function() { return NoCarsErrorComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var NoCarsErrorComponent = /** @class */ (function () {
+    function NoCarsErrorComponent() {
+    }
+    NoCarsErrorComponent.prototype.ngOnInit = function () {
+    };
+    NoCarsErrorComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-no-cars-error',
+            template: __webpack_require__(/*! ./no-cars-error.component.html */ "./src/app/components/errors/no-cars-error/no-cars-error.component.html"),
+            styles: [__webpack_require__(/*! ./no-cars-error.component.css */ "./src/app/components/errors/no-cars-error/no-cars-error.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], NoCarsErrorComponent);
+    return NoCarsErrorComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/components/header/header.component.css":
 /*!********************************************************!*\
   !*** ./src/app/components/header/header.component.css ***!
@@ -221,7 +295,7 @@ var AppModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ""
+module.exports = ".active{\r\n    font-weight: bold\r\n}"
 
 /***/ }),
 
@@ -232,7 +306,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-default\">\n    <div class=\"container-fluid\">\n        <div class=\"navbar-header\">\n            <button type=\"button\" class=\"navbar-toggle\" (click)=\"toogleCollapse()\">\n                    <span class=\"icon-bar\"></span>\n                    <span class=\"icon-bar\"></span>\n                    <span class=\"icon-bar\"></span>\n            </button>\n            <a class=\"navbar-brand\" style=\"cursor:pointer\">Taxi Service</a>\n        </div>\n        <div class=\"navbar-collapse collapse\" #responsiveNavbar collapse=\"navCollapsed\" >\n            <ul class=\"nav navbar-nav\">\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType && userType !== 0\">\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Rides<span class=\"caret\"></span></a>\n                    <ul class=\"dropdown-menu\">\n                        <li><a style=\"cursor: pointer;\">Crate New</a></li>\n                        <li><a style=\"cursor: pointer;\">All Rides</a></li>\n                    </ul>\n                </li>\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType === 3\">\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Users<span class=\"caret\"></span></a>\n                    <ul class=\"dropdown-menu\">\n                        <li><a style=\"cursor: pointer;\">Crate New</a></li>\n                        <li><a style=\"cursor: pointer;\">All Users</a></li>\n                    </ul>\n                </li>\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType === 3\">\n                        <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Cars<span class=\"caret\"></span></a>\n                        <ul class=\"dropdown-menu\">\n                            <li><a style=\"cursor: pointer;\">Crate New</a></li>\n                            <li><a style=\"cursor: pointer;\">All Cars</a></li>\n                        </ul>\n                    </li>\n            </ul>\n            <ul class=\"nav navbar-nav navbar-right\" *ngIf=\"userType && userType !== 0\">\n                <li class=\"dropdown\" appDropdown>\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Settings<span class=\"caret\"></span></a>\n                    <ul class=\"dropdown-menu\">\n                        <li><a style=\"cursor: pointer;\">User setting</a></li>\n                        <li><a style=\"cursor: pointer;\" (click)=\"onLogout()\">Logout</a></li>\n                    </ul>\n                </li>\n            </ul>\n        </div>\n    </div>\n</nav>"
+module.exports = "<nav class=\"navbar navbar-default\">\n    <div class=\"container-fluid\">\n        <div class=\"navbar-header\">\n            <button type=\"button\" class=\"navbar-toggle\" (click)=\"toogleCollapse()\">\n                    <span class=\"icon-bar\"></span>\n                    <span class=\"icon-bar\"></span>\n                    <span class=\"icon-bar\"></span>\n            </button>\n            <a routerLink=\"/home\" class=\"navbar-brand\" style=\"cursor:pointer\">Taxi Service</a>\n        </div>\n        <div class=\"navbar-collapse collapse\" #responsiveNavbar collapse=\"navCollapsed\" >\n            <ul class=\"nav navbar-nav\">\n                <li routerLinkActive=\"active\" *ngIf=\"!userType || userType === 0\">\n                    <a routerLink=\"/login\" style=\"cursor: pointer;\">Login</a>\n                </li>\n                <li routerLinkActive=\"active\" class=\"dropdown\" appDropdown *ngIf=\"!userType || userType === 0\">\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Registration<span class=\"caret\"></span></a>\n                    <ul class=\"dropdown-menu\">\n                        <li><a routerLink=\"/registration\" [queryParams]=\"{type: 'customer'}\" style=\"cursor: pointer;\">New Customer</a></li>\n                        <li><a routerLink=\"/registration\" [queryParams]=\"{type: 'driver'}\" style=\"cursor: pointer;\">New Driver</a></li>\n                    </ul>\n                </li>\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType && userType !== 0\">\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Rides<span class=\"caret\"></span></a>\n                    <ul class=\"dropdown-menu\">\n                        <li><a style=\"cursor: pointer;\">Add New</a></li>\n                        <li><a style=\"cursor: pointer;\">All Rides</a></li>\n                    </ul>\n                </li>\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType === 3\">\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Users<span class=\"caret\"></span></a>\n                    <ul class=\"dropdown-menu\">\n                        <li><a style=\"cursor: pointer;\">All Users</a></li>\n                    </ul>\n                </li>\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType === 3\">\n                        <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Cars<span class=\"caret\"></span></a>\n                        <ul class=\"dropdown-menu\">\n                            <li><a style=\"cursor: pointer;\">Add New</a></li>\n                            <li><a style=\"cursor: pointer;\">All Cars</a></li>\n                        </ul>\n                    </li>\n            </ul>\n            <ul class=\"nav navbar-nav navbar-right\" *ngIf=\"userType && userType !== 0\">\n                <li class=\"dropdown\" appDropdown>\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Settings<span class=\"caret\"></span></a>\n                    <ul class=\"dropdown-menu\">\n                        <li><a style=\"cursor: pointer;\">User setting</a></li>\n                        <li><a style=\"cursor: pointer;\" (click)=\"onLogout()\">Logout</a></li>\n                    </ul>\n                </li>\n            </ul>\n        </div>\n    </div>\n</nav>"
 
 /***/ }),
 
@@ -464,7 +538,7 @@ var LoginComponent = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ""
+module.exports = "input.ng-invalid.ng-touched{\r\n    border: 1px red solid\r\n}"
 
 /***/ }),
 
@@ -475,7 +549,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  registration works!\n</p>\n"
+module.exports = "<div class=\"container\">\n    <div class=\"row\">\n      <div class=\"col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2\">\n        <form [formGroup]=\"registrationForm\" (submit)=\"onRegistration()\">\n          <div class=\"form-group\">\n            <label for=\"username\">Username *</label>\n            <input type=\"text\" id=\"username\" formControlName=\"username\" class=\"form-control\">\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('username').touched && registrationForm.get('username').invalid\">This fields is required</span>\n            <span></span>\n          </div>\n          <div class=\"form-group\">\n            <label for=\"password\">Password *</label>\n            <input type=\"password\" id=\"password\" formControlName=\"password\" class=\"form-control\">\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('password').touched && registrationForm.get('password').invalid\">This fields is required</span>\n          </div>\n          <div class=\"form-group\">\n            <label for=\"email\">Email *</label>\n            <input type=\"email\" id=\"email\" formControlName=\"email\" class=\"form-control\">\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['required']\">This fields is required</span>\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['email']\">Invalid email format</span>\n          </div>\n          <div class=\"form-group\">\n            <label for=\"name\">Name</label>\n            <input type=\"text\" id=\"name\" formControlName=\"name\" class=\"form-control\">\n          </div>\n          <div class=\"form-group\">\n            <label for=\"lastname\">Lastname</label>\n            <input type=\"text\" id=\"lastname\" formControlName=\"lastname\" class=\"form-control\">\n          </div>\n          <div class=\"form-group\">\n            <label for=\"jmbg\">JMBG</label>\n            <input type=\"text\" id=\"jmbg\" formControlName=\"jmbg\" class=\"form-control\">\n          </div>\n          <div class=\"form-group\">\n            <label for=\"phone\">Phone *</label>\n            <input type=\"text\" id=\"phone\" formControlName=\"phone\" class=\"form-control\">\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['required']\">This fields is required.</span>\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['pattern']\">Phone can contain only numbers.</span>\n          </div>\n          <div class=\"form-group\" *ngIf=\"isDriver\">\n            <label for=\"carNumber\">Car Number</label>\n            <select id=\"carNumber\" formControlName=\"carNumber\" class=\"form-control\">\n              <option *ngFor=\"let car of freeCars\" [value]=\"car.carNumber\">{{car.carNumber}}</option>\n            </select>\n          </div>\n          <br>\n          <span class=\"help-block\">Fields marked with * are required.</span>\n          <button [disabled]=\"!registrationForm.valid\" type=\"submit\" class=\"btn btn-default\">Login</button>\n        </form>\n      </div>\n    </div>\n  </div>"
 
 /***/ }),
 
@@ -490,6 +564,11 @@ module.exports = "<p>\n  registration works!\n</p>\n"
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RegistrationComponent", function() { return RegistrationComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _services_cars_data_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/cars-data.service */ "./src/app/services/cars-data.service.ts");
+/* harmony import */ var _services_users_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/users.service */ "./src/app/services/users.service.ts");
+/* harmony import */ var _services_usertype_enum__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../services/usertype.enum */ "./src/app/services/usertype.enum.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -500,10 +579,96 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
+
+
+
 var RegistrationComponent = /** @class */ (function () {
-    function RegistrationComponent() {
+    function RegistrationComponent(route, router, carsService, usersService) {
+        this.route = route;
+        this.router = router;
+        this.carsService = carsService;
+        this.usersService = usersService;
+        this.isDriver = false;
     }
     RegistrationComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        //subscribe to query params to protect initialized component tampering trough query
+        this.typeSubscription = this.route.queryParams.subscribe(function (query) {
+            var type = query['type'];
+            if (!type || (type !== 'customer' && type !== 'driver')) {
+                _this.router.navigate([''], { relativeTo: _this.route, queryParams: { type: 'customer' } });
+            }
+            else {
+                if (type === 'driver') {
+                    _this.isDriver = true;
+                    _this.freeCars = _this.carsService.getFreeCars();
+                    if (_this.freeCars.length == 0) {
+                        _this.router.navigate(['/driver-registration-error']);
+                    }
+                }
+                else {
+                    _this.isDriver = false;
+                    _this.freeCars = [];
+                }
+            }
+        });
+        this.registrationForm = new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroup"]({
+            username: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required),
+            password: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required),
+            email: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].email]),
+            name: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null),
+            lastname: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null),
+            jmbg: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].pattern('[0-9]{13,13}'), this.jmbgValidator.bind(this)]),
+            phone: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].pattern('[0-9]*')]),
+            carNumber: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null),
+        });
+    };
+    RegistrationComponent.prototype.ngOnDestroy = function () {
+        this.typeSubscription.unsubscribe();
+    };
+    RegistrationComponent.prototype.onRegistration = function () {
+        var newUser = {
+            username: this.registrationForm.value['username'],
+            password: this.registrationForm.value['password'],
+            email: this.registrationForm.value['email'],
+            name: this.registrationForm.value['name'],
+            lastname: this.registrationForm.value['lastname'],
+            jmbg: this.registrationForm.value['jmbg'],
+            phone: this.registrationForm.value['phone'],
+            carNumber: this.registrationForm.value['carNumber'],
+            userType: this.isDriver ? _services_usertype_enum__WEBPACK_IMPORTED_MODULE_5__["Usertype"].Driver : _services_usertype_enum__WEBPACK_IMPORTED_MODULE_5__["Usertype"].Customer
+        };
+        this.usersService.addNewUser(newUser);
+    };
+    RegistrationComponent.prototype.jmbgValidator = function (control) {
+        if (!this.checkJmbg(control.value)) {
+            return { 'jmbgInvalid': true };
+        }
+        return null;
+    };
+    RegistrationComponent.prototype.checkJmbg = function (jmbg) {
+        if (!jmbg) {
+            return true;
+        }
+        var a = +jmbg[0];
+        var b = +jmbg[1];
+        var c = +jmbg[2];
+        var d = +jmbg[3];
+        var e = +jmbg[4];
+        var f = +jmbg[5];
+        var g = +jmbg[6];
+        var h = +jmbg[7];
+        var i = +jmbg[8];
+        var j = +jmbg[9];
+        var k = +jmbg[10];
+        var l = +jmbg[11];
+        var m = +jmbg[12];
+        var checksum = 11 - ((7 * (a + g) + 6 * (b + h) + 5 * (c + i) + 4 * (d + j) + 3 * (e + k) + 2 * (f + l)) % 11);
+        if (m != checksum)
+            return false;
+        return true;
     };
     RegistrationComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -511,7 +676,10 @@ var RegistrationComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./registration.component.html */ "./src/app/components/users/registration/registration.component.html"),
             styles: [__webpack_require__(/*! ./registration.component.css */ "./src/app/components/users/registration/registration.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
+            _services_cars_data_service__WEBPACK_IMPORTED_MODULE_3__["CarsDataService"],
+            _services_users_service__WEBPACK_IMPORTED_MODULE_4__["UsersService"]])
     ], RegistrationComponent);
     return RegistrationComponent;
 }());
@@ -748,6 +916,52 @@ var LoginGuard = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/route-guards/registration.guard.ts":
+/*!****************************************************!*\
+  !*** ./src/app/route-guards/registration.guard.ts ***!
+  \****************************************************/
+/*! exports provided: RegistrationGuard */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RegistrationGuard", function() { return RegistrationGuard; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var RegistrationGuard = /** @class */ (function () {
+    function RegistrationGuard(router) {
+        this.router = router;
+    }
+    RegistrationGuard.prototype.canActivate = function (next, state) {
+        if (!next.queryParams['type'] || (next.queryParams['type'] !== 'customer' && next.queryParams['type'] !== 'driver')) {
+            this.router.navigate(['/login']);
+        }
+        return true;
+    };
+    RegistrationGuard = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
+            providedIn: 'root'
+        }),
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]])
+    ], RegistrationGuard);
+    return RegistrationGuard;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/services/auth.service.ts":
 /*!******************************************!*\
   !*** ./src/app/services/auth.service.ts ***!
@@ -862,6 +1076,87 @@ var AuthService = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/services/cars-data.service.ts":
+/*!***********************************************!*\
+  !*** ./src/app/services/cars-data.service.ts ***!
+  \***********************************************/
+/*! exports provided: CarsDataService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CarsDataService", function() { return CarsDataService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _interfaces__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./interfaces */ "./src/app/services/interfaces.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var CarsDataService = /** @class */ (function () {
+    function CarsDataService() {
+        this.cars = [
+            { carNumber: 10, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].sedan, registration: 'ns-111-aa', driverId: 2, year: 2010 },
+            { carNumber: 11, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-112-aa', driverId: null, year: 2011 },
+            { carNumber: 12, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].sedan, registration: 'ns-113-aa', driverId: null, year: 2012 },
+            { carNumber: 13, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
+        ];
+    }
+    CarsDataService.prototype.ngOnInit = function () {
+    };
+    CarsDataService.prototype.addNewCar = function (newCar) {
+        this.cars.push(newCar);
+    };
+    CarsDataService.prototype.removeCar = function (carId) {
+        var index = this.cars.findIndex(function (car) { return car.carNumber === carId; });
+        if (index != -1) {
+            this.cars.splice(index);
+        }
+    };
+    CarsDataService.prototype.getCar = function (driverId) {
+        var foundCar = this.cars.findIndex(function (car) { return car.driverId === driverId; });
+        if (foundCar != -1) {
+            return this.cars[foundCar];
+        }
+        else {
+            return null;
+        }
+    };
+    CarsDataService.prototype.getAllCars = function () {
+        return this.cars.slice();
+    };
+    CarsDataService.prototype.getFreeCars = function () {
+        var retCars = [];
+        this.cars.forEach(function (car) {
+            if (!car.driverId) {
+                retCars.push(car);
+            }
+        });
+        return retCars;
+    };
+    CarsDataService.prototype.anyFreeCars = function () {
+        var index = this.cars.findIndex(function (car) { return car.driverId === null; });
+        return index !== -1 ? true : false;
+    };
+    CarsDataService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
+            providedIn: 'root'
+        }),
+        __metadata("design:paramtypes", [])
+    ], CarsDataService);
+    return CarsDataService;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/services/cookie.service.ts":
 /*!********************************************!*\
   !*** ./src/app/services/cookie.service.ts ***!
@@ -920,6 +1215,79 @@ var CookieService = /** @class */ (function () {
         __metadata("design:paramtypes", [])
     ], CookieService);
     return CookieService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/interfaces.ts":
+/*!****************************************!*\
+  !*** ./src/app/services/interfaces.ts ***!
+  \****************************************/
+/*! exports provided: CarType */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CarType", function() { return CarType; });
+var CarType;
+(function (CarType) {
+    CarType[CarType["sedan"] = 0] = "sedan";
+    CarType[CarType["van"] = 1] = "van";
+    CarType[CarType["undefined"] = 2] = "undefined";
+})(CarType || (CarType = {}));
+
+
+/***/ }),
+
+/***/ "./src/app/services/users.service.ts":
+/*!*******************************************!*\
+  !*** ./src/app/services/users.service.ts ***!
+  \*******************************************/
+/*! exports provided: UsersService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UsersService", function() { return UsersService; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _auth_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./auth.service */ "./src/app/services/auth.service.ts");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+var UsersService = /** @class */ (function () {
+    function UsersService(authService) {
+        this.authService = authService;
+        this.users = [];
+    }
+    UsersService.prototype.addNewUser = function (newUser) {
+        this.users.push(newUser);
+    };
+    UsersService.prototype.removeUser = function (username) {
+        var index = this.users.findIndex(function (user) {
+            return user.username === username;
+        });
+        if (index !== -1) {
+            this.users.slice(index);
+            this.authService.logout();
+        }
+    };
+    UsersService = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
+            providedIn: 'root'
+        }),
+        __metadata("design:paramtypes", [_auth_service__WEBPACK_IMPORTED_MODULE_1__["AuthService"]])
+    ], UsersService);
+    return UsersService;
 }());
 
 
