@@ -13,6 +13,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { DropdownDirective } from './directives/dropdown.directive';
 import { UsersComponent } from './components/users/users.component';
 import { RegistrationComponent } from './components/users/registration/registration.component';
+import { NoCarsErrorComponent } from './components/errors/no-cars-error/no-cars-error.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { RegistrationComponent } from './components/users/registration/registrat
     HeaderComponent,
     DropdownDirective,
     UsersComponent,
-    RegistrationComponent
+    RegistrationComponent,
+    NoCarsErrorComponent
   ],
   imports: [
     BrowserModule,

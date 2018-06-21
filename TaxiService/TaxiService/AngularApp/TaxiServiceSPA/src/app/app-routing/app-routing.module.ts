@@ -7,11 +7,13 @@ import { UsersComponent } from '../components/users/users.component';
 import { LoginGuard } from '../route-guards/login.guard';
 import { RegistrationComponent } from '../components/users/registration/registration.component';
 import { RegistrationGuard } from '../route-guards/registration.guard';
+import { NoCarsErrorComponent } from '../components/errors/no-cars-error/no-cars-error.component';
 
 
 const appRoutes : Routes = [
   {path:'login', component: LoginComponent, canActivate:[LoginGuard]},
   {path:'registration', component: RegistrationComponent, canActivate:[LoginGuard, RegistrationGuard]},
+  {path:'driver-registration-error', component: NoCarsErrorComponent},
   {path:'home', component: HomeComponent, canActivate:[AuthGuard], children:[
     {path: 'users', component: UsersComponent}
   ]},

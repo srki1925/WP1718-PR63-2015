@@ -13,7 +13,7 @@
                 <li routerLinkActive="active" *ngIf="!userType || userType === 0">
                     <a routerLink="/login" style="cursor: pointer;">Login</a>
                 </li>
-                <li routerLinkActive="active" class="dropdown" appDropdown *ngIf="userType || userType === 0">
+                <li routerLinkActive="active" class="dropdown" appDropdown *ngIf="!userType || userType === 0">
                     <a class="dropdown-toggle" role="button" style="cursor: pointer;" >Registration<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a routerLink="/registration" [queryParams]="{type: 'customer'}" style="cursor: pointer;">New Customer</a></li>

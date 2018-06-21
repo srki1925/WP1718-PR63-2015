@@ -39,12 +39,12 @@
           </div>
           <div class="form-group" *ngIf="isDriver">
             <label for="carNumber">Car Number</label>
-            <select type="text" id="carNumber" formControlName="carNumber" class="form-control">
+            <select id="carNumber" formControlName="carNumber" class="form-control">
               <option *ngFor="let car of freeCars" [value]="car.carNumber">{{car.carNumber}}</option>
             </select>
           </div>
+          <br>
           <span class="help-block">Fields marked with * are required.</span>
-          <span *ngIf="failed" class="help-block">Invalid username or password!</span>
           <button [disabled]="!registrationForm.valid" type="submit" class="btn btn-default">Login</button>
         </form>
       </div>

@@ -1,3 +1,5 @@
+import { Usertype } from "./usertype.enum";
+
 export interface ICar{
     driverId : number,
     year: number,
@@ -11,3 +13,15 @@ export enum CarType{
     van,
     undefined
 } 
+
+export interface INewUser{
+    username: string,
+    password: string,
+    email: string,
+    name: string,
+    lastname: string,
+    jmbg: string,
+    phone: number,
+    carNumber: number,
+    userType: Usertype
+}
