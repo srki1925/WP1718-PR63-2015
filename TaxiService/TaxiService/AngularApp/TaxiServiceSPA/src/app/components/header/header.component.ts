@@ -3,6 +3,7 @@ import { AuthService, User } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { Usertype } from '../../services/usertype.enum';
 import { Subscriber, Subscription } from 'rxjs';
+import { UsersService } from '../../services/users.service';
 
 @Component({
   selector: 'app-header',
@@ -15,11 +16,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   username : string = null;
   private userSubscription : Subscription;
   constructor(private authService:AuthService,
-              private router:Router) {}
+              private router:Router,
+              private usersService:UsersService) {}
 
   ngOnInit() {
-    this.userType = this.authService.getUserType();
-    this.userSubscription = this.authService.userChanged.subscribe((user:User)=>{
+      this.userType = this.authService.getUserType();
+      this.userSubscription = this.authService.userChanged.subscribe((user:User)=>{
       this.userType = user.usertype;
       this.username = user.username;
     });
@@ -31,6 +33,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onLogout(){
     this.authService.logout();
     this.router.navigate(['/login']);
+  }
+
+  onDeleteAccount(){
+    this.authService.removeUser(this.username);
   }
 
   toogleCollapse(){

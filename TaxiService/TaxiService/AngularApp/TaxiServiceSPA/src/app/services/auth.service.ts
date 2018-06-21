@@ -2,6 +2,8 @@ import { Injectable, OnInit } from '@angular/core';
 import { Usertype } from './usertype.enum';
 import { CookieService } from './cookie.service';
 import { Subject } from 'rxjs';
+import { UsersService } from './users.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +15,9 @@ export class AuthService{
   
   userChanged = new Subject<User>();
 
-  private users : {username:string,password:string, usertype:Usertype}[] = [
-    {username:'c', password: 'c', usertype: Usertype.Customer},
-    {username:'d', password: 'd', usertype: Usertype.Driver},
-    {username:'a', password: 'a', usertype: Usertype.Dispatcher},
-  ];
-
-  constructor(private cookieService: CookieService) { 
+  constructor(private cookieService: CookieService,
+              private usersService:UsersService,
+              private router:Router) { 
     const cookie = cookieService.getCookie("taxiServiceData");
     if(cookie !== ""){
       const user = this.decodeCookie(cookie);
@@ -38,13 +36,11 @@ export class AuthService{
   authenticateUser(username:string,password:string){
     if(this.authenticated)
       return true;
-    const foundUser = this.users.find((value) =>{
-      return value.username === username && value.password === password;
-    });
+    const foundUser = this.usersService.getUser(username);
 
-    if(foundUser){
+    if(foundUser && foundUser.password === password){
       this.currentUser.username = username;
-      this.currentUser.usertype = foundUser.usertype;
+      this.currentUser.usertype = foundUser.userType;
       this.authenticated = true;
       const cookie = this.createCookie();
       this.cookieService.setCookie('taxiServiceData',cookie, 365);
@@ -59,6 +55,11 @@ export class AuthService{
     return this.authenticated;
   }
 
+  removeUser(username:string){
+    this.usersService.removeUser(username);
+    this.logout();
+  }
+
   logout(){
     this.currentUser.username = null;
     this.currentUser.usertype = Usertype.Guest;
@@ -66,6 +67,7 @@ export class AuthService{
     this.authenticated = false;
     this.cookieService.removeCookie('taxiServiceData');
     this.userChanged.next(this.currentUser);
+    this.router.navigate(['\login']);
   }
 
   getUserType() : Usertype{

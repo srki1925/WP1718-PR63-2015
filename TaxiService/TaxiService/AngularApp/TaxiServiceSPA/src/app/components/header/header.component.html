@@ -36,8 +36,8 @@
                 <li class="dropdown" appDropdown *ngIf="userType === 3">
                         <a class="dropdown-toggle" role="button" style="cursor: pointer;" >Cars<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a style="cursor: pointer;">Add New</a></li>
-                            <li><a style="cursor: pointer;">All Cars</a></li>
+                            <li><a [routerLink]="['home','cars','new']" style="cursor: pointer;">Add New</a></li>
+                            <li><a [routerLink]="['home','cars']" style="cursor: pointer;">All Cars</a></li>
                         </ul>
                     </li>
             </ul>
@@ -46,6 +46,7 @@
                     <a class="dropdown-toggle" role="button" style="cursor: pointer;" >Settings<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a style="cursor: pointer;">User setting</a></li>
+                        <li *ngIf="userType && userType !== 3" ><a style="cursor: pointer;" (click)="onDeleteAccount()">Delete Account</a></li>
                         <li><a style="cursor: pointer;" (click)="onLogout()">Logout</a></li>
                     </ul>
                 </li>
