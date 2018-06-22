@@ -21,6 +21,12 @@ import { EditDriverComponent } from './components/drivers/edit-driver/edit-drive
 import { CarsListComponent } from './components/cars/cars-list/cars-list.component';
 import { CarItemComponent } from './components/cars/car-item/car-item.component';
 import { CarDetailsComponent } from './components/cars/car-details/car-details.component';
+import { FullUserDetailsComponent } from './components/users/full-user-details/full-user-details.component';
+import { PasswordChangeComponent } from './components/users/password-change/password-change.component';
+import { EditUserComponent } from './components/users/edit-user/edit-user.component';
+import { UserListComponent } from './components/users/management/user-list/user-list.component';
+import { UserDetailsComponent } from './components/users/management/user-details/user-details.component';
+import { UserItemComponent } from './components/users/management/user-item/user-item.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +44,13 @@ import { CarDetailsComponent } from './components/cars/car-details/car-details.c
     EditDriverComponent,
     CarsListComponent,
     CarItemComponent,
-    CarDetailsComponent
+    CarDetailsComponent,
+    FullUserDetailsComponent,
+    PasswordChangeComponent,
+    EditUserComponent,
+    UserListComponent,
+    UserDetailsComponent,
+    UserItemComponent
   ],
   imports: [
     BrowserModule,

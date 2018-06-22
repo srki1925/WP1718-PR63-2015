@@ -23,21 +23,21 @@
                 <li class="dropdown" appDropdown *ngIf="userType && userType !== 0">
                     <a class="dropdown-toggle" role="button" style="cursor: pointer;" >Rides<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a style="cursor: pointer;">Add New</a></li>
+                        <li *ngIf="userType && userType !== 2"><a style="cursor: pointer;">Add New</a></li>
                         <li><a style="cursor: pointer;">All Rides</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" appDropdown *ngIf="userType === 3">
                     <a class="dropdown-toggle" role="button" style="cursor: pointer;" >Users<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a style="cursor: pointer;">All Users</a></li>
+                        <li><a style="cursor: pointer;" [routerLink]="['/home','users']" routerLinkActive="router-link-active" >All Users</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" appDropdown *ngIf="userType === 3">
                         <a class="dropdown-toggle" role="button" style="cursor: pointer;" >Cars<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a [routerLink]="['home','cars','new']" style="cursor: pointer;">Add New</a></li>
-                            <li><a [routerLink]="['home','cars']" style="cursor: pointer;">All Cars</a></li>
+                            <li><a [routerLink]="['/home','cars','new']" style="cursor: pointer;">Add New</a></li>
+                            <li><a [routerLink]="['/home','cars']" style="cursor: pointer;">All Cars</a></li>
                         </ul>
                     </li>
             </ul>
@@ -45,7 +45,7 @@
                 <li class="dropdown" appDropdown>
                     <a class="dropdown-toggle" role="button" style="cursor: pointer;" >Settings<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a style="cursor: pointer;">User setting</a></li>
+                        <li><a routerLink="/profile" style="cursor: pointer;">User Profile</a></li>
                         <li *ngIf="userType && userType !== 3" ><a style="cursor: pointer;" (click)="onDeleteAccount()">Delete Account</a></li>
                         <li><a style="cursor: pointer;" (click)="onLogout()">Logout</a></li>
                     </ul>

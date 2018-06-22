@@ -69,7 +69,8 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       jmbg:this.registrationForm.value['jmbg'],
       phone:this.registrationForm.value['phone'],
       carNumber:this.registrationForm.value['carNumber'],
-      userType: this.isDriver ? Usertype.Driver : Usertype.Customer
+      userType: this.isDriver ? Usertype.Driver : Usertype.Customer,
+      blocked: false,
     };
     this.usersService.addNewUser(newUser);
   }

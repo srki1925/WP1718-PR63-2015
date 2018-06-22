@@ -216,6 +216,7 @@
     <Content Include="AngularApp\TaxiServiceSPA\dist\TaxiServiceSPA\runtime.js" />
     <Content Include="AngularApp\TaxiServiceSPA\dist\TaxiServiceSPA\styles.js" />
     <Content Include="AngularApp\TaxiServiceSPA\dist\TaxiServiceSPA\vendor.js" />
+    <Content Include="App_Data\taxi-background.jpg" />
     <Content Include="App_Data\TaxiServiceDB.mdf" />
     <Content Include="App_Data\TaxiServiceDB_log.ldf">
       <DependentUpon>TaxiServiceDB.mdf</DependentUpon>

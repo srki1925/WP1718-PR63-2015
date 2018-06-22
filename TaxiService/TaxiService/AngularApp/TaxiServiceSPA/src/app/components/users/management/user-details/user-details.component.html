@@ -1,0 +1,11 @@
+<h2>Details</h2>
+<div class="pull-left">
+  <p class="list-group-item-text">Username: {{user.username}}</p>
+  <p class="list-group-item-text">Email: {{user.email}}</p>
+  <p class="list-group-item-text">Phone: {{user.phone}}</p>
+  <p class="list-group-item-text">Type: {{userType}}</p>
+</div>
+<div class="pull-right">
+<button *ngIf="!user.blocked" class="btn btn-danger" (click)="onBlock()">Block user</button>
+<button *ngIf="user.blocked" class="btn btn-success" (click)="onUnblock()">Unblock user</button>
+</div>

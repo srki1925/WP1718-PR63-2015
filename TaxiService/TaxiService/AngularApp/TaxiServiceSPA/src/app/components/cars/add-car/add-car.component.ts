@@ -3,7 +3,6 @@ import { ICar } from '../../../services/interfaces';
 import { CarsDataService } from '../../../services/cars-data.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Z_SYNC_FLUSH } from 'zlib';
 
 @Component({
   selector: 'app-add-car',
@@ -23,7 +22,6 @@ export class AddCarComponent implements OnInit {
     this.route.params.subscribe((params:Params) => {
       this.id = +params['id'];
       this.editMode = params['id'] != null;
-      console.log(this.id);
       if(!this.editMode){
         this.carForm = new FormGroup({
           registration: new FormControl(null),
@@ -61,6 +59,7 @@ export class AddCarComponent implements OnInit {
         registration : this.carForm.value.registration,
         year : +this.carForm.value.year
       }
+      this.carsService.addNewCar(c);
     }
   }
 }

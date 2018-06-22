@@ -74,6 +74,10 @@ export class AuthService{
     return this.currentUser.usertype;
   }
 
+  getCurrentUsername() : string{
+    return this.currentUser.username;
+  }
+
   private createCookie() : string{
     //api token to be added later
     if(this.authenticated){

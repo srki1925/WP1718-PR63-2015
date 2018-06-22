@@ -95,4 +95,11 @@ export class CarsDataService implements OnInit {
     c.year = car.year;
     c.carType = car.carType;
   }
+
+  exists(carNumber:number){
+    if(this.cars.findIndex((car:ICar) => {return car.carNumber === carNumber}) !== -1){
+      return true;
+    }
+    return false;
+  }
 }

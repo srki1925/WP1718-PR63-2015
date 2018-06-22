@@ -23,5 +23,14 @@ export interface INewUser{
     jmbg: string,
     phone: number,
     carNumber: number,
-    userType: Usertype
+    userType: Usertype,
+    blocked: boolean
+}
+
+export interface IBasicUser{
+    username:string,
+    email: string,
+    type: Usertype,
+    phone: number,
+    blocked: boolean
 }

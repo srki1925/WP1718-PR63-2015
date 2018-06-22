@@ -10,7 +10,7 @@ import { CarsDataService } from '../../../services/cars-data.service';
 })
 export class CarDetailsComponent implements OnInit {
 
-  car:ICar;
+  car:ICar = null;
   private id : number;
   carType : string;
   constructor(private route:ActivatedRoute,
@@ -20,8 +20,11 @@ export class CarDetailsComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params:Params) => {
       this.id = +params['id'];
-      this.car = this.carsService.getCarByNumber(this.id);
+      if(!this.carsService.exists(this.id)){
+        this.router.navigate(['../'], {relativeTo:this.route});
+      }
 
+      this.car = this.carsService.getCarByNumber(this.id);
       switch(this.car.carType){
         case CarType.sedan: this.carType = 'Sedan';break;
         case CarType.van: this.carType = 'Van';break;

@@ -1,0 +1,18 @@
+<h2>Details</h2>
+<div class="list-group">
+  <p>Name: {{user.name}}</p>
+  <p>Lastname: {{user.lastname}}</p>
+  <p>Username: {{user.username}}</p>
+  <p>Email: {{user.email}}</p>
+  <p>JMBG: {{user.jmbg}}</p>
+  <p>Phone: {{user.phone}}</p>
+  <p *ngIf="user && user.userType && user.userType === 2">Car number: {{user.carNumber}}</p>
+</div>
+<hr>
+<div class="row">
+  <button type="button" class="col-sm-2 btn btn-primary" (click)="onUserChange()">Edit</button>
+</div>
+<br>
+<div class="row">
+    <button type="button" class="col-sm-2 btn btn-primary" (click)="onPasswordChange()">Change Password</button>
+</div>
