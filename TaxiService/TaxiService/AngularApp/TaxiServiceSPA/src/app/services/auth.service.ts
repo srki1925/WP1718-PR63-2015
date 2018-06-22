@@ -97,6 +97,7 @@ export class AuthService{
   }
 }
   
+//interface for user data saved in cookie
   export interface User{
     username:string,
     usertype:Usertype,

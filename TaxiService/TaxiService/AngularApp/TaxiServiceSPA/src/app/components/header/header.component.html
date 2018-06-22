@@ -46,6 +46,7 @@
                     <a class="dropdown-toggle" role="button" style="cursor: pointer;" >Settings<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a routerLink="/profile" style="cursor: pointer;">User Profile</a></li>
+                        <li><a routerLink="/password-change" style="cursor: pointer;">Change Password</a></li>
                         <li *ngIf="userType && userType !== 3" ><a style="cursor: pointer;" (click)="onDeleteAccount()">Delete Account</a></li>
                         <li><a style="cursor: pointer;" (click)="onLogout()">Logout</a></li>
                     </ul>

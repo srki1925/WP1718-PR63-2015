@@ -79,4 +79,8 @@ export class UsersService {
   unblockUser(username:string){
     this.getUser(username).blocked = false;
   }
+
+  changePassword(username:string,newPassword:string){
+    this.getUser(username).password = newPassword;
+  }
 }
