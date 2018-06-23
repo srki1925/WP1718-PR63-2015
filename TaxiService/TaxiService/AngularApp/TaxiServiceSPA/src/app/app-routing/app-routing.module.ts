@@ -15,6 +15,10 @@ import { FullUserDetailsComponent } from '../components/users/full-user-details/
 import { EditUserComponent } from '../components/users/edit-user/edit-user.component';
 import { PasswordChangeComponent } from '../components/users/password-change/password-change.component';
 import { UserDetailsComponent } from '../components/users/management/user-details/user-details.component';
+import { RidesComponent } from '../components/rides/rides.component';
+import { NewRideComponent } from '../components/rides/new-ride/new-ride.component';
+import { AcceptRideComponent } from '../components/rides/accept-ride/accept-ride.component';
+import { RideDetailsComponent } from '../components/rides/ride-details/ride-details.component';
 
 
 const appRoutes : Routes = [
@@ -25,6 +29,12 @@ const appRoutes : Routes = [
   {path: 'password-change', component: PasswordChangeComponent, canActivate:[AuthGuard]},
   {path:'driver-registration-error', component: NoCarsErrorComponent},
   {path:'home', component: HomeComponent, canActivate:[AuthGuard], children:[
+    {path: 'rides', component: RidesComponent, children:[
+      {path: 'new', component: NewRideComponent},
+      {path: ':id/edit', component: NewRideComponent},
+      {path: ':id/accept', component: AcceptRideComponent},
+      {path: ':id', component: RideDetailsComponent},
+    ]},
     {path: 'users', component: UsersComponent, children:[
       {path: ':username', component: UserDetailsComponent}
     ]},

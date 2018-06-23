@@ -27,6 +27,14 @@ import { EditUserComponent } from './components/users/edit-user/edit-user.compon
 import { UserListComponent } from './components/users/management/user-list/user-list.component';
 import { UserDetailsComponent } from './components/users/management/user-details/user-details.component';
 import { UserItemComponent } from './components/users/management/user-item/user-item.component';
+import { RidesComponent } from './components/rides/rides.component';
+import { RidesListComponent } from './components/rides/rides-list/rides-list.component';
+import { RideDetailsComponent } from './components/rides/ride-details/ride-details.component';
+import { RideItemComponent } from './components/rides/ride-item/ride-item.component';
+import { NewRideComponent } from './components/rides/new-ride/new-ride.component';
+import { AcceptRideComponent } from './components/rides/accept-ride/accept-ride.component';
+import { CommentDetailsComponent } from './components/rides/comment-details/comment-details.component';
+import { AddCommentComponent } from './components/rides/add-comment/add-comment.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +58,15 @@ import { UserItemComponent } from './components/users/management/user-item/user-
     EditUserComponent,
     UserListComponent,
     UserDetailsComponent,
-    UserItemComponent
+    UserItemComponent,
+    RidesComponent,
+    RidesListComponent,
+    RideDetailsComponent,
+    RideItemComponent,
+    NewRideComponent,
+    AcceptRideComponent,
+    CommentDetailsComponent,
+    AddCommentComponent
   ],
   imports: [
     BrowserModule,

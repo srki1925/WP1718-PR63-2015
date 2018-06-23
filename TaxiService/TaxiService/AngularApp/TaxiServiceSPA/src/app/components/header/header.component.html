@@ -23,8 +23,8 @@
                 <li class="dropdown" appDropdown *ngIf="userType && userType !== 0">
                     <a class="dropdown-toggle" role="button" style="cursor: pointer;" >Rides<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li *ngIf="userType && userType !== 2"><a style="cursor: pointer;">Add New</a></li>
-                        <li><a style="cursor: pointer;">All Rides</a></li>
+                        <li *ngIf="userType && userType !== 2"><a [routerLink]="['/home','rides','new']" style="cursor: pointer;">Add New</a></li>
+                        <li><a [routerLink]="['/home','rides']" style="cursor: pointer;">All Rides</a></li>
                     </ul>
                 </li>
                 <li class="dropdown" appDropdown *ngIf="userType === 3">

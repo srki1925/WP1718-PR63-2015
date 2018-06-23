@@ -34,3 +34,36 @@ export interface IBasicUser{
     phone: number,
     blocked: boolean
 }
+
+export interface IComment{
+    description: string,
+    time: string,
+    rating: number
+}
+
+export interface ILocation{
+    lat:number,
+    long:number,
+    address: string
+}
+
+export interface IRide{
+    id: number,
+    location: ILocation,
+    destination: ILocation,
+    driver: string,
+    fare: number,
+    comment: IComment,
+    time:string,
+    status: RideStatus
+}
+
+export enum RideStatus{
+    ordered,
+    processed,
+    waiting,
+    accepted,
+    cancelled,
+    sucessful,
+    failed
+}

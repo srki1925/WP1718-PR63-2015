@@ -1,0 +1,13 @@
+<h2>Details</h2>
+<div *ngIf="ride" class="pull-left">
+  <p class="list-group-item-text">Pickup location: {{ride.location.address}}</p>
+  <p *ngIf="ride.destination" class="list-group-item-text">Destination : {{ride.destination.address}}</p>
+  <p class="list-group-item-text">Created on: {{ride.time}}</p>
+  <p class="list-group-item-text">Status: {{rideStatus}}</p>
+  <p class="list-group-item-text">Driver: {{ride.driver}}</p>
+  <p class="list-group-item-text">Fare: {{ride.fare}}</p>
+  <app-comment-details *ngIf="ride && ride.comment" [comment]="ride.comment"></app-comment-details>
+</div>
+
+<div class="pull-right">
+</div>
