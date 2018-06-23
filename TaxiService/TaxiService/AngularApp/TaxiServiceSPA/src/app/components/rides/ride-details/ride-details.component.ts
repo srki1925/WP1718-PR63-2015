@@ -47,5 +47,6 @@ export class RideDetailsComponent implements OnInit {
         this.cancelFailed = false;
       }, 2000);
     }
+    this.router.navigate(['../'], {relativeTo: this.route});
   }
 }

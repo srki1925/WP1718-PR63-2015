@@ -20,6 +20,7 @@ import { NewRideComponent } from '../components/rides/new-ride/new-ride.componen
 import { AcceptRideComponent } from '../components/rides/accept-ride/accept-ride.component';
 import { RideDetailsComponent } from '../components/rides/ride-details/ride-details.component';
 
+//TODO add guard for ride creation(for drivers) and editing, since drivers shouldn't be able to create new ridess
 
 const appRoutes : Routes = [
   {path:'login', component: LoginComponent, canActivate:[LoginGuard]},

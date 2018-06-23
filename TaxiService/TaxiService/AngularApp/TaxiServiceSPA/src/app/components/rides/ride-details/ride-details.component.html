@@ -1,6 +1,6 @@
 <h2>Details</h2>
 <div *ngIf="ride" class="pull-left">
-  <p class="list-group-item-text">Pickup location: {{ride.location.address}}</p>
+  <p class="list-group-item-text" >Pickup location: {{ride.location.address}}</p>
   <p *ngIf="ride.destination" class="list-group-item-text">Destination : {{ride.destination.address}}</p>
   <p class="list-group-item-text">Created on: {{ride.time}}</p>
   <p class="list-group-item-text">Status: {{rideStatus}}</p>
@@ -12,5 +12,5 @@
 
 <div class="pull-right">
   <a *ngIf="userType === 3 && ride.status === 2" [routerLink]="['ride.id','accept']" class="btn btn-success">Accept</a>
-  <button *ngIf="userType === 1"  class="btn btn-danger" (click)="onCancel()">Cancel</button>
+  <button *ngIf="userType === 1 && ride.status === 2"  class="btn btn-danger" (click)="onCancel()">Cancel</button>
 </div>

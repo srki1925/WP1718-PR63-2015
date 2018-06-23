@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { RidesService } from '../../../services/rides.service';
 import { ActivatedRoute } from '@angular/router';
 import { ExternalApisDataService } from '../../../services/external-apis-data.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { IRide, RideStatus } from '../../../services/interfaces';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-new-ride',
@@ -29,9 +31,33 @@ export class NewRideComponent implements OnInit {
 
   ngOnInit() {
     this.rideForm = new FormGroup({
-      address: new FormControl(null),
+      address: new FormControl(null, Validators.required),
       cartype: new FormControl(0)
     });
+  }
+
+  onSubmit(){
+    const d = new Date();
+    if(!this.editMode){
+      let newRide : IRide = {
+        location : {
+          address: this.rideForm.value.address,
+          lat: this.marker.lat,
+          long: this.marker.lng
+        },
+        comment: null,
+        destination: null,
+        driver: null,
+        fare: 0,
+        status: RideStatus.waiting,
+        time: null,
+        id: -1
+      }
+      console.log(newRide);
+      this.ridesService.newRide(newRide);
+    }else{
+
+    }
   }
 
   onChoseLocation(event){

@@ -67,6 +67,8 @@ export class RidesService {
       return false;
     }
     ride.status = RideStatus.cancelled;
+    this.waitingRidesChanged.next(this.getAllWaitingRides());
+    this.ridesChanged.next(this.getAllRides());
     return true;
   }
 
