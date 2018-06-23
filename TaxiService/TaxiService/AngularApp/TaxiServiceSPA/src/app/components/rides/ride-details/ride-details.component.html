@@ -7,7 +7,10 @@
   <p class="list-group-item-text">Driver: {{ride.driver}}</p>
   <p class="list-group-item-text">Fare: {{ride.fare}}</p>
   <app-comment-details *ngIf="ride && ride.comment" [comment]="ride.comment"></app-comment-details>
+  <span class="help-block" *ngIf="cancelFailed">Failed to cancel ride, no longer in waiting.</span>
 </div>
 
 <div class="pull-right">
+  <a *ngIf="userType === 3 && ride.status === 2" [routerLink]="['ride.id','accept']" class="btn btn-success">Accept</a>
+  <button *ngIf="userType === 1"  class="btn btn-danger" (click)="onCancel()">Cancel</button>
 </div>

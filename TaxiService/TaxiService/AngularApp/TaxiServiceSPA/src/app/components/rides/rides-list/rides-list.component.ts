@@ -38,6 +38,7 @@ export class RidesListComponent implements OnInit, OnDestroy {
     this.ridesSubscription = this.ridesService.ridesChanged.subscribe((rides:IRide[]) =>{
       this.rides = rides;
     });
+    this.rides = this.ridesService.getAllRides();
   }
 
   onWaitingRides(){

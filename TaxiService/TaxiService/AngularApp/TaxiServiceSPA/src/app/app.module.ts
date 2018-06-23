@@ -1,10 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http'
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing/app-routing.module';
 import { LoginComponent } from './components/login/login.component';
-import { HttpModule } from '@angular/http'
 import { AuthService } from './services/auth.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HomeComponent } from './components/home/home.component';
@@ -35,6 +35,8 @@ import { NewRideComponent } from './components/rides/new-ride/new-ride.component
 import { AcceptRideComponent } from './components/rides/accept-ride/accept-ride.component';
 import { CommentDetailsComponent } from './components/rides/comment-details/comment-details.component';
 import { AddCommentComponent } from './components/rides/add-comment/add-comment.component';
+import { AgmCoreModule } from '@agm/core'
+import { ExternalApisDataService } from './services/external-apis-data.service';
 
 @NgModule({
   declarations: [
@@ -66,15 +68,18 @@ import { AddCommentComponent } from './components/rides/add-comment/add-comment.
     NewRideComponent,
     AcceptRideComponent,
     CommentDetailsComponent,
-    AddCommentComponent
+    AddCommentComponent,
   ],
   imports: [
     BrowserModule,
-    HttpModule,
+    HttpClientModule,
     AppRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AgmCoreModule.forRoot({
+      apiKey:'AIzaSyBrjeABCsOwW1rhi7eW6_b_fWF8OK2HeiA'
+    })
   ],
-  providers: [AuthService, CookieService],
+  providers: [AuthService, CookieService, ExternalApisDataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

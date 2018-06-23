@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { RidesService } from '../../../services/rides.service';
 import { IRide, RideStatus } from '../../../services/interfaces';
+import { Usertype } from '../../../services/usertype.enum';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-ride-details',
@@ -13,9 +15,13 @@ export class RideDetailsComponent implements OnInit {
   private id : number;
   ride : IRide;
   rideStatus: string;
+  userType: Usertype;
+  cancelFailed = false;
+
   constructor(private route:ActivatedRoute,
               private router:Router,
-              private ridesService:RidesService) { }
+              private ridesService:RidesService,
+              private authService: AuthService) { }
 
   ngOnInit() {
     this.route.params.subscribe((params:Params) => {
@@ -31,6 +37,15 @@ export class RideDetailsComponent implements OnInit {
         case RideStatus.ordered : this.rideStatus = 'Ordered';break;
       }
     });
+    this.userType = this.authService.getUserType();
   }
 
+  onCancel(){
+    if(!this.ridesService.cancelRide(this.ride.id)){
+      this.cancelFailed = true;
+      setTimeout(() => {
+        this.cancelFailed = false;
+      }, 2000);
+    }
+  }
 }

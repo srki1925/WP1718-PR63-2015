@@ -9,12 +9,21 @@ export class RidesService {
 
   private rides : IRide[] = [
     { id:0, 
-      driver:'d',
+      driver:null,
       comment:null,
       location:{lat:45.260030,long:19.832409, address: 'Bulevar oslobođenja 22-24, Novi Sad 21000'}, 
       destination:null,
       fare:null, 
       status:RideStatus.waiting,
+      time: '01/06/2013 12:32',
+    },
+    { id:1, 
+      driver:'d',
+      comment:null,
+      location:{lat:45.260030,long:19.832409, address: 'Bulevar oslobođenja 22-24, Novi Sad 21000'}, 
+      destination:null,
+      fare:null, 
+      status:RideStatus.processed,
       time: '01/06/2013 12:32',
     }
   ];
@@ -49,6 +58,16 @@ export class RidesService {
 
   changeRideStatus(rideId:number, status:RideStatus){
     this.rides.find((ride:IRide) =>{return ride.id === rideId}).status = status;
+  }
+
+  cancelRide(rideId:number) : boolean{
+    console.log(rideId);
+    let ride = this.getRideById(rideId);
+    if(ride.status !== RideStatus.waiting){
+      return false;
+    }
+    ride.status = RideStatus.cancelled;
+    return true;
   }
 
   updateRideLocation(rideId:number,location:Location){

@@ -1,3 +1,24 @@
-<p>
-  new-ride works!
-</p>
+<h3 *ngIf="!editMode">New ride</h3>
+<h3 *ngIf="editMode">Edit ride</h3>
+
+<!--Google maps component-->
+<agm-map [zoom]="zoom" [latitude]="latitude" [longitude]="longitude" (mapClick)="onChoseLocation($event)">
+  <agm-marker *ngIf="chosen" [longitude]="marker.lng" [latitude]="marker.lat" [markerDraggable]="draggable"></agm-marker>
+</agm-map>
+
+<form [formGroup]="rideForm" (submit)="onSubmit()">
+  <div class="form-group">
+    <label for="address">Address</label>
+    <input type="text" id="address" formControlName="address" class="form-control">
+  </div>
+  <button class="btn btn-default" type="button" (click)="onCheckAddress()">Check Address</button>
+  <div class="form-group">
+    <label for="cartype">Car type</label>
+    <select id="type" formControlName="cartype" class="form-control">
+      <option value=0>Sedan</option>
+      <option value=1>Van</option>
+    </select>
+  </div>
+  <hr>
+  <button type="submit" class="btn btn-primary">{{editMode ? 'Edit' : 'Add'}}</button>
+</form>
