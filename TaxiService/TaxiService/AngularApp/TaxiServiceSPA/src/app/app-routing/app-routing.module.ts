@@ -19,8 +19,7 @@ import { RidesComponent } from '../components/rides/rides.component';
 import { NewRideComponent } from '../components/rides/new-ride/new-ride.component';
 import { AcceptRideComponent } from '../components/rides/accept-ride/accept-ride.component';
 import { RideDetailsComponent } from '../components/rides/ride-details/ride-details.component';
-
-//TODO add guard for ride creation(for drivers) and editing, since drivers shouldn't be able to create new ridess
+import { NoDriverGuard } from '../route-guards/no-driver.guard';
 
 const appRoutes : Routes = [
   {path:'login', component: LoginComponent, canActivate:[LoginGuard]},
@@ -31,7 +30,7 @@ const appRoutes : Routes = [
   {path:'driver-registration-error', component: NoCarsErrorComponent},
   {path:'home', component: HomeComponent, canActivate:[AuthGuard], children:[
     {path: 'rides', component: RidesComponent, children:[
-      {path: 'new', component: NewRideComponent},
+      {path: 'new', component: NewRideComponent, canActivate:[NoDriverGuard]},
       {path: ':id/edit', component: NewRideComponent},
       {path: ':id/accept', component: AcceptRideComponent},
       {path: ':id', component: RideDetailsComponent},

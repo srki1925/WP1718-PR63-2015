@@ -11,6 +11,6 @@
 </div>
 
 <div class="pull-right">
-  <a *ngIf="userType === 3 && ride.status === 2" [routerLink]="['ride.id','accept']" class="btn btn-success">Accept</a>
+  <a *ngIf="(userType === 3 || userType === 2) && ride.status === 2" [routerLink]="['accept']" class="btn btn-success">Accept</a>
   <button *ngIf="userType === 1 && ride.status === 2"  class="btn btn-danger" (click)="onCancel()">Cancel</button>
 </div>
