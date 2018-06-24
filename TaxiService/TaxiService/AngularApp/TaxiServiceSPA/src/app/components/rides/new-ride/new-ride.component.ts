@@ -6,6 +6,8 @@ import { ExternalApisDataService } from '../../../services/external-apis-data.se
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IRide, RideStatus } from '../../../services/interfaces';
 import { stringify } from 'querystring';
+import { AuthService } from '../../../services/auth.service';
+import { Usertype } from '../../../services/usertype.enum';
 
 @Component({
   selector: 'app-new-ride',
@@ -16,6 +18,8 @@ export class NewRideComponent implements OnInit {
 
   rideForm:FormGroup;
   editMode = false;
+  isDispatcher = false;
+  
   //google maps specific
   latitude = 45.260656;
   longitude = 19.832157;
@@ -24,16 +28,20 @@ export class NewRideComponent implements OnInit {
   chosen = false;
   draggable = true;
   error = false;
+
   constructor(private ridesService:RidesService,
               private route:ActivatedRoute,
               private apisServices:ExternalApisDataService,
-              private http:HttpClient) { }
+              private http:HttpClient,
+              private authService:AuthService) { }
 
   ngOnInit() {
     this.rideForm = new FormGroup({
       address: new FormControl(null, Validators.required),
-      cartype: new FormControl(0)
+      cartype: new FormControl(0),
+      driver: new FormControl(),
     });
+    this.isDispatcher = this.authService.getUserType() === Usertype.Dispatcher;
   }
 
   onSubmit(){
@@ -51,9 +59,16 @@ export class NewRideComponent implements OnInit {
         fare: 0,
         status: RideStatus.waiting,
         time: null,
-        id: -1
+        id: -1,
+        dispatcher:null,
+        customer: null
       }
-      console.log(newRide);
+      if(this.isDispatcher){
+        newRide.dispatcher = this.authService.getCurrentUsername();
+      }else{
+        newRide.customer = this.authService.getCurrentUsername();
+      }
+
       this.ridesService.newRide(newRide);
     }else{
 
@@ -68,7 +83,7 @@ export class NewRideComponent implements OnInit {
   }
 
   getAddressFromLocation(){
-    //https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452
+    //here maps reverse geocoding api
     let requestString = 'https://reverse.geocoder.cit.api.here.com/6.2/reversegeocode.json?prox='+this.marker.lat+'%2C'+this.marker.lng+'%2C250&mode=retrieveAddresses&maxresults=1&gen=8&app_id='+this.apisServices.getHereAppId()+'&app_code='+this.apisServices.getHereAppCode()+'&language=en-US';
     this.http.get(requestString).subscribe((response) =>{
       console.log(response);
@@ -78,6 +93,7 @@ export class NewRideComponent implements OnInit {
   }
 
   getLocationFromAddres(){
+    //here maps geocoding api
     let requestString = 'https://geocoder.cit.api.here.com/6.2/geocode.json?searchtext='+ this.rideForm.value.address +'&app_id='+this.apisServices.getHereAppId()+'&app_code='+this.apisServices.getHereAppCode()+'&gen=8';
     const headers = new HttpHeaders();
     headers.set('Accept-Language', 'en-US');

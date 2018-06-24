@@ -24,11 +24,16 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin(){
-    const response = this.authSevice.authenticateUser(this.loginForm.value['username'], this.loginForm.value['password']);
-    if(response){
-      this.router.navigate(['/home']);
-    }else{
-      this.failed = true;
+    this.authSevice.authStatus.subscribe((ok:boolean)=>{
+      if(ok){
+        this.router.navigate(['/home','drives']);
+      }else{
+        this.failed = true;
+      }
+    });
+    const ok = this.authSevice.authenticateUser(this.loginForm.value['username'], this.loginForm.value['password']);
+    if(ok === true){
+      this.router.navigate(['/home','drives']);
     }
   }
 }

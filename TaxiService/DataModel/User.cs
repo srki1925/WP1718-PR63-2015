@@ -8,7 +8,7 @@ using System.Web;
 namespace DataModel
 {
     public enum Sex { Male, Female}
-    public enum UserRole { Customer, Driver, Dispatcher }
+    public enum UserRole { Guest, Customer, Driver, Dispatcher }
     public class User
     {
         [Key]

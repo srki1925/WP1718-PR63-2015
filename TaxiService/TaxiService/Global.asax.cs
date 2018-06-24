@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
@@ -34,6 +36,122 @@ namespace TaxiService
             Repository.Instance.TaxiServiceRepository.Cars.Add(car);
             Repository.Instance.TaxiServiceRepository.Rides.Add(ride);
             Repository.Instance.TaxiServiceRepository.SaveChanges();*/
+            ReadDispatchers();
+            InitCars();
+            InitDrivers();
+            InitCustomers();
+        }
+
+        private void ReadDispatchers()
+        {
+            var fileLocation = ConfigurationManager.AppSettings["dispatchersInitData"];
+            var lines = File.ReadAllLines(fileLocation);
+            foreach (var item in lines)
+            {
+                if (!item.StartsWith("//"))
+                {
+                    var parameters = item.Replace(" ","").Replace("/t","").Split(',');
+                    var user = new User()
+                    {
+                        Username = parameters[0],
+                        Password = parameters[1],
+                        Name = parameters[2],
+                        Lastname = parameters[3],
+                        Sex = parameters[4] == "male" ? Sex.Male : Sex.Female,
+                        JMBG = parameters[5],
+                        Email = parameters[6],
+                        Role = UserRole.Dispatcher
+                    };
+                    if (!Repository.Instance.UserExists(user.Username)){
+                        Repository.Instance.TaxiServiceRepository.Users.Add(user);
+                        Repository.Instance.TaxiServiceRepository.SaveChanges();
+                    }
+                }
+            }
+        }
+
+        private void InitDrivers()
+        {
+            var fileLocation = ConfigurationManager.AppSettings["driversInitData"];
+            var lines = File.ReadAllLines(fileLocation);
+            int i = 0;
+            foreach (var item in lines)
+            {
+                if (!item.StartsWith("//"))
+                {
+                    var parameters = item.Replace(" ", "").Replace("/t", "").Split(',');
+                    var driver = new Driver()
+                    {
+                        Username = parameters[0],
+                        Password = parameters[1],
+                        Name = parameters[2],
+                        Lastname = parameters[3],
+                        Sex = parameters[4] == "male" ? Sex.Male : Sex.Female,
+                        JMBG = parameters[5],
+                        Email = parameters[6],
+                        Role = UserRole.Driver,
+                        Car = Repository.Instance.TaxiServiceRepository.Cars.FirstOrDefault(x => x.DriverId == null)
+                    };
+                    if (Repository.Instance.TaxiServiceRepository.Drivers.FirstOrDefault(x => x.Username == driver.Username) == null)
+                    {
+                        Repository.Instance.TaxiServiceRepository.Drivers.Add(driver);
+                        Repository.Instance.TaxiServiceRepository.Cars.FirstOrDefault(x => x.CarNumber == driver.Car.CarNumber).Driver = driver;
+                        Repository.Instance.TaxiServiceRepository.SaveChanges();
+                    }
+                }
+            }
+        }
+        private void InitCustomers()
+        {
+            var fileLocation = ConfigurationManager.AppSettings["customersInitData"];
+            var lines = File.ReadAllLines(fileLocation);
+            foreach (var item in lines)
+            {
+                if (!item.StartsWith("//"))
+                {
+                    var parameters = item.Replace(" ", "").Replace("/t", "").Split(',');
+                    var user = new User()
+                    {
+                        Username = parameters[0],
+                        Password = parameters[1],
+                        Name = parameters[2],
+                        Lastname = parameters[3],
+                        Sex = parameters[4] == "male" ? Sex.Male : Sex.Female,
+                        JMBG = parameters[5],
+                        Email = parameters[6],
+                        Role = UserRole.Customer
+                    };
+                    if (!Repository.Instance.UserExists(user.Username))
+                    {
+                        Repository.Instance.TaxiServiceRepository.Users.Add(user);
+                        Repository.Instance.TaxiServiceRepository.SaveChanges();
+                    }
+                }
+            }
+        }
+        private void InitCars()
+        {
+            var fileLocation = ConfigurationManager.AppSettings["carsInitData"];
+            var lines = File.ReadAllLines(fileLocation);
+            foreach (var item in lines)
+            {
+                if (!item.StartsWith("//"))
+                {
+                    var parameters = item.Replace(" ", "").Replace("/t", "").Split(',');
+                    var car = new Car()
+                    {
+                        Year = ushort.Parse(parameters[0]),
+                        Registration = parameters[1],
+                        Type = parameters[2] == "sedan" ? CarType.Sedan : CarType.Van,
+                    };
+
+                    if(Repository.Instance.TaxiServiceRepository.Cars.FirstOrDefault(x => x.Registration == car.Registration) == null)
+                    {
+                        Repository.Instance.TaxiServiceRepository.Cars.Add(car);
+                        Repository.Instance.TaxiServiceRepository.SaveChanges();
+                    }
+                }
+            }
         }
     }
 }

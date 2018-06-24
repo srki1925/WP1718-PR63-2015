@@ -1,9 +1,11 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Usertype } from './usertype.enum';
 import { CookieService } from './cookie.service';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { UsersService } from './users.service';
 import { Router } from '@angular/router';
+import { ExternalApisDataService } from './external-apis-data.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +16,14 @@ export class AuthService{
   private authenticated:boolean = false;
   
   userChanged = new Subject<User>();
+  authStatus = new Subject<boolean>();
 
   constructor(private cookieService: CookieService,
               private usersService:UsersService,
-              private router:Router) { 
+              private router:Router,
+              private http:HttpClient,
+              private externalApisDataService:ExternalApisDataService) { 
+
     const cookie = cookieService.getCookie("taxiServiceData");
     if(cookie !== ""){
       const user = this.decodeCookie(cookie);
@@ -33,22 +39,32 @@ export class AuthService{
     }
   }
 
-  authenticateUser(username:string,password:string){
-    if(this.authenticated)
+  authenticateUser(username:string,password:string) : Subject<boolean> | boolean{
+    if(this.authenticated){
       return true;
-    const foundUser = this.usersService.getUser(username);
-
-    if(foundUser && foundUser.password === password){
-      this.currentUser.username = username;
-      this.currentUser.usertype = foundUser.userType;
-      this.authenticated = true;
-      const cookie = this.createCookie();
-      this.cookieService.setCookie('taxiServiceData',cookie, 365);
-      this.userChanged.next(this.currentUser);
-      return true;
-    }else{
-      return false;
     }
+
+    const url = this.externalApisDataService.getDataApiHostname() + '/access/login';
+    
+    this.http.post(url, {username:username, password:password}).subscribe(
+      data =>{
+        this.currentUser.username = username;
+        this.currentUser.token = data as string;
+        console.log(this.currentUser.token);
+        this.currentUser.usertype = Usertype.Driver;
+        this.authenticated = true;
+        const cookie = this.createCookie();
+        this.cookieService.setCookie('taxiServiceData',cookie, 365);
+        this.userChanged.next(this.currentUser);
+        this.router.navigate(['/home']);
+        this.authStatus.next(true);
+      },
+      error => {
+        console.log(error.status);
+        this.authStatus.next(false);
+      }
+    );
+    return this.authStatus;
   }
 
   isUserAuthenticated(){

@@ -1,3 +1,11 @@
-<p>
-  accept-ride works!
-</p>
+<form *ngIf="!isDriver" [formGroup]="acceptForm" (submit)="onAccept()">
+<div class="form-group">
+  <label for="driver">Select Driver</label>
+  <select id="driver" formControlName="driver" class="form-control">
+    <option *ngFor="let driver of drivers" [value]="driver">{{driver}}</option>
+  </select>
+</div>
+<br>
+<span class="help-block" *ngIf="noFreeDrivers">Fields marked with * are required.</span>
+<button [disabled]="!acceptForm.valid" type="submit" class="btn btn-default">Accept</button>
+</form>

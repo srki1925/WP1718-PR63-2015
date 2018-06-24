@@ -8,6 +8,7 @@ export class ExternalApisDataService {
   private gmapsKey = 'AIzaSyBrjeABCsOwW1rhi7eW6_b_fWF8OK2HeiA';
   private hereAppId = 'bAXQChNSxbtNhSYbrloM';
   private hereAppCode = '%20FT-7YO-65_E2m1OFO8NvqQ';
+  private dataApiAddress = 'http://localhost:7685/api';
   constructor() { }
 
   getGoogleMapsApiKey() : string{
@@ -20,5 +21,9 @@ export class ExternalApisDataService {
 
   getHereAppCode():string{
     return this.hereAppCode.slice();
+  }
+
+  getDataApiHostname(){
+    return this.dataApiAddress;
   }
 }

@@ -16,7 +16,10 @@ export class RideDetailsComponent implements OnInit {
   ride : IRide;
   rideStatus: string;
   userType: Usertype;
+
   cancelFailed = false;
+
+  driverFree = true;
 
   constructor(private route:ActivatedRoute,
               private router:Router,
@@ -38,6 +41,23 @@ export class RideDetailsComponent implements OnInit {
       }
     });
     this.userType = this.authService.getUserType();
+    this.ridesService.ridesChanged.subscribe((rides:IRide[]) =>{
+      this.updateDriverStatus();
+    });
+    if(this.userType === Usertype.Driver){
+      this.updateDriverStatus();
+    }
+  }
+
+  private updateDriverStatus() {
+    let driverRides = this.ridesService.getAllRidesForDriver(this.authService.getCurrentUsername());
+    let driverBusy = false;
+    driverRides.forEach((ride: IRide) => {
+      if (ride.status !== RideStatus.waiting && ride.status !== RideStatus.sucessful && ride.status !== RideStatus.failed) {
+        driverBusy = true;
+      }
+    });
+    this.driverFree = !driverBusy;
   }
 
   onCancel(){

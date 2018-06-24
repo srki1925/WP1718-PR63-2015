@@ -83,4 +83,16 @@ export class UsersService {
   changePassword(username:string,newPassword:string){
     this.getUser(username).password = newPassword;
   }
+
+  getAllDrivers() : string[]{
+    let drivers : string[] = [];
+
+    this.users.forEach((user:INewUser) =>{
+      if(user.userType === Usertype.Driver){
+        drivers.push(user.username);
+      }
+    })
+    
+    return drivers;
+  }
 }

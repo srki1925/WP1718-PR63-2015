@@ -1,0 +1,3 @@
+﻿//username,password,name,lastname,sex,jmbg,email
+c1,c1pass,jake,doe,male,0123456789123,jake@yolomail.com
+c2,c2pass,julie,doe,female,0123456789123,julie@yolomail.com

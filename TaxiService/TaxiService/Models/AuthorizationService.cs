@@ -37,7 +37,7 @@ namespace TaxiService.Models
         {
             var bytes = Encoding.UTF8.GetBytes(original);
             var shaBytes = _cryptoService.ComputeHash(bytes);
-            return Encoding.ASCII.GetString(shaBytes);
+            return BitConverter.ToString(shaBytes).Replace("-","");
         }
     }
 }

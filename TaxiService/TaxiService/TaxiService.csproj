@@ -216,6 +216,10 @@
     <Content Include="AngularApp\TaxiServiceSPA\dist\TaxiServiceSPA\runtime.js" />
     <Content Include="AngularApp\TaxiServiceSPA\dist\TaxiServiceSPA\styles.js" />
     <Content Include="AngularApp\TaxiServiceSPA\dist\TaxiServiceSPA\vendor.js" />
+    <Content Include="App_Data\InitData\Cars.txt" />
+    <Content Include="App_Data\InitData\Customers.txt" />
+    <Content Include="App_Data\Dispatchers.txt" />
+    <Content Include="App_Data\InitData\Drivers.txt" />
     <Content Include="App_Data\taxi-background.jpg" />
     <Content Include="App_Data\TaxiServiceDB.mdf" />
     <Content Include="App_Data\TaxiServiceDB_log.ldf">

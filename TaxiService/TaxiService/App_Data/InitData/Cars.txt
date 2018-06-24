@@ -1,0 +1,5 @@
+﻿//year,registration,carType
+2006,ns-0000-tx,sedan
+2008,ns-0001-tx,sedan
+2010,ns-0002-tx,van
+2007,ns-0003-tx,van
