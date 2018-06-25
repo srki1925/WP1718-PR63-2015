@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UsersService } from '../../../../services/users.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { IBasicUser } from '../../../../services/interfaces';
 import { Usertype } from '../../../../services/usertype.enum';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-user-details',
@@ -14,8 +15,6 @@ export class UserDetailsComponent implements OnInit {
   private username: string;
   user :IBasicUser;
   userType : string;
-  notBlocked = true;
-  blocked = false;
 
   constructor(private usersService:UsersService,
               private route:ActivatedRoute,
@@ -29,24 +28,48 @@ export class UserDetailsComponent implements OnInit {
       }
 
       this.updateUser();
-      switch(this.user.type){
-        case Usertype.Customer: this.userType = 'Customer';break;
-        case Usertype.Driver: this.userType = 'Driver';break;
-      }
+      
     });
   }
 
   onBlock(){
-    this.usersService.blockUser(this.username);
-    this.updateUser();
+    console.log(this.username);
+    this.usersService.blockUser(this.username)
+    .subscribe(
+     data => {this.updateUser()},
+     error => {
+       console.log(error);
+       this.router.navigate(['../'], {relativeTo: this.route});
+     } 
+    );
   }
 
   onUnblock(){
-    this.usersService.unblockUser(this.username);
-    this.updateUser();
+    console.log(this.username);
+    this.usersService.unblockUser(this.username)
+    .subscribe(
+      data => {this.updateUser()},
+      error => {
+        console.log(error);
+        this.router.navigate(['../'], {relativeTo: this.route});
+      } 
+     );
   }
 
   private updateUser(){
-    this.user = this.usersService.getUserBasicInfo(this.username);
+    this.usersService.getUserBasicInfo(this.username)
+    .subscribe(
+      (data:IBasicUser) => {
+        this.user = data;
+        switch(this.user.type){
+          case Usertype.Customer: this.userType = 'Customer';break;
+          case Usertype.Driver: this.userType = 'Driver';break;
+        }
+      },
+      error => {
+        console.log(error);
+        this.router.navigate(['../'], {relativeTo:this.route});
+      }
+    );
   }
 }

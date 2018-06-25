@@ -33,6 +33,15 @@ namespace TaxiService.Models
             return true;
         }
 
+        public static bool UnblockUser(string username)
+        {
+            var user = Repository.Instance.TaxiServiceRepository.Users.FirstOrDefault(x => x.Username == username);
+            if (user == null)
+                return false;
+            user.Blocked = false;
+            Repository.Instance.TaxiServiceRepository.SaveChanges();
+            return true;
+        }
         public static string ComputeSha512(string original)
         {
             var bytes = Encoding.UTF8.GetBytes(original);

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { INewUser, IBasicUser } from './interfaces';
+import { INewUser, IBasicUser, ApiRequest } from './interfaces';
 import { AuthService } from './auth.service';
 import { Usertype } from './usertype.enum';
 import { Subject } from 'rxjs';
@@ -55,38 +55,36 @@ export class UsersService {
     return this.users.find((user:INewUser) => {return user.username === username;})
   }
 
-  getUserBasicInfo(username:string) : IBasicUser {
-    const found = this.users.find((user:INewUser) => {return user.username === username});
-    if(!found){
-      return null;
-    }
-    return {
-      username : found.username,
-      email : found.email,
-      blocked : found.blocked,
-      phone : found.phone,
-      type : found.userType
-    }
+  getUserBasicInfo(username:string) {
+    const url = this.externApis.getDataApiHostname() + '/users/' + username;
+    return this.http.get(url);
   }
 
-  getAllUsersUsernames() :string[]{
-    let output : string[] = [];
-
-    this.users.forEach((user:INewUser) =>{
-      if(user.userType != Usertype.Dispatcher){
-        output.push(user.username);
-      }
-    })
-
-    return output;
+  getAllUsersUsernames(){
+    const url = this.externApis.getDataApiHostname() + '/users';
+    this.http.get(url).subscribe(
+      (data:string[]) => {this.usersChanged.next(data)},
+      error => console.log(error)
+    );
+    return this.usersChanged;
   }
 
   blockUser(username:string){
-    this.getUser(username).blocked = true;
+    const url = this.externApis.getDataApiHostname() + '/users/block';
+    const data : ApiRequest = {
+      userHash: this.authService.getApiToken(),
+      data: username
+    };
+    return this.http.post(url, data);
   }
 
   unblockUser(username:string){
-    this.getUser(username).blocked = false;
+    const url = this.externApis.getDataApiHostname() + '/users/unblock';
+    const data : ApiRequest = {
+      userHash: this.authService.getApiToken(),
+      data: username
+    };
+    return this.http.post(url, data);
   }
 
   changePassword(username:string,newPassword:string){

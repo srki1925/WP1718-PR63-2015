@@ -2281,8 +2281,6 @@ var UserDetailsComponent = /** @class */ (function () {
         this.usersService = usersService;
         this.route = route;
         this.router = router;
-        this.notBlocked = true;
-        this.blocked = false;
     }
     UserDetailsComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -2292,6 +2290,31 @@ var UserDetailsComponent = /** @class */ (function () {
                 _this.router.navigate(['../'], { relativeTo: _this.route });
             }
             _this.updateUser();
+        });
+    };
+    UserDetailsComponent.prototype.onBlock = function () {
+        var _this = this;
+        console.log(this.username);
+        this.usersService.blockUser(this.username)
+            .subscribe(function (data) { _this.updateUser(); }, function (error) {
+            console.log(error);
+            _this.router.navigate(['../'], { relativeTo: _this.route });
+        });
+    };
+    UserDetailsComponent.prototype.onUnblock = function () {
+        var _this = this;
+        console.log(this.username);
+        this.usersService.unblockUser(this.username)
+            .subscribe(function (data) { _this.updateUser(); }, function (error) {
+            console.log(error);
+            _this.router.navigate(['../'], { relativeTo: _this.route });
+        });
+    };
+    UserDetailsComponent.prototype.updateUser = function () {
+        var _this = this;
+        this.usersService.getUserBasicInfo(this.username)
+            .subscribe(function (data) {
+            _this.user = data;
             switch (_this.user.type) {
                 case _services_usertype_enum__WEBPACK_IMPORTED_MODULE_3__["Usertype"].Customer:
                     _this.userType = 'Customer';
@@ -2300,18 +2323,10 @@ var UserDetailsComponent = /** @class */ (function () {
                     _this.userType = 'Driver';
                     break;
             }
+        }, function (error) {
+            console.log(error);
+            _this.router.navigate(['../'], { relativeTo: _this.route });
         });
-    };
-    UserDetailsComponent.prototype.onBlock = function () {
-        this.usersService.blockUser(this.username);
-        this.updateUser();
-    };
-    UserDetailsComponent.prototype.onUnblock = function () {
-        this.usersService.unblockUser(this.username);
-        this.updateUser();
-    };
-    UserDetailsComponent.prototype.updateUser = function () {
-        this.user = this.usersService.getUserBasicInfo(this.username);
     };
     UserDetailsComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -2449,10 +2464,15 @@ var UserListComponent = /** @class */ (function () {
     }
     UserListComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.users = this.userService.getAllUsersUsernames();
+        this.usersSub = this.userService.getAllUsersUsernames().subscribe(function (users) {
+            _this.users = users;
+        });
         this.userService.usersChanged.subscribe(function (changedUsersInfo) {
             _this.users = changedUsersInfo;
         });
+    };
+    UserListComponent.prototype.ngOnDestroy = function () {
+        this.usersSub.unsubscribe();
     };
     UserListComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -3666,32 +3686,30 @@ var UsersService = /** @class */ (function () {
         return this.users.find(function (user) { return user.username === username; });
     };
     UsersService.prototype.getUserBasicInfo = function (username) {
-        var found = this.users.find(function (user) { return user.username === username; });
-        if (!found) {
-            return null;
-        }
-        return {
-            username: found.username,
-            email: found.email,
-            blocked: found.blocked,
-            phone: found.phone,
-            type: found.userType
-        };
+        var url = this.externApis.getDataApiHostname() + '/users/' + username;
+        return this.http.get(url);
     };
     UsersService.prototype.getAllUsersUsernames = function () {
-        var output = [];
-        this.users.forEach(function (user) {
-            if (user.userType != _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Dispatcher) {
-                output.push(user.username);
-            }
-        });
-        return output;
+        var _this = this;
+        var url = this.externApis.getDataApiHostname() + '/users';
+        this.http.get(url).subscribe(function (data) { _this.usersChanged.next(data); }, function (error) { return console.log(error); });
+        return this.usersChanged;
     };
     UsersService.prototype.blockUser = function (username) {
-        this.getUser(username).blocked = true;
+        var url = this.externApis.getDataApiHostname() + '/users/block';
+        var data = {
+            userHash: this.authService.getApiToken(),
+            data: username
+        };
+        return this.http.post(url, data);
     };
     UsersService.prototype.unblockUser = function (username) {
-        this.getUser(username).blocked = false;
+        var url = this.externApis.getDataApiHostname() + '/users/unblock';
+        var data = {
+            userHash: this.authService.getApiToken(),
+            data: username
+        };
+        return this.http.post(url, data);
     };
     UsersService.prototype.changePassword = function (username, newPassword) {
         this.getUser(username).password = newPassword;

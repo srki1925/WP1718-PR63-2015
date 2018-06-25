@@ -13,15 +13,37 @@ namespace TaxiService.Controllers
     public class UsersController : ApiController
     { 
         [HttpGet]
-        // GET: api/Users
+        [Route("api/users/mydata")]
         public IHttpActionResult Get([FromUri]ApiRequest<string> request)
         {
+            if (request == null || request.UserHash == null)
+                return BadRequest();
             if (request.UserHash == null)
                 return Unauthorized();
             if (!Repository.Instance.LoggedInUsers.TryGetValue(request.UserHash, out User user))
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Forbidden));
 
             return Ok(user);
+        }
+        //GET: api/users
+        public IEnumerable<string> Get()
+        {
+            var users = Repository.Instance.TaxiServiceRepository.Users.Where(x => x.Role != UserRole.Dispatcher).ToList();
+            return users.Select(user => user.Username);
+        }
+        //GET: api/users/username
+        public BasicUserData Get(string id)
+        {
+            if (!Repository.Instance.UserExists(id))
+                return null;
+            return Repository.Instance.TaxiServiceRepository.Users.Where(x => x.Username == id).Select(x => new BasicUserData()
+            {
+                username = x.Username,
+                blocked = x.Blocked,
+                email = x.Email,
+                phone = x.PhoneNumber,
+                type = x.Role
+            }).ToArray()[0];
         }
         [HttpPut]
         // PUT: api/Users
@@ -67,9 +89,9 @@ namespace TaxiService.Controllers
 
             return Ok();
         }
-        [HttpGet]
+        [HttpPost]
         [Route("api/users/block")]
-        public IHttpActionResult Block([FromUri]ApiRequest<string> request)
+        public IHttpActionResult Block([FromBody]ApiRequest<string> request)
         {
             if (request.UserHash == null)
                 return Unauthorized();
@@ -77,6 +99,20 @@ namespace TaxiService.Controllers
                 return Unauthorized();
 
             if (!AuthorizationService.BlockUser(request.Data))
+                return NotFound();
+
+            return Ok();
+        }
+        [HttpPost]
+        [Route("api/users/unblock")]
+        public IHttpActionResult Unblock([FromBody]ApiRequest<string> request)
+        {
+            if (request.UserHash == null)
+                return Unauthorized();
+            if (!Repository.Instance.LoggedInUsers.TryGetValue(request.UserHash, out User user) || user.Role != UserRole.Dispatcher)
+                return Unauthorized();
+
+            if (!AuthorizationService.UnblockUser(request.Data))
                 return NotFound();
 
             return Ok();
