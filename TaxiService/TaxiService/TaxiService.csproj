@@ -196,6 +196,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccessController.cs" />
+    <Compile Include="Controllers\CarsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RegistrationController.cs" />
     <Compile Include="Controllers\RidesController.cs" />
@@ -206,6 +207,8 @@
     <Compile Include="Models\ApiRequest.cs" />
     <Compile Include="Models\AuthorizationService.cs" />
     <Compile Include="Models\LoginParameters.cs" />
+    <Compile Include="Models\NewUser.cs" />
+    <Compile Include="Models\ResponseCar.cs" />
     <Compile Include="Models\RideRequest.cs" />
     <Compile Include="Models\RideResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

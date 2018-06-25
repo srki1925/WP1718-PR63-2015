@@ -1,7 +1,7 @@
 import { Usertype } from "./usertype.enum";
 
 export interface ICar{
-    driverId : number,
+    driver : string,
     year: number,
     registration: string,
     carNumber: number,
@@ -68,4 +68,9 @@ export enum RideStatus{
     cancelled,
     sucessful,
     failed
+}
+
+export interface ApiRequest{
+    userHash:string,
+    data:object | number | string
 }

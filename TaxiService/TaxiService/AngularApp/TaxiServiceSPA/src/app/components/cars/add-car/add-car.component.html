@@ -1,5 +1,5 @@
 <h3 *ngIf="!editMode">New car</h3>
-<h3 *ngIf="editMode">Edit {{car.carNumber}}</h3>
+<h3 *ngIf="editMode">Edit {{car?.CarNumber}}</h3>
 <form [formGroup]="carForm" (submit)="onSubmit()">
   <div class="form-group">
     <label for="registration">Registration</label>

@@ -353,7 +353,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h3 *ngIf=\"!editMode\">New car</h3>\r\n<h3 *ngIf=\"editMode\">Edit {{car.carNumber}}</h3>\r\n<form [formGroup]=\"carForm\" (submit)=\"onSubmit()\">\r\n  <div class=\"form-group\">\r\n    <label for=\"registration\">Registration</label>\r\n    <input type=\"text\" id=\"registation\" formControlName=\"registration\" class=\"form-control\">\r\n  </div>\r\n  <div class=\"form-group\">\r\n    <label for=\"year\">Year</label>\r\n    <input type=\"number\" id=\"year\" formControlName=\"year\" class=\"form-control\">\r\n  </div>\r\n  <select id=\"type\" formControlName=\"type\" class=\"form-control\">\r\n    <option value=0>Sedan</option>\r\n    <option value=1>Van</option>\r\n  </select>\r\n  <hr>\r\n  <button type=\"submit\" class=\"btn btn-primary\">{{editMode ? 'Edit' : 'Add'}}</button>\r\n</form>\r\n\r\n"
+module.exports = "<h3 *ngIf=\"!editMode\">New car</h3>\r\n<h3 *ngIf=\"editMode\">Edit {{car?.CarNumber}}</h3>\r\n<form [formGroup]=\"carForm\" (submit)=\"onSubmit()\">\r\n  <div class=\"form-group\">\r\n    <label for=\"registration\">Registration</label>\r\n    <input type=\"text\" id=\"registation\" formControlName=\"registration\" class=\"form-control\">\r\n  </div>\r\n  <div class=\"form-group\">\r\n    <label for=\"year\">Year</label>\r\n    <input type=\"number\" id=\"year\" formControlName=\"year\" class=\"form-control\">\r\n  </div>\r\n  <select id=\"type\" formControlName=\"type\" class=\"form-control\">\r\n    <option value=0>Sedan</option>\r\n    <option value=1>Van</option>\r\n  </select>\r\n  <hr>\r\n  <button type=\"submit\" class=\"btn btn-primary\">{{editMode ? 'Edit' : 'Add'}}</button>\r\n</form>\r\n\r\n"
 
 /***/ }),
 
@@ -385,9 +385,10 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var AddCarComponent = /** @class */ (function () {
-    function AddCarComponent(carsService, route) {
+    function AddCarComponent(carsService, route, router) {
         this.carsService = carsService;
         this.route = route;
+        this.router = router;
         this.editMode = false;
     }
     AddCarComponent.prototype.ngOnInit = function () {
@@ -403,11 +404,22 @@ var AddCarComponent = /** @class */ (function () {
                 });
             }
             else {
-                _this.car = _this.carsService.getCarByNumber(_this.id);
+                _this.carsService.getCarByNumber(_this.id).subscribe(function (data) {
+                    if (!data) {
+                        _this.router.navigate(['/home', 'cars']);
+                        return;
+                    }
+                    _this.car = data;
+                    _this.carForm.patchValue({
+                        'registration': _this.car['Registration'],
+                        'year': _this.car['Year'],
+                        'type': _this.car['CarType']
+                    });
+                });
                 _this.carForm = new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormGroup"]({
-                    registration: new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](_this.car.registration),
-                    year: new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](_this.car.year),
-                    type: new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](_this.car.carType),
+                    registration: new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](),
+                    year: new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](),
+                    type: new _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormControl"](),
                 });
             }
         });
@@ -416,19 +428,19 @@ var AddCarComponent = /** @class */ (function () {
         var c;
         if (this.editMode) {
             c = {
-                carNumber: this.car.carNumber,
-                driverId: this.car.driverId,
+                carNumber: this.car['CarNumber'],
+                driver: this.car['Driver'],
                 carType: +this.carForm.value.type,
                 registration: this.carForm.value.registration,
                 year: +this.carForm.value.year
             };
             this.carsService.updateCar(c);
+            this.router.navigate(['../'], { relativeTo: this.route });
         }
         else {
             c = {
-                //TODO remove when connected with api service
-                carNumber: -1,
-                driverId: null,
+                carNumber: null,
+                driver: null,
                 carType: +this.carForm.value.type,
                 registration: this.carForm.value.registration,
                 year: +this.carForm.value.year
@@ -443,7 +455,8 @@ var AddCarComponent = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./add-car.component.css */ "./src/app/components/cars/add-car/add-car.component.css")]
         }),
         __metadata("design:paramtypes", [_services_cars_data_service__WEBPACK_IMPORTED_MODULE_1__["CarsDataService"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"]])
+            _angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
     ], AddCarComponent);
     return AddCarComponent;
 }());
@@ -470,7 +483,7 @@ module.exports = "p{\r\n    font-size: 20px\r\n}"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Details</h2>\r\n<div class=\"pull-left\">\r\n  <p class=\"list-group-item-text\">Registration: {{car.registration}}</p>\r\n  <p class=\"list-group-item-text\">DriverId: {{car.driverId}}</p>\r\n  <p class=\"list-group-item-text\">CarType: {{carType}}</p>\r\n  <p class=\"list-group-item-text\">Year: {{car.year}}</p>\r\n</div>\r\n<div class=\"pull-right\">\r\n<a class=\"btn btn-primary\" (click)=\"onEdit()\">Edit</a>\r\n<a *ngIf=\"!car.driverId\" class=\"btn btn-danger\" (click)=\"onRemove()\">Remove</a>\r\n</div>"
+module.exports = "<h2>Details</h2>\r\n<div class=\"pull-left\">\r\n  <p class=\"list-group-item-text\">Registration: {{car?.Registration}}</p>\r\n  <p class=\"list-group-item-text\">Driver: {{car?.Driver}}</p>\r\n  <p class=\"list-group-item-text\">CarType: {{car?.CarType === 0 ? 'Sedan' : 'Van'}}</p>\r\n  <p class=\"list-group-item-text\">Year: {{car?.Year}}</p>\r\n</div>\r\n<div class=\"pull-right\">\r\n<a class=\"btn btn-primary\" (click)=\"onEdit()\">Edit</a>\r\n<a *ngIf=\"!car?.Driver\" class=\"btn btn-danger\" (click)=\"onRemove()\">Remove</a>\r\n</div>"
 
 /***/ }),
 
@@ -485,9 +498,8 @@ module.exports = "<h2>Details</h2>\r\n<div class=\"pull-left\">\r\n  <p class=\"
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CarDetailsComponent", function() { return CarDetailsComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _services_interfaces__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../services/interfaces */ "./src/app/services/interfaces.ts");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var _services_cars_data_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/cars-data.service */ "./src/app/services/cars-data.service.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _services_cars_data_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../services/cars-data.service */ "./src/app/services/cars-data.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -500,7 +512,6 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-
 var CarDetailsComponent = /** @class */ (function () {
     function CarDetailsComponent(route, router, carsService) {
         this.route = route;
@@ -510,30 +521,24 @@ var CarDetailsComponent = /** @class */ (function () {
     }
     CarDetailsComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.route.params.subscribe(function (params) {
+        this.carSubscription = this.route.params.subscribe(function (params) {
             _this.id = +params['id'];
-            if (!_this.carsService.exists(_this.id)) {
-                _this.router.navigate(['../'], { relativeTo: _this.route });
-            }
-            _this.car = _this.carsService.getCarByNumber(_this.id);
-            switch (_this.car.carType) {
-                case _services_interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].sedan:
-                    _this.carType = 'Sedan';
-                    break;
-                case _services_interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van:
-                    _this.carType = 'Van';
-                    break;
-                case _services_interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].undefined:
-                    _this.carType = 'Undefined';
-                    break;
-            }
+            _this.carSubscription = _this.carsService.getCarByNumber(_this.id).subscribe(function (car) {
+                if (!car) {
+                    _this.router.navigate(['../'], { relativeTo: _this.route });
+                }
+                _this.car = car;
+            });
         });
     };
+    CarDetailsComponent.prototype.ngOnDestroy = function () {
+        this.carSubscription.unsubscribe();
+    };
     CarDetailsComponent.prototype.onEdit = function () {
-        this.router.navigate(['../', this.car.carNumber, 'edit'], { relativeTo: this.route });
+        this.router.navigate(['../', this.car['CarNumber'], 'edit'], { relativeTo: this.route });
     };
     CarDetailsComponent.prototype.onRemove = function () {
-        this.carsService.removeCar(this.car.carNumber);
+        this.carsService.removeCar(this.car['CarNumber']);
         this.router.navigate(['../'], { relativeTo: this.route });
     };
     CarDetailsComponent = __decorate([
@@ -542,9 +547,9 @@ var CarDetailsComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./car-details.component.html */ "./src/app/components/cars/car-details/car-details.component.html"),
             styles: [__webpack_require__(/*! ./car-details.component.css */ "./src/app/components/cars/car-details/car-details.component.css")]
         }),
-        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
-            _services_cars_data_service__WEBPACK_IMPORTED_MODULE_3__["CarsDataService"]])
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["ActivatedRoute"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"],
+            _services_cars_data_service__WEBPACK_IMPORTED_MODULE_2__["CarsDataService"]])
     ], CarDetailsComponent);
     return CarDetailsComponent;
 }());
@@ -571,7 +576,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<a [routerLink]=\"[car.carNumber]\" routerLinkActive=\"active\" style=\"cursor:pointer\" class=\"list-group-item clearfix\" >\r\n  <div class=\"pull-left\">\r\n      <h4 class=\"list-group-item-heading\">{{car.carNumber}}</h4>\r\n  </div>\r\n</a>"
+module.exports = "<a [routerLink]=\"[car.CarNumber]\" routerLinkActive=\"active\" style=\"cursor:pointer\" class=\"list-group-item clearfix\" >\r\n  <div class=\"pull-left\">\r\n      <h4 class=\"list-group-item-heading\">{{car.CarNumber}}</h4>\r\n  </div>\r\n</a>"
 
 /***/ }),
 
@@ -681,9 +686,9 @@ var CarsListComponent = /** @class */ (function () {
     }
     CarsListComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.cars = this.carService.getAllCars();
-        this.carsSubscription = this.carService.carsChanged.subscribe(function (cars) {
-            _this.cars = cars;
+        this.carsSubscription = this.carService.getAllCars().subscribe(function (data) {
+            _this.cars = data;
+            console.log(_this.cars);
         });
     };
     CarsListComponent.prototype.ngOnDestroy = function () {
@@ -1031,7 +1036,7 @@ var HeaderComponent = /** @class */ (function () {
         this.router.navigate(['/login']);
     };
     HeaderComponent.prototype.onDeleteAccount = function () {
-        this.authService.removeUser(this.username);
+        this.usersService.removeUser(this.username);
     };
     HeaderComponent.prototype.toogleCollapse = function () {
         this.responsiveNavbar.nativeElement.classList.toggle('collapse');
@@ -1138,7 +1143,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2\">\n      <form [formGroup]=\"loginForm\" (submit)=\"onLogin()\">\n        <div class=\"form-group\">\n          <label for=\"username\">Username</label>\n          <input type=\"text\" id=\"username\" formControlName=\"username\" class=\"form-control\">\n        </div>\n        <div class=\"form-group\">\n          <label for=\"password\">Password</label>\n          <input type=\"password\" id=\"password\" formControlName=\"password\" class=\"form-control\">\n        </div>\n        <span *ngIf=\"failed\" class=\"help-block\">Invalid username or password!</span>\n        <button [disabled]=\"!loginForm.valid\" type=\"submit\" class=\"btn btn-default\">Login</button>\n      </form>\n    </div>\n  </div>\n</div>"
+module.exports = "<div class=\"container\">\r\n  <div class=\"row\">\r\n    <div class=\"col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2\">\r\n      <form [formGroup]=\"loginForm\" (submit)=\"onLogin()\">\r\n        <div class=\"form-group\">\r\n          <label for=\"username\">Username</label>\r\n          <input type=\"text\" id=\"username\" formControlName=\"username\" class=\"form-control\">\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"password\">Password</label>\r\n          <input type=\"password\" id=\"password\" formControlName=\"password\" class=\"form-control\">\r\n        </div>\r\n        <span *ngIf=\"failed\" class=\"help-block\">Invalid username or password!</span>\r\n        <button [disabled]=\"!loginForm.valid\" type=\"submit\" class=\"btn btn-default\">Login</button>\r\n      </form>\r\n    </div>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -1230,7 +1235,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<form *ngIf=\"!isDriver\" [formGroup]=\"acceptForm\" (submit)=\"onAccept()\">\n<div class=\"form-group\">\n  <label for=\"driver\">Select Driver</label>\n  <select id=\"driver\" formControlName=\"driver\" class=\"form-control\">\n    <option *ngFor=\"let driver of drivers\" [value]=\"driver\">{{driver}}</option>\n  </select>\n</div>\n<br>\n<span class=\"help-block\" *ngIf=\"noFreeDrivers\">Fields marked with * are required.</span>\n<button [disabled]=\"!acceptForm.valid\" type=\"submit\" class=\"btn btn-default\">Accept</button>\n</form>"
+module.exports = "<form *ngIf=\"!isDriver\" [formGroup]=\"acceptForm\" (submit)=\"onAccept()\">\r\n<div class=\"form-group\">\r\n  <label for=\"driver\">Select Driver</label>\r\n  <select id=\"driver\" formControlName=\"driver\" class=\"form-control\">\r\n    <option *ngFor=\"let driver of drivers\" [value]=\"driver\">{{driver}}</option>\r\n  </select>\r\n</div>\r\n<br>\r\n<span class=\"help-block\" *ngIf=\"noFreeDrivers\">Fields marked with * are required.</span>\r\n<button [disabled]=\"!acceptForm.valid\" type=\"submit\" class=\"btn btn-default\">Accept</button>\r\n</form>"
 
 /***/ }),
 
@@ -1355,7 +1360,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  add-comment works!\n</p>\n"
+module.exports = "<p>\r\n  add-comment works!\r\n</p>\r\n"
 
 /***/ }),
 
@@ -1418,7 +1423,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  comment-details works!\n</p>\n"
+module.exports = "<p>\r\n  comment-details works!\r\n</p>\r\n"
 
 /***/ }),
 
@@ -1485,7 +1490,7 @@ module.exports = "agm-map{\r\n    height: 300px;\r\n}"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h3 *ngIf=\"!editMode\">New ride</h3>\n<h3 *ngIf=\"editMode\">Edit ride</h3>\n\n<!--Google maps component-->\n<agm-map [zoom]=\"zoom\" [latitude]=\"latitude\" [longitude]=\"longitude\" (mapClick)=\"onChoseLocation($event)\">\n  <agm-marker *ngIf=\"chosen\" [longitude]=\"marker.lng\" [latitude]=\"marker.lat\" [markerDraggable]=\"draggable\"></agm-marker>\n</agm-map>\n\n<form [formGroup]=\"rideForm\" (submit)=\"onSubmit()\">\n  <div class=\"form-group\">\n    <label for=\"address\">Address</label>\n    <input type=\"text\" id=\"address\" formControlName=\"address\" class=\"form-control\">\n  </div>\n  <button class=\"btn btn-default\" type=\"button\" (click)=\"onCheckAddress()\">Check Address</button>\n  <div class=\"form-group\">\n    <label for=\"cartype\">Car type</label>\n    <select id=\"type\" formControlName=\"cartype\" class=\"form-control\">\n      <option value=0>Sedan</option>\n      <option value=1>Van</option>\n    </select>\n  </div>\n  <hr>\n  <button type=\"submit\" class=\"btn btn-primary\">{{editMode ? 'Edit' : 'Add'}}</button>\n</form>"
+module.exports = "<h3 *ngIf=\"!editMode\">New ride</h3>\r\n<h3 *ngIf=\"editMode\">Edit ride</h3>\r\n\r\n<!--Google maps component-->\r\n<agm-map [zoom]=\"zoom\" [latitude]=\"latitude\" [longitude]=\"longitude\" (mapClick)=\"onChoseLocation($event)\">\r\n  <agm-marker *ngIf=\"chosen\" [longitude]=\"marker.lng\" [latitude]=\"marker.lat\" [markerDraggable]=\"draggable\"></agm-marker>\r\n</agm-map>\r\n\r\n<form [formGroup]=\"rideForm\" (submit)=\"onSubmit()\">\r\n  <div class=\"form-group\">\r\n    <label for=\"address\">Address</label>\r\n    <input type=\"text\" id=\"address\" formControlName=\"address\" class=\"form-control\">\r\n  </div>\r\n  <button class=\"btn btn-default\" type=\"button\" (click)=\"onCheckAddress()\">Check Address</button>\r\n  <div class=\"form-group\">\r\n    <label for=\"cartype\">Car type</label>\r\n    <select id=\"type\" formControlName=\"cartype\" class=\"form-control\">\r\n      <option value=0>Sedan</option>\r\n      <option value=1>Van</option>\r\n    </select>\r\n  </div>\r\n  <hr>\r\n  <button type=\"submit\" class=\"btn btn-primary\">{{editMode ? 'Edit' : 'Add'}}</button>\r\n</form>"
 
 /***/ }),
 
@@ -1659,7 +1664,7 @@ module.exports = ".help-block{\r\n    color: red;\r\n    font-size: 20px;\r\n}\r
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Details</h2>\n<div *ngIf=\"ride\" class=\"pull-left\">\n  <p class=\"list-group-item-text\" >Pickup location: {{ride.location.address}}</p>\n  <p *ngIf=\"ride.destination\" class=\"list-group-item-text\">Destination : {{ride.destination.address}}</p>\n  <p class=\"list-group-item-text\">Created on: {{ride.time}}</p>\n  <p class=\"list-group-item-text\">Status: {{rideStatus}}</p>\n  <p class=\"list-group-item-text\">Driver: {{ride.driver}}</p>\n  <p class=\"list-group-item-text\">Fare: {{ride.fare}}</p>\n  <app-comment-details *ngIf=\"ride && ride.comment\" [comment]=\"ride.comment\"></app-comment-details>\n  <span class=\"help-block\" *ngIf=\"cancelFailed\">Failed to cancel ride, no longer in waiting.</span>\n</div>\n\n<div class=\"pull-right\">\n  <a *ngIf=\"(userType === 3 || userType === 2) && ride.status === 2 && (userType === 2 && driverFree)\" [routerLink]=\"['accept']\" class=\"btn btn-success\">Accept</a>\n  <button *ngIf=\"userType === 1 && ride.status === 2\"  class=\"btn btn-danger\" (click)=\"onCancel()\">Cancel</button>\n</div>"
+module.exports = "<h2>Details</h2>\r\n<div *ngIf=\"ride\" class=\"pull-left\">\r\n  <p class=\"list-group-item-text\" >Pickup location: {{ride.location.address}}</p>\r\n  <p *ngIf=\"ride.destination\" class=\"list-group-item-text\">Destination : {{ride.destination.address}}</p>\r\n  <p class=\"list-group-item-text\">Created on: {{ride.time}}</p>\r\n  <p class=\"list-group-item-text\">Status: {{rideStatus}}</p>\r\n  <p class=\"list-group-item-text\">Driver: {{ride.driver}}</p>\r\n  <p class=\"list-group-item-text\">Fare: {{ride.fare}}</p>\r\n  <app-comment-details *ngIf=\"ride && ride.comment\" [comment]=\"ride.comment\"></app-comment-details>\r\n  <span class=\"help-block\" *ngIf=\"cancelFailed\">Failed to cancel ride, no longer in waiting.</span>\r\n</div>\r\n\r\n<div class=\"pull-right\">\r\n  <a *ngIf=\"(userType === 3 || userType === 2) && ride.status === 2 && (userType === 2 && driverFree)\" [routerLink]=\"['accept']\" class=\"btn btn-success\">Accept</a>\r\n  <button *ngIf=\"userType === 1 && ride.status === 2\"  class=\"btn btn-danger\" (click)=\"onCancel()\">Cancel</button>\r\n</div>"
 
 /***/ }),
 
@@ -1796,7 +1801,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<a [routerLink]=\"[ride.id]\" routerLinkActive=\"active\" style=\"cursor:pointer\" class=\"list-group-item clearfix\" >\n  <div class=\"pull-left\">\n      <h4 class=\"list-group-item-heading\">{{ride.location.address}}</h4>\n      <h4 class=\"list-group-item-heading\">{{ride.time}}</h4>\n  </div>\n</a>"
+module.exports = "<a [routerLink]=\"[ride.id]\" routerLinkActive=\"active\" style=\"cursor:pointer\" class=\"list-group-item clearfix\" >\r\n  <div class=\"pull-left\">\r\n      <h4 class=\"list-group-item-heading\">{{ride.location.address}}</h4>\r\n      <h4 class=\"list-group-item-heading\">{{ride.time}}</h4>\r\n  </div>\r\n</a>"
 
 /***/ }),
 
@@ -1863,7 +1868,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<!-- <div class=\"row\">\n<h3 *ngIf=\"waiting\">Waiting rides</h3>\n<h3 *ngIf=\"!waiting\">All rides</h3>\n</div> -->\n<div class=\"row\">\n  <button *ngIf=\"!waiting\" class=\"btn btn-primary\" (click)=\"onWaitingRides()\">All rides</button>\n  <button *ngIf=\"waiting\" class=\"btn btn-primary\" (click)=\"onAllRides()\">Waiting</button>\n</div>\n<br>\n\n<div class=\" row well well-sm pre-scrollable\">\n  <div class=\"list-group\">\n  <app-ride-item *ngFor=\"let ride of rides\"\n  [ride]=\"ride\"></app-ride-item>\n  </div>\n</div>"
+module.exports = "<!-- <div class=\"row\">\r\n<h3 *ngIf=\"waiting\">Waiting rides</h3>\r\n<h3 *ngIf=\"!waiting\">All rides</h3>\r\n</div> -->\r\n<div class=\"row\">\r\n  <button *ngIf=\"!waiting\" class=\"btn btn-primary\" (click)=\"onWaitingRides()\">All rides</button>\r\n  <button *ngIf=\"waiting\" class=\"btn btn-primary\" (click)=\"onAllRides()\">Waiting</button>\r\n</div>\r\n<br>\r\n\r\n<div class=\" row well well-sm pre-scrollable\">\r\n  <div class=\"list-group\">\r\n  <app-ride-item *ngFor=\"let ride of rides\"\r\n  [ride]=\"ride\"></app-ride-item>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -1965,7 +1970,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-md-5\">\n    <app-rides-list></app-rides-list>\n  </div>\n  <div class=\"col-md-5 col-md-offset-1\">\n    <router-outlet></router-outlet>\n  </div>\n</div>"
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-md-5\">\r\n    <app-rides-list></app-rides-list>\r\n  </div>\r\n  <div class=\"col-md-5 col-md-offset-1\">\r\n    <router-outlet></router-outlet>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -2028,7 +2033,7 @@ module.exports = "input.ng-touched.ng-invalid{\r\n    border: 1px red solid\r\n}
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2\">\n      <form [formGroup]=\"registrationForm\" (submit)=\"onEdit()\">\n        <div class=\"form-group\">\n          <label for=\"email\">Email *</label>\n          <input type=\"email\" id=\"email\" formControlName=\"email\" class=\"form-control\">\n          <span class=\"help-block\" *ngIf=\"registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['required']\">This fields is required</span>\n          <span class=\"help-block\" *ngIf=\"registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['email']\">Invalid email format</span>\n        </div>\n        <div class=\"form-group\">\n          <label for=\"name\">Name</label>\n          <input type=\"text\" id=\"name\" formControlName=\"name\" class=\"form-control\">\n        </div>\n        <div class=\"form-group\">\n          <label for=\"lastname\">Lastname</label>\n          <input type=\"text\" id=\"lastname\" formControlName=\"lastname\" class=\"form-control\">\n        </div>\n        <div class=\"form-group\">\n          <label for=\"jmbg\">JMBG</label>\n          <input type=\"text\" id=\"jmbg\" formControlName=\"jmbg\" class=\"form-control\">\n          <span class=\"help-block\" *ngIf=\"registrationForm.get('jmbg').invalid && registrationForm.get('jmbg').touched && registrationForm.get('jmbg').errors['jmbgInvalid']\">Invalid JMBG</span>\n        </div>\n        <div class=\"form-group\">\n          <label for=\"phone\">Phone *</label>\n          <input type=\"text\" id=\"phone\" formControlName=\"phone\" class=\"form-control\">\n          <span class=\"help-block\" *ngIf=\"registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['required']\">This fields is required.</span>\n          <span class=\"help-block\" *ngIf=\"registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['pattern']\">Phone can contain only numbers.</span>\n        </div>\n        <!--For future use if driver wants to change car-->\n        <!-- <div class=\"form-group\" *ngIf=\"isDriver\">\n          <label for=\"carNumber\">Car Number</label>\n          <select id=\"carNumber\" formControlName=\"carNumber\" class=\"form-control\">\n            <option *ngFor=\"let car of freeCars\" [value]=\"car.carNumber\">{{car.carNumber}}</option>\n          </select>\n        </div> -->\n        <br>\n        <span class=\"help-block\">Fields marked with * are required.</span>\n        <button [disabled]=\"!registrationForm.valid\" type=\"submit\" class=\"btn btn-primary pull-left\">Confirm</button>\n        <a routerLink=\"/profile\" class=\"btn btn-danger pull\">Cancel</a>\n      </form>\n    </div>\n  </div>\n</div>"
+module.exports = "<div class=\"container\">\r\n  <div class=\"row\">\r\n    <div class=\"col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2\">\r\n      <form [formGroup]=\"registrationForm\" (submit)=\"onEdit()\">\r\n        <div class=\"form-group\">\r\n          <label for=\"email\">Email *</label>\r\n          <input type=\"email\" id=\"email\" formControlName=\"email\" class=\"form-control\">\r\n          <span class=\"help-block\" *ngIf=\"registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['required']\">This fields is required</span>\r\n          <span class=\"help-block\" *ngIf=\"registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['email']\">Invalid email format</span>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"name\">Name</label>\r\n          <input type=\"text\" id=\"name\" formControlName=\"name\" class=\"form-control\">\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"lastname\">Lastname</label>\r\n          <input type=\"text\" id=\"lastname\" formControlName=\"lastname\" class=\"form-control\">\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"jmbg\">JMBG</label>\r\n          <input type=\"text\" id=\"jmbg\" formControlName=\"jmbg\" class=\"form-control\">\r\n          <span class=\"help-block\" *ngIf=\"registrationForm.get('jmbg').invalid && registrationForm.get('jmbg').touched && registrationForm.get('jmbg').errors['jmbgInvalid']\">Invalid JMBG</span>\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"phone\">Phone *</label>\r\n          <input type=\"text\" id=\"phone\" formControlName=\"phone\" class=\"form-control\">\r\n          <span class=\"help-block\" *ngIf=\"registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['required']\">This fields is required.</span>\r\n          <span class=\"help-block\" *ngIf=\"registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['pattern']\">Phone can contain only numbers.</span>\r\n        </div>\r\n        <!--For future use if driver wants to change car-->\r\n        <!-- <div class=\"form-group\" *ngIf=\"isDriver\">\r\n          <label for=\"carNumber\">Car Number</label>\r\n          <select id=\"carNumber\" formControlName=\"carNumber\" class=\"form-control\">\r\n            <option *ngFor=\"let car of freeCars\" [value]=\"car.carNumber\">{{car.carNumber}}</option>\r\n          </select>\r\n        </div> -->\r\n        <br>\r\n        <span class=\"help-block\">Fields marked with * are required.</span>\r\n        <button [disabled]=\"!registrationForm.valid\" type=\"submit\" class=\"btn btn-primary pull-left\">Confirm</button>\r\n        <a routerLink=\"/profile\" class=\"btn btn-danger pull\">Cancel</a>\r\n      </form>\r\n    </div>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -2158,7 +2163,7 @@ module.exports = "p{\r\n    font-size: 20px\r\n}"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Details</h2>\n<div class=\"list-group\">\n  <p>Name: {{user.name}}</p>\n  <p>Lastname: {{user.lastname}}</p>\n  <p>Username: {{user.username}}</p>\n  <p>Email: {{user.email}}</p>\n  <p>JMBG: {{user.jmbg}}</p>\n  <p>Phone: {{user.phone}}</p>\n  <p *ngIf=\"user && user.userType && user.userType === 2\">Car number: {{user.carNumber}}</p>\n</div>\n<hr>\n<div class=\"row\">\n  <button type=\"button\" class=\"col-sm-2 btn btn-primary\" (click)=\"onUserChange()\">Edit</button>\n</div>\n<br>\n<div class=\"row\">\n    <button type=\"button\" class=\"col-sm-2 btn btn-primary\" (click)=\"onPasswordChange()\">Change Password</button>\n</div>"
+module.exports = "<h2>Details</h2>\r\n<div class=\"list-group\">\r\n  <p>Name: {{user.name}}</p>\r\n  <p>Lastname: {{user.lastname}}</p>\r\n  <p>Username: {{user.username}}</p>\r\n  <p>Email: {{user.email}}</p>\r\n  <p>JMBG: {{user.jmbg}}</p>\r\n  <p>Phone: {{user.phone}}</p>\r\n  <p *ngIf=\"user && user.userType && user.userType === 2\">Car number: {{user.carNumber}}</p>\r\n</div>\r\n<hr>\r\n<div class=\"row\">\r\n  <button type=\"button\" class=\"col-sm-2 btn btn-primary\" (click)=\"onUserChange()\">Edit</button>\r\n</div>\r\n<br>\r\n<div class=\"row\">\r\n    <button type=\"button\" class=\"col-sm-2 btn btn-primary\" (click)=\"onPasswordChange()\">Change Password</button>\r\n</div>"
 
 /***/ }),
 
@@ -2240,7 +2245,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Details</h2>\n<div class=\"pull-left\">\n  <p class=\"list-group-item-text\">Username: {{user.username}}</p>\n  <p class=\"list-group-item-text\">Email: {{user.email}}</p>\n  <p class=\"list-group-item-text\">Phone: {{user.phone}}</p>\n  <p class=\"list-group-item-text\">Type: {{userType}}</p>\n</div>\n<div class=\"pull-right\">\n<button *ngIf=\"!user.blocked\" class=\"btn btn-danger\" (click)=\"onBlock()\">Block user</button>\n<button *ngIf=\"user.blocked\" class=\"btn btn-success\" (click)=\"onUnblock()\">Unblock user</button>\n</div>"
+module.exports = "<h2>Details</h2>\r\n<div class=\"pull-left\">\r\n  <p class=\"list-group-item-text\">Username: {{user.username}}</p>\r\n  <p class=\"list-group-item-text\">Email: {{user.email}}</p>\r\n  <p class=\"list-group-item-text\">Phone: {{user.phone}}</p>\r\n  <p class=\"list-group-item-text\">Type: {{userType}}</p>\r\n</div>\r\n<div class=\"pull-right\">\r\n<button *ngIf=\"!user.blocked\" class=\"btn btn-danger\" (click)=\"onBlock()\">Block user</button>\r\n<button *ngIf=\"user.blocked\" class=\"btn btn-success\" (click)=\"onUnblock()\">Unblock user</button>\r\n</div>"
 
 /***/ }),
 
@@ -2343,7 +2348,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<a [routerLink]=\"[username]\" routerLinkActive=\"active\" style=\"cursor:pointer\" class=\"list-group-item clearfix\" >\n  <div class=\"pull-left\">\n      <h4 class=\"list-group-item-heading\">{{username}}</h4>\n  </div>\n</a>"
+module.exports = "<a [routerLink]=\"[username]\" routerLinkActive=\"active\" style=\"cursor:pointer\" class=\"list-group-item clearfix\" >\r\n  <div class=\"pull-left\">\r\n      <h4 class=\"list-group-item-heading\">{{username}}</h4>\r\n  </div>\r\n</a>"
 
 /***/ }),
 
@@ -2410,7 +2415,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\" row well well-sm pre-scrollable\">\n  <div class=\"list-group\">\n  <app-user-item *ngFor=\"let username of users\"\n  [username]=\"username\"></app-user-item>\n  </div>\n</div>"
+module.exports = "<div class=\" row well well-sm pre-scrollable\">\r\n  <div class=\"list-group\">\r\n  <app-user-item *ngFor=\"let username of users\"\r\n  [username]=\"username\"></app-user-item>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -2482,7 +2487,7 @@ module.exports = "input.ng-touched.ng-invalid{\r\n    border: 1px red solid\r\n}
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <div class=\"row\">\n    <div class=\"col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2\">\n      <form [formGroup]=\"passwordChangeForm\" (submit)=\"onConfirm()\">\n        <div class=\"form-group\">\n          <label for=\"password\">New Password</label>\n          <input type=\"text\" id=\"password\" formControlName=\"password\" class=\"form-control\">\n        </div>\n        <div class=\"form-group\">\n          <label for=\"confirm\">Confirm Password</label>\n          <input type=\"text\" id=\"confirm\" formControlName=\"confirm\" class=\"form-control\">\n          <span *ngIf=\"!passwordChangeForm.get('confirm').valid && passwordChangeForm.get('confirm').touched && passwordChangeForm.get('confirm').errors['confirmError']\">Password must match!</span>\n        </div>\n        <br>\n        <button [disabled]=\"!passwordChangeForm.valid\" type=\"submit\" class=\"btn btn-default\">Confirm</button>\n      </form>\n    </div>\n  </div>\n</div>"
+module.exports = "<div class=\"container\">\r\n  <div class=\"row\">\r\n    <div class=\"col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2\">\r\n      <form [formGroup]=\"passwordChangeForm\" (submit)=\"onConfirm()\">\r\n        <div class=\"form-group\">\r\n          <label for=\"password\">New Password</label>\r\n          <input type=\"text\" id=\"password\" formControlName=\"password\" class=\"form-control\">\r\n        </div>\r\n        <div class=\"form-group\">\r\n          <label for=\"confirm\">Confirm Password</label>\r\n          <input type=\"text\" id=\"confirm\" formControlName=\"confirm\" class=\"form-control\">\r\n          <span *ngIf=\"!passwordChangeForm.get('confirm').valid && passwordChangeForm.get('confirm').touched && passwordChangeForm.get('confirm').errors['confirmError']\">Password must match!</span>\r\n        </div>\r\n        <br>\r\n        <button [disabled]=\"!passwordChangeForm.valid\" type=\"submit\" class=\"btn btn-default\">Confirm</button>\r\n      </form>\r\n    </div>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -2571,7 +2576,7 @@ module.exports = "input.ng-invalid.ng-touched{\r\n    border: 1px red solid\r\n}
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n    <div class=\"row\">\n      <div class=\"col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2\">\n        <form [formGroup]=\"registrationForm\" (submit)=\"onRegistration()\">\n          <div class=\"form-group\">\n            <label for=\"username\">Username *</label>\n            <input type=\"text\" id=\"username\" formControlName=\"username\" class=\"form-control\">\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('username').touched && registrationForm.get('username').invalid\">This fields is required</span>\n            <span></span>\n          </div>\n          <div class=\"form-group\">\n            <label for=\"password\">Password *</label>\n            <input type=\"password\" id=\"password\" formControlName=\"password\" class=\"form-control\">\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('password').touched && registrationForm.get('password').invalid\">This fields is required</span>\n          </div>\n          <div class=\"form-group\">\n            <label for=\"email\">Email *</label>\n            <input type=\"email\" id=\"email\" formControlName=\"email\" class=\"form-control\">\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['required']\">This fields is required</span>\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['email']\">Invalid email format</span>\n          </div>\n          <div class=\"form-group\">\n            <label for=\"name\">Name</label>\n            <input type=\"text\" id=\"name\" formControlName=\"name\" class=\"form-control\">\n          </div>\n          <div class=\"form-group\">\n            <label for=\"lastname\">Lastname</label>\n            <input type=\"text\" id=\"lastname\" formControlName=\"lastname\" class=\"form-control\">\n          </div>\n          <div class=\"form-group\">\n            <label for=\"jmbg\">JMBG</label>\n            <input type=\"text\" id=\"jmbg\" formControlName=\"jmbg\" class=\"form-control\">\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('jmbg').invalid && registrationForm.get('jmbg').touched && registrationForm.get('jmbg').errors['jmbgInvalid']\">Invalid JMBG</span>\n          </div>\n          <div class=\"form-group\">\n            <label for=\"phone\">Phone *</label>\n            <input type=\"text\" id=\"phone\" formControlName=\"phone\" class=\"form-control\">\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['required']\">This fields is required.</span>\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['pattern']\">Phone can contain only numbers.</span>\n          </div>\n          <div class=\"form-group\" *ngIf=\"isDriver\">\n            <label for=\"carNumber\">Car Number</label>\n            <select id=\"carNumber\" formControlName=\"carNumber\" class=\"form-control\">\n              <option *ngFor=\"let car of freeCars\" [value]=\"car.carNumber\">{{car.carNumber}}</option>\n            </select>\n          </div>\n          <br>\n          <span class=\"help-block\">Fields marked with * are required.</span>\n          <button [disabled]=\"!registrationForm.valid\" type=\"submit\" class=\"btn btn-default\">Login</button>\n        </form>\n      </div>\n    </div>\n  </div>"
+module.exports = "<div class=\"container\">\r\n    <div class=\"row\">\r\n      <div class=\"col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2\">\r\n        <form [formGroup]=\"registrationForm\" (submit)=\"onRegistration()\">\r\n          <div class=\"form-group\">\r\n            <label for=\"username\">Username *</label>\r\n            <input type=\"text\" id=\"username\" formControlName=\"username\" class=\"form-control\">\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('username').touched && registrationForm.get('username').invalid\">This fields is required</span>\r\n            <span></span>\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"password\">Password *</label>\r\n            <input type=\"password\" id=\"password\" formControlName=\"password\" class=\"form-control\">\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('password').touched && registrationForm.get('password').invalid\">This fields is required</span>\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"email\">Email *</label>\r\n            <input type=\"email\" id=\"email\" formControlName=\"email\" class=\"form-control\">\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['required']\">This fields is required</span>\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['email']\">Invalid email format</span>\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"name\">Name</label>\r\n            <input type=\"text\" id=\"name\" formControlName=\"name\" class=\"form-control\">\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"lastname\">Lastname</label>\r\n            <input type=\"text\" id=\"lastname\" formControlName=\"lastname\" class=\"form-control\">\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"jmbg\">JMBG</label>\r\n            <input type=\"text\" id=\"jmbg\" formControlName=\"jmbg\" class=\"form-control\">\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('jmbg').invalid && registrationForm.get('jmbg').touched && registrationForm.get('jmbg').errors['jmbgInvalid']\">Invalid JMBG</span>\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"phone\">Phone *</label>\r\n            <input type=\"text\" id=\"phone\" formControlName=\"phone\" class=\"form-control\">\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['required']\">This fields is required.</span>\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['pattern']\">Phone can contain only numbers.</span>\r\n          </div>\r\n          <div class=\"form-group\" >\r\n            <label for=\"sex\">Sex</label>\r\n            <select id=\"sex\" formControlName=\"sex\" class=\"form-control\">\r\n              <option value=0>Male</option>\r\n              <option value=1>Female</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group\" *ngIf=\"isDriver\">\r\n            <label for=\"carNumber\">Car Number</label>\r\n            <select id=\"carNumber\" formControlName=\"carNumber\" class=\"form-control\">\r\n              <option *ngFor=\"let car of freeCars\" [value]=\"car.carNumber\">{{car.carNumber}}</option>\r\n            </select>\r\n          </div>\r\n          <br>\r\n          <span class=\"help-block\">Fields marked with * are required.</span>\r\n          <button [disabled]=\"!registrationForm.valid\" type=\"submit\" class=\"btn btn-default\">Submit</button>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>"
 
 /***/ }),
 
@@ -2645,6 +2650,7 @@ var RegistrationComponent = /** @class */ (function () {
             jmbg: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].pattern('[0-9]{13,13}'), this.jmbgValidator.bind(this)]),
             phone: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].pattern('[0-9]*')]),
             carNumber: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null),
+            sex: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](0)
         });
     };
     RegistrationComponent.prototype.ngOnDestroy = function () {
@@ -2729,7 +2735,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"row\">\n  <div class=\"col-md-5\">\n    <h3>All users</h3>\n    <app-user-list></app-user-list>\n  </div>\n  <div class=\"col-md-5 col-md-offset-1\">\n    <router-outlet></router-outlet>\n  </div>\n</div>"
+module.exports = "<div class=\"row\">\r\n  <div class=\"col-md-5\">\r\n    <h3>All users</h3>\r\n    <app-user-list></app-user-list>\r\n  </div>\r\n  <div class=\"col-md-5 col-md-offset-1\">\r\n    <router-outlet></router-outlet>\r\n  </div>\r\n</div>"
 
 /***/ }),
 
@@ -3052,10 +3058,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _usertype_enum__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./usertype.enum */ "./src/app/services/usertype.enum.ts");
 /* harmony import */ var _cookie_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./cookie.service */ "./src/app/services/cookie.service.ts");
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-/* harmony import */ var _users_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./users.service */ "./src/app/services/users.service.ts");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var _external_apis_data_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./external-apis-data.service */ "./src/app/services/external-apis-data.service.ts");
-/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _external_apis_data_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./external-apis-data.service */ "./src/app/services/external-apis-data.service.ts");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3072,11 +3077,9 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
-
 var AuthService = /** @class */ (function () {
-    function AuthService(cookieService, usersService, router, http, externalApisDataService) {
+    function AuthService(cookieService, router, http, externalApisDataService) {
         this.cookieService = cookieService;
-        this.usersService = usersService;
         this.router = router;
         this.http = http;
         this.externalApisDataService = externalApisDataService;
@@ -3109,7 +3112,7 @@ var AuthService = /** @class */ (function () {
             _this.currentUser.username = username;
             _this.currentUser.token = data;
             console.log(_this.currentUser.token);
-            _this.currentUser.usertype = _usertype_enum__WEBPACK_IMPORTED_MODULE_1__["Usertype"].Driver;
+            _this.currentUser.usertype = _usertype_enum__WEBPACK_IMPORTED_MODULE_1__["Usertype"].Dispatcher;
             _this.authenticated = true;
             var cookie = _this.createCookie();
             _this.cookieService.setCookie('taxiServiceData', cookie, 365);
@@ -3124,10 +3127,6 @@ var AuthService = /** @class */ (function () {
     };
     AuthService.prototype.isUserAuthenticated = function () {
         return this.authenticated;
-    };
-    AuthService.prototype.removeUser = function (username) {
-        this.usersService.removeUser(username);
-        this.logout();
     };
     AuthService.prototype.logout = function () {
         this.currentUser.username = null;
@@ -3144,6 +3143,9 @@ var AuthService = /** @class */ (function () {
     AuthService.prototype.getCurrentUsername = function () {
         return this.currentUser.username;
     };
+    AuthService.prototype.getApiToken = function () {
+        return this.currentUser.token;
+    };
     AuthService.prototype.createCookie = function () {
         //api token to be added later
         if (this.authenticated) {
@@ -3156,7 +3158,7 @@ var AuthService = /** @class */ (function () {
         return {
             username: split[0],
             usertype: +split[1],
-            token: ''
+            token: split[2]
         };
     };
     AuthService = __decorate([
@@ -3164,10 +3166,9 @@ var AuthService = /** @class */ (function () {
             providedIn: 'root'
         }),
         __metadata("design:paramtypes", [_cookie_service__WEBPACK_IMPORTED_MODULE_2__["CookieService"],
-            _users_service__WEBPACK_IMPORTED_MODULE_4__["UsersService"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_5__["Router"],
-            _angular_common_http__WEBPACK_IMPORTED_MODULE_7__["HttpClient"],
-            _external_apis_data_service__WEBPACK_IMPORTED_MODULE_6__["ExternalApisDataService"]])
+            _angular_router__WEBPACK_IMPORTED_MODULE_4__["Router"],
+            _angular_common_http__WEBPACK_IMPORTED_MODULE_6__["HttpClient"],
+            _external_apis_data_service__WEBPACK_IMPORTED_MODULE_5__["ExternalApisDataService"]])
     ], AuthService);
     return AuthService;
 }());
@@ -3189,6 +3190,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _interfaces__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./interfaces */ "./src/app/services/interfaces.ts");
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _auth_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./auth.service */ "./src/app/services/auth.service.ts");
+/* harmony import */ var _external_apis_data_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./external-apis-data.service */ "./src/app/services/external-apis-data.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3201,58 +3205,55 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
+
+
 var CarsDataService = /** @class */ (function () {
-    function CarsDataService() {
+    function CarsDataService(http, authService, externApis) {
+        this.http = http;
+        this.authService = authService;
+        this.externApis = externApis;
         this.cars = [
-            { carNumber: 10, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].sedan, registration: 'ns-111-aa', driverId: 2, year: 2010 },
-            { carNumber: 11, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-112-aa', driverId: null, year: 2011 },
-            { carNumber: 12, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].sedan, registration: 'ns-113-aa', driverId: null, year: 2012 },
-            { carNumber: 13, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 14, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 15, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 16, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 17, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 18, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 19, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 20, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 21, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 22, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 23, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 24, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 25, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 26, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 27, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 28, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 29, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 30, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
-            { carNumber: 31, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-114-aa', driverId: 5, year: 2013 },
+            { carNumber: 10, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].sedan, registration: 'ns-111-aa', driver: 'd', year: 2010 },
+            { carNumber: 11, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].van, registration: 'ns-112-aa', driver: null, year: 2011 },
+            { carNumber: 12, carType: _interfaces__WEBPACK_IMPORTED_MODULE_1__["CarType"].sedan, registration: 'ns-113-aa', driver: null, year: 2012 },
         ];
         this.carsChanged = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
+        this.carChanged = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
     }
     CarsDataService.prototype.ngOnInit = function () {
     };
     CarsDataService.prototype.addNewCar = function (newCar) {
-        this.cars.push(newCar);
-        this.carsChanged.next(this.cars.slice());
-    };
-    CarsDataService.prototype.removeCar = function (carId) {
-        var index = this.cars.findIndex(function (car) { return car.carNumber === carId; });
-        if (index != -1) {
-            this.cars.splice(index, 1);
-        }
-        this.carsChanged.next(this.cars.slice());
-    };
-    CarsDataService.prototype.getCar = function (driverId) {
-        var foundCar = this.cars.findIndex(function (car) { return car.driverId === driverId; });
-        if (foundCar != -1) {
-            return this.cars[foundCar];
-        }
-        else {
-            return null;
-        }
+        var _this = this;
+        var url = this.externApis.getDataApiHostname() + '/cars';
+        var data = {
+            data: newCar,
+            userHash: this.authService.getApiToken()
+        };
+        this.http.post(url, data)
+            .subscribe(function (next) {
+            _this.getAllCars();
+        }, function (error) { console.log(error); });
     };
     CarsDataService.prototype.getCarByNumber = function (carNumber) {
-        var foundCar = this.cars.findIndex(function (car) { return car.carNumber === carNumber; });
+        var url = this.externApis.getDataApiHostname() + '/cars/' + carNumber;
+        return this.http.get(url);
+    };
+    CarsDataService.prototype.removeCar = function (carId) {
+        var _this = this;
+        var url = this.externApis.getDataApiHostname() + '/cars/remove';
+        var data = {
+            userHash: this.authService.getApiToken(),
+            data: carId
+        };
+        console.log(data.data);
+        this.http.post(url, data)
+            .subscribe(function (next) {
+            _this.getAllCars();
+        }, function (error) { console.log(error); });
+    };
+    CarsDataService.prototype.getCar = function (driver) {
+        var foundCar = this.cars.findIndex(function (car) { return car.driver === driver; });
         if (foundCar != -1) {
             return this.cars[foundCar];
         }
@@ -3261,38 +3262,46 @@ var CarsDataService = /** @class */ (function () {
         }
     };
     CarsDataService.prototype.getAllCars = function () {
-        return this.cars.slice();
+        var _this = this;
+        var url = this.externApis.getDataApiHostname() + '/cars';
+        var cars;
+        this.http.get(url).subscribe(function (data) {
+            _this.carsChanged.next(data);
+        });
+        return this.carsChanged;
     };
     CarsDataService.prototype.getFreeCars = function () {
         var retCars = [];
         this.cars.forEach(function (car) {
-            if (!car.driverId) {
+            if (!car.driver) {
                 retCars.push(car);
             }
         });
         return retCars;
     };
     CarsDataService.prototype.anyFreeCars = function () {
-        var index = this.cars.findIndex(function (car) { return car.driverId === null; });
+        var index = this.cars.findIndex(function (car) { return car.driver === null; });
         return index !== -1 ? true : false;
     };
     CarsDataService.prototype.updateCar = function (car) {
-        var c = this.getCarByNumber(car.carNumber);
-        c.registration = car.registration;
-        c.year = car.year;
-        c.carType = car.carType;
-    };
-    CarsDataService.prototype.exists = function (carNumber) {
-        if (this.cars.findIndex(function (car) { return car.carNumber === carNumber; }) !== -1) {
-            return true;
-        }
-        return false;
+        var _this = this;
+        var url = this.externApis.getDataApiHostname() + '/cars/' + car.carNumber;
+        var data = {
+            userHash: this.authService.getApiToken(),
+            data: car
+        };
+        this.http.put(url, data)
+            .subscribe(function (next) {
+            _this.getAllCars();
+        }, function (error) { console.log(error); });
     };
     CarsDataService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
             providedIn: 'root'
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"],
+            _auth_service__WEBPACK_IMPORTED_MODULE_4__["AuthService"],
+            _external_apis_data_service__WEBPACK_IMPORTED_MODULE_5__["ExternalApisDataService"]])
     ], CarsDataService);
     return CarsDataService;
 }());
@@ -3597,8 +3606,11 @@ var RidesService = /** @class */ (function () {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UsersService", function() { return UsersService; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _usertype_enum__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./usertype.enum */ "./src/app/services/usertype.enum.ts");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var _auth_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./auth.service */ "./src/app/services/auth.service.ts");
+/* harmony import */ var _usertype_enum__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./usertype.enum */ "./src/app/services/usertype.enum.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _external_apis_data_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./external-apis-data.service */ "./src/app/services/external-apis-data.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3611,19 +3623,27 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
+
+
 var UsersService = /** @class */ (function () {
-    function UsersService() {
-        this.usersChanged = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
+    function UsersService(http, authService, externApis) {
+        this.http = http;
+        this.authService = authService;
+        this.externApis = externApis;
+        this.usersChanged = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
         this.users = [
-            { username: 'c', password: 'c', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_1__["Usertype"].Customer, carNumber: null, email: 'customer@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
-            { username: 'd', password: 'd', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_1__["Usertype"].Driver, carNumber: 10, email: 'driver@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
-            { username: 'a', password: 'a', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_1__["Usertype"].Dispatcher, carNumber: null, email: 'dispatcher@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
+            { username: 'c', password: 'c', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Customer, carNumber: null, email: 'customer@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
+            { username: 'd', password: 'd', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Driver, carNumber: 10, email: 'driver@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
+            { username: 'a', password: 'a', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Dispatcher, carNumber: null, email: 'dispatcher@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
         ];
     }
     ;
     UsersService.prototype.addNewUser = function (newUser) {
-        this.users.push(newUser);
-        this.usersChanged.next(this.getAllUsersUsernames());
+        //this.users.push(newUser);
+        //this.usersChanged.next(this.getAllUsersUsernames());
+        var url = this.externApis.getDataApiHostname() + '/users/create';
+        this.http.post(url, newUser).subscribe(function (next) { console.log(next); }, function (error) { console.log(error.status); });
     };
     UsersService.prototype.updateUser = function (editUser) {
         var user = this.getUser(editUser.username);
@@ -3661,7 +3681,7 @@ var UsersService = /** @class */ (function () {
     UsersService.prototype.getAllUsersUsernames = function () {
         var output = [];
         this.users.forEach(function (user) {
-            if (user.userType != _usertype_enum__WEBPACK_IMPORTED_MODULE_1__["Usertype"].Dispatcher) {
+            if (user.userType != _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Dispatcher) {
                 output.push(user.username);
             }
         });
@@ -3679,7 +3699,7 @@ var UsersService = /** @class */ (function () {
     UsersService.prototype.getAllDrivers = function () {
         var drivers = [];
         this.users.forEach(function (user) {
-            if (user.userType === _usertype_enum__WEBPACK_IMPORTED_MODULE_1__["Usertype"].Driver) {
+            if (user.userType === _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Driver) {
                 drivers.push(user.username);
             }
         });
@@ -3689,7 +3709,9 @@ var UsersService = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
             providedIn: 'root'
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_4__["HttpClient"],
+            _auth_service__WEBPACK_IMPORTED_MODULE_1__["AuthService"],
+            _external_apis_data_service__WEBPACK_IMPORTED_MODULE_5__["ExternalApisDataService"]])
     ], UsersService);
     return UsersService;
 }());
@@ -3779,7 +3801,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\remoteUser\Desktop\web project\repo\TaxiService\TaxiService\AngularApp\TaxiServiceSPA\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! C:\Users\srki1\Desktop\web project\clone2\TaxiService\TaxiService\AngularApp\TaxiServiceSPA\src\main.ts */"./src/main.ts");
 
 
 /***/ })

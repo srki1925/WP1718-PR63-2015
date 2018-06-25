@@ -16,7 +16,6 @@ export class CarItemComponent implements OnInit {
               private carsService: CarsDataService) { }
 
   ngOnInit() {
-    
   }
 
 }

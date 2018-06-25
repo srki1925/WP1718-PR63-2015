@@ -53,6 +53,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       jmbg: new FormControl(null, [Validators.pattern('[0-9]{13,13}'), this.jmbgValidator.bind(this)]),
       phone: new FormControl(null, [Validators.required,Validators.pattern('[0-9]*')]),
       carNumber: new FormControl(null),
+      sex: new FormControl(0)
     });
   }
 

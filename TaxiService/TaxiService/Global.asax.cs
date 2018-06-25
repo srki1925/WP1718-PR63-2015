@@ -10,6 +10,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using DAL;
 using DataModel;
+using TaxiService.Models;
 
 namespace TaxiService
 {
@@ -40,6 +41,12 @@ namespace TaxiService
             InitCars();
             InitDrivers();
             InitCustomers();
+            foreach (var item in Repository.Instance.TaxiServiceRepository.Users.ToList())
+            {
+                var hash = AuthorizationService.ComputeSha512(item.Username + item.Password);
+                Repository.Instance.LoggedInUsers[hash] = item;
+                Console.WriteLine(hash);
+            }
         }
 
         private void ReadDispatchers()
@@ -74,7 +81,6 @@ namespace TaxiService
         {
             var fileLocation = ConfigurationManager.AppSettings["driversInitData"];
             var lines = File.ReadAllLines(fileLocation);
-            int i = 0;
             foreach (var item in lines)
             {
                 if (!item.StartsWith("//"))

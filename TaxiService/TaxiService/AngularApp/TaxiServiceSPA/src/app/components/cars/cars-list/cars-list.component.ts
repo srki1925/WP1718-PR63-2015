@@ -14,9 +14,9 @@ export class CarsListComponent implements OnInit, OnDestroy {
   constructor(private carService: CarsDataService) { }
 
   ngOnInit() {
-    this.cars = this.carService.getAllCars();
-    this.carsSubscription = this.carService.carsChanged.subscribe((cars:ICar[]) =>{
-      this.cars = cars;
+    this.carsSubscription = this.carService.getAllCars().subscribe((data) =>{
+      this.cars = data;
+      console.log(this.cars);
     });
   }
 

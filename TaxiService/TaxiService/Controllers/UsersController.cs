@@ -81,5 +81,61 @@ namespace TaxiService.Controllers
 
             return Ok();
         }
+        [HttpPost]
+        [Route("api/users/create")]
+        public IHttpActionResult Create([FromBody]NewUser user)
+        {
+            if (user.UserType == UserRole.Dispatcher || user.UserType == UserRole.Guest)
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            if (Repository.Instance.UserExists(user.Username))
+                return Conflict();
+
+            if (user.UserType == UserRole.Driver)
+            {
+                if(user.CarNumber == null)
+                    return BadRequest("carNumber is null");
+                if (Repository.Instance.CarExists((int)user.CarNumber))
+                    return BadRequest("carNumber doesn't exist");
+                var car = Repository.Instance.TaxiServiceRepository.Cars.FirstOrDefault(x => x.CarNumber == user.CarNumber);
+                var newDriver = new Driver()
+                {
+                    Username = user.Username,
+                    Password = user.Password,
+                    Email = user.Email,
+                    JMBG = user.Jmbg,
+                    Name = user.Name,
+                    Lastname = user.Lastname,
+                    PhoneNumber = user.Phone,
+                    Role = user.UserType,
+                    Sex = user.Sex,
+                    Car = car,
+                    Blocked = false,
+                    Rides = new List<Ride>()
+                };
+                car.Driver = newDriver;
+                Repository.Instance.TaxiServiceRepository.Drivers.Add(newDriver);
+                Repository.Instance.TaxiServiceRepository.SaveChanges();
+            }
+            else {
+                var newUser = new User()
+                {
+                    Username = user.Username,
+                    Password = user.Password,
+                    Email = user.Email,
+                    JMBG = user.Jmbg,
+                    Name = user.Name,
+                    Lastname = user.Lastname,
+                    PhoneNumber = user.Phone,
+                    Role = user.UserType,
+                    Sex = user.Sex,
+                    Blocked = false,
+                    Rides = new List<Ride>()
+                };
+                Repository.Instance.TaxiServiceRepository.Users.Add(newUser);
+                Repository.Instance.TaxiServiceRepository.SaveChanges();
+            }
+
+            return Created(user.Username, user);
+        }
     }
 }

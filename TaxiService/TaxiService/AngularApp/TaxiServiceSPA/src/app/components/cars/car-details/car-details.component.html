@@ -1,11 +1,11 @@
 <h2>Details</h2>
 <div class="pull-left">
-  <p class="list-group-item-text">Registration: {{car.registration}}</p>
-  <p class="list-group-item-text">DriverId: {{car.driverId}}</p>
-  <p class="list-group-item-text">CarType: {{carType}}</p>
-  <p class="list-group-item-text">Year: {{car.year}}</p>
+  <p class="list-group-item-text">Registration: {{car?.Registration}}</p>
+  <p class="list-group-item-text">Driver: {{car?.Driver}}</p>
+  <p class="list-group-item-text">CarType: {{car?.CarType === 0 ? 'Sedan' : 'Van'}}</p>
+  <p class="list-group-item-text">Year: {{car?.Year}}</p>
 </div>
 <div class="pull-right">
 <a class="btn btn-primary" (click)="onEdit()">Edit</a>
-<a *ngIf="!car.driverId" class="btn btn-danger" (click)="onRemove()">Remove</a>
+<a *ngIf="!car?.Driver" class="btn btn-danger" (click)="onRemove()">Remove</a>
 </div>

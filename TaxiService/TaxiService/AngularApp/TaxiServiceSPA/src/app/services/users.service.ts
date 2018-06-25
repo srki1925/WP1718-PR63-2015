@@ -3,6 +3,8 @@ import { INewUser, IBasicUser } from './interfaces';
 import { AuthService } from './auth.service';
 import { Usertype } from './usertype.enum';
 import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { ExternalApisDataService } from './external-apis-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,11 +18,18 @@ export class UsersService {
     {username:'d', password: 'd', userType: Usertype.Driver, carNumber:10, email:'driver@test.com', jmbg:null, name:null, lastname:null, phone:null, blocked:false},
     {username:'a', password: 'a', userType: Usertype.Dispatcher, carNumber:null, email:'dispatcher@test.com', jmbg:null, name:null, lastname:null, phone:null, blocked:false},
   ];;
-  constructor() { }
+  constructor(private http:HttpClient,
+              private authService:AuthService,
+              private externApis:ExternalApisDataService) { }
 
   addNewUser(newUser: INewUser){
-    this.users.push(newUser);
-    this.usersChanged.next(this.getAllUsersUsernames());
+    //this.users.push(newUser);
+    //this.usersChanged.next(this.getAllUsersUsernames());
+    const url = this.externApis.getDataApiHostname() + '/users/create';
+    this.http.post(url,newUser).subscribe(
+      next =>{ console.log(next)},
+      error =>{console.log(error.status)}
+    );
   }
 
   updateUser(editUser: INewUser){

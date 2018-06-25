@@ -19,7 +19,6 @@ export class AuthService{
   authStatus = new Subject<boolean>();
 
   constructor(private cookieService: CookieService,
-              private usersService:UsersService,
               private router:Router,
               private http:HttpClient,
               private externalApisDataService:ExternalApisDataService) { 
@@ -51,7 +50,7 @@ export class AuthService{
         this.currentUser.username = username;
         this.currentUser.token = data as string;
         console.log(this.currentUser.token);
-        this.currentUser.usertype = Usertype.Driver;
+        this.currentUser.usertype = Usertype.Dispatcher;
         this.authenticated = true;
         const cookie = this.createCookie();
         this.cookieService.setCookie('taxiServiceData',cookie, 365);
@@ -69,11 +68,6 @@ export class AuthService{
 
   isUserAuthenticated(){
     return this.authenticated;
-  }
-
-  removeUser(username:string){
-    this.usersService.removeUser(username);
-    this.logout();
   }
 
   logout(){
@@ -94,6 +88,10 @@ export class AuthService{
     return this.currentUser.username;
   }
 
+  getApiToken() : string{
+    return this.currentUser.token;
+  }
+
   private createCookie() : string{
     //api token to be added later
     if(this.authenticated){
@@ -108,7 +106,7 @@ export class AuthService{
    return {
      username:split[0],
      usertype:+split[1],
-     token:''
+     token:split[2]
    };
   }
 }

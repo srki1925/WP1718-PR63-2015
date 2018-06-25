@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onDeleteAccount(){
-    this.authService.removeUser(this.username);
+    this.usersService.removeUser(this.username);
   }
 
   toogleCollapse(){

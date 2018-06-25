@@ -1,6 +1,9 @@
 import { Injectable, OnInit } from '@angular/core';
-import { ICar, CarType } from './interfaces';
+import { ICar, CarType, ApiRequest } from './interfaces';
 import { Subject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from './auth.service';
+import { ExternalApisDataService } from './external-apis-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,52 +11,59 @@ import { Subject } from 'rxjs';
 export class CarsDataService implements OnInit {
 
   private cars:ICar[] = [
-    {carNumber:10, carType:CarType.sedan, registration:'ns-111-aa',  driverId:2, year:2010},
-    {carNumber:11, carType:CarType.van, registration:'ns-112-aa',  driverId:null, year:2011},
-    {carNumber:12, carType:CarType.sedan, registration:'ns-113-aa',  driverId:null, year:2012},
-    {carNumber:13, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:14, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:15, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:16, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:17, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:18, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:19, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:20, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:21, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:22, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:23, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:24, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:25, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:26, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:27, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:28, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:29, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:30, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
-    {carNumber:31, carType:CarType.van, registration:'ns-114-aa',  driverId:5, year:2013},
+    {carNumber:10, carType:CarType.sedan, registration:'ns-111-aa',  driver:'d', year:2010},
+    {carNumber:11, carType:CarType.van, registration:'ns-112-aa',  driver:null, year:2011},
+    {carNumber:12, carType:CarType.sedan, registration:'ns-113-aa',  driver:null, year:2012},
   ];
 
   carsChanged = new Subject<ICar[]>();
+  private carChanged = new Subject<ICar>();
 
-  constructor() { }
+  constructor(private http:HttpClient,
+              private authService:AuthService,
+              private externApis:ExternalApisDataService) { }
 
   ngOnInit(){
   }
 
   addNewCar(newCar:ICar){
-    this.cars.push(newCar);
-    this.carsChanged.next(this.cars.slice());
+    const url = this.externApis.getDataApiHostname() + '/cars';
+    const data :ApiRequest = {
+      data : newCar,
+      userHash: this.authService.getApiToken()
+    };
+    this.http.post(url, data)
+    .subscribe(
+      next =>{
+        this.getAllCars();
+      },
+      error =>{console.log(error)}
+    );
+  }
+  
+  getCarByNumber(carNumber:number){
+    const url = this.externApis.getDataApiHostname() + '/cars/' + carNumber;
+    return this.http.get(url);
   }
 
   removeCar(carId:number){
-    const index = this.cars.findIndex((car:ICar) =>{return car.carNumber === carId});
-    if(index != -1){
-      this.cars.splice(index,1);
-    }
-    this.carsChanged.next(this.cars.slice());
+    const url = this.externApis.getDataApiHostname() + '/cars/remove';
+    let data : ApiRequest = {
+      userHash : this.authService.getApiToken(),
+      data:carId
+    };
+    console.log(data.data);
+    this.http.post(url, data)
+    .subscribe(
+      next =>{
+        this.getAllCars();
+      },
+      error =>{console.log(error)}
+    );
   }
 
-  getCar(driverId:number){
-    const foundCar = this.cars.findIndex((car:ICar) =>{return car.driverId === driverId});
+  getCar(driver:string){
+    const foundCar = this.cars.findIndex((car:ICar) =>{return car.driver === driver});
     if(foundCar != -1){
       return this.cars[foundCar];
     }else{
@@ -61,23 +71,21 @@ export class CarsDataService implements OnInit {
     }
   }
 
-  getCarByNumber(carNumber:number){
-    const foundCar = this.cars.findIndex((car:ICar) =>{return car.carNumber === carNumber});
-    if(foundCar != -1){
-      return this.cars[foundCar];
-    }else{
-      return null;
-    }
-  }
 
   getAllCars(){
-    return this.cars.slice();
+    const url = this.externApis.getDataApiHostname() + '/cars';
+    let cars : ICar[];
+    this.http.get(url).subscribe((data : ICar[]) => {
+      this.carsChanged.next(data);
+    });
+
+    return this.carsChanged;
   }
 
   getFreeCars(){
     let retCars : ICar[] = [];
     this.cars.forEach((car:ICar) =>{
-      if(!car.driverId){
+      if(!car.driver){
         retCars.push(car);
       }
     });
@@ -85,21 +93,22 @@ export class CarsDataService implements OnInit {
   }
 
   anyFreeCars(){
-    const index = this.cars.findIndex((car:ICar) => {return car.driverId === null;})
+    const index = this.cars.findIndex((car:ICar) => {return car.driver === null;})
     return index !== -1 ? true : false;
   }
 
   updateCar(car:ICar){
-    let c = this.getCarByNumber(car.carNumber);
-    c.registration = car.registration;
-    c.year = car.year;
-    c.carType = car.carType;
-  }
-
-  exists(carNumber:number){
-    if(this.cars.findIndex((car:ICar) => {return car.carNumber === carNumber}) !== -1){
-      return true;
-    }
-    return false;
+    const url = this.externApis.getDataApiHostname() + '/cars/' + car.carNumber;
+    let data : ApiRequest = {
+      userHash : this.authService.getApiToken(),
+      data:car
+    };
+    this.http.put(url, data)
+    .subscribe(
+      next =>{
+        this.getAllCars();
+      },
+      error =>{console.log(error)}
+    );
   }
 }
