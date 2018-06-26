@@ -212,6 +212,7 @@
     <Compile Include="Models\ResponseCar.cs" />
     <Compile Include="Models\RideRequest.cs" />
     <Compile Include="Models\RideResponse.cs" />
+    <Compile Include="Models\UserFullData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

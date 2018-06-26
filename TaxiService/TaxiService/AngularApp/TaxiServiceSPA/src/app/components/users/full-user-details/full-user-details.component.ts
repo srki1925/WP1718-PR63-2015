@@ -11,14 +11,32 @@ import { Router } from '@angular/router';
 })
 export class FullUserDetailsComponent implements OnInit {
 
-  user : INewUser;
+  user : INewUser = {
+    name:null,
+    lastname:null,
+    blocked:null,
+    phone:null,
+    carId:null,
+    email:null,
+    jmbg:null,
+    password:null,
+    username:null,
+    userType:null,
+  }
   constructor(private authService:AuthService,
               private usersService:UsersService,
               private router:Router) { }
 
   ngOnInit() {
     const username = this.authService.getCurrentUsername();
-    this.user = this.usersService.getUser(username);
+    this.usersService.getUser(username)
+    .subscribe(
+     (data:INewUser) => {
+        this.user = data;
+        console.log(data);
+     },
+     error => console.log(error), 
+    );
   }
 
   onUserChange(){

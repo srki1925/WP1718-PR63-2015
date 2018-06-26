@@ -30,10 +30,10 @@ namespace TaxiService.Controllers
 
             if (Repository.Instance.LoggedInUsers.ContainsKey(shastr))
             {
-                return Ok(shastr + $";{(int)foundUser.Role}");
+                return Ok(shastr + $";{(int)foundUser.Role};{foundUser.Blocked}");
             }
             Repository.Instance.LoggedInUsers[shastr] = Repository.Instance.TaxiServiceRepository.Users.First(x => x.Username == username && x.Password == password);
-            return Ok(shastr + $";{(int)foundUser.Role}");
+            return Ok(shastr + $";{(int)foundUser.Role};{foundUser.Blocked}");
         }
         [HttpPost]
         [Route("api/access/logout")]

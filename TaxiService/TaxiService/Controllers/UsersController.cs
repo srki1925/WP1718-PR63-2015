@@ -22,8 +22,18 @@ namespace TaxiService.Controllers
                 return Unauthorized();
             if (!Repository.Instance.LoggedInUsers.TryGetValue(request.UserHash, out User user))
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Forbidden));
+            var data = new UserFullData() {
+                name = user.Name,
+                lastname = user.Lastname,
+                email = user.Email,
+                username = user.Username,
+                phone = user.PhoneNumber,
+                jmbg = user.JMBG,
+                sex = user.Sex,
+                carId = user.Role == UserRole.Driver ? (user as Driver).CarId : null
+            };
 
-            return Ok(user);
+            return Ok(data);
         }
         //GET: api/users
         public IEnumerable<string> Get()
@@ -47,36 +57,40 @@ namespace TaxiService.Controllers
         }
         [HttpPut]
         // PUT: api/Users
-        public IHttpActionResult Put([FromBody]ApiRequest<User> request)
+        public IHttpActionResult Put([FromBody]ApiRequest<UserFullData> request)
         {
-            if (request.UserHash == null)
+            if (request == null || request.UserHash == null)
+                return BadRequest("User token missing");
+            if (!Repository.Instance.LoggedInUsers.TryGetValue(request.UserHash, out User oldUser))
                 return Unauthorized();
-            if (!Repository.Instance.LoggedInUsers.TryGetValue(request.UserHash, out User oldUser) || oldUser.Blocked)
-                return Unauthorized();
-            //trying to change other user 
-            if (request.Data.Id != oldUser.Id)
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Forbidden));
-            if (request.Data.Username != oldUser.Username)
-                return BadRequest("Username can't be changed");
 
-            //modify hash if user has changed password
-            if (request.Data.Password != oldUser.Password)
-            {
-                Repository.Instance.LoggedInUsers.Remove(request.UserHash);
-                var newHash = AuthorizationService.ComputeSha512(string.Concat(request.Data.Username, request.Data.Password));
-                Repository.Instance.LoggedInUsers[newHash] = request.Data;
-                return Ok(newHash);
-            }
-            Repository.Instance.TaxiServiceRepository.Users.Remove(oldUser);
-            Repository.Instance.TaxiServiceRepository.Users.Add(request.Data);
+            oldUser.Name = request.Data.name;
+            oldUser.Lastname = request.Data.lastname;
+            oldUser.Email = request.Data.email;
+            oldUser.PhoneNumber = request.Data.phone;
+            oldUser.JMBG = request.Data.jmbg;
+
             Repository.Instance.TaxiServiceRepository.SaveChanges();
 
             return Ok();
         }
 
+        [HttpPut]
+        [Route("api/users/changepass")]
+        public IHttpActionResult ChangePassword([FromBody]ApiRequest<string> request)
+        {
+            if (request == null || request.UserHash == null)
+                return BadRequest("User token missing");
+            if (!Repository.Instance.LoggedInUsers.TryGetValue(request.UserHash, out User oldUser))
+                return Unauthorized();
+
+            oldUser.Password = request.Data;
+            Repository.Instance.TaxiServiceRepository.SaveChanges();
+            return Ok();
+        }
         [HttpPost]
         [Route("api/users/remove")]
-        public IHttpActionResult Delete([FromUri]ApiRequest<string> request)
+        public IHttpActionResult Delete([FromBody]ApiRequest<string> request)
         {
             if (request == null || request.UserHash == null)
                 return BadRequest();

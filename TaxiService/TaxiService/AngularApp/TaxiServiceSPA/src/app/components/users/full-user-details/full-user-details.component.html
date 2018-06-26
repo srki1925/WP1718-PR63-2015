@@ -1,12 +1,13 @@
 <h2>Details</h2>
 <div class="list-group">
-  <p>Name: {{user.name}}</p>
-  <p>Lastname: {{user.lastname}}</p>
-  <p>Username: {{user.username}}</p>
-  <p>Email: {{user.email}}</p>
-  <p>JMBG: {{user.jmbg}}</p>
-  <p>Phone: {{user.phone}}</p>
-  <p *ngIf="user && user.userType && user.userType === 2">Car number: {{user.carNumber}}</p>
+  <p>Name: {{user?.name}}</p>
+  <p>Lastname: {{user?.lastname}}</p>
+  <p>Username: {{user?.username}}</p>
+  <p>Email: {{user?.email}}</p>
+  <p>JMBG: {{user?.jmbg}}</p>
+  <p>Phone: {{user?.phone}}</p>
+  <p>Sex: {{user?.sex == 0 ? 'Male' : 'Female'}}</p>
+  <p *ngIf="user && user.userType && user.userType === 2">Car number: {{user?.carId}}</p>
 </div>
 <hr>
 <div class="row">

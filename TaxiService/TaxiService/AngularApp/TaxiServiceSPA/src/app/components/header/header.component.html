@@ -9,7 +9,7 @@
             <a routerLink="/home" class="navbar-brand" style="cursor:pointer">Taxi Service</a>
         </div>
         <div class="navbar-collapse collapse" #responsiveNavbar collapse="navCollapsed" >
-            <ul class="nav navbar-nav">
+            <ul *ngIf="!userBlocked" class="nav navbar-nav">
                 <li routerLinkActive="active" *ngIf="!userType || userType === 0">
                     <a routerLink="/login" style="cursor: pointer;">Login</a>
                 </li>

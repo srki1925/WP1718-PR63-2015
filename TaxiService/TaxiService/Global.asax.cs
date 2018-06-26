@@ -24,19 +24,7 @@ namespace TaxiService
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             Repository.Instance.TaxiServiceRepository.Users.DefaultIfEmpty(null);
-            //mapper validation testing
-            /*var user = new User() { Role = Role.Customer };
-            var disp = new User() { Role = Role.Dispatcher };
-            var driver = new Driver();
-            var car = new Car();
-            var ride = new Ride();
-            ride.OrderTime = DateTime.Now;
-            Repository.Instance.TaxiServiceRepository.Users.Add(user);
-            Repository.Instance.TaxiServiceRepository.Users.Add(disp);
-            Repository.Instance.TaxiServiceRepository.Drivers.Add(driver);
-            Repository.Instance.TaxiServiceRepository.Cars.Add(car);
-            Repository.Instance.TaxiServiceRepository.Rides.Add(ride);
-            Repository.Instance.TaxiServiceRepository.SaveChanges();*/
+
             ReadDispatchers();
             InitCars();
             InitDrivers();

@@ -979,7 +979,7 @@ module.exports = ".active{\r\n    font-weight: bold\r\n}"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-default\">\r\n    <div class=\"container-fluid\">\r\n        <div class=\"navbar-header\">\r\n            <button type=\"button\" class=\"navbar-toggle\" (click)=\"toogleCollapse()\">\r\n                    <span class=\"icon-bar\"></span>\r\n                    <span class=\"icon-bar\"></span>\r\n                    <span class=\"icon-bar\"></span>\r\n            </button>\r\n            <a routerLink=\"/home\" class=\"navbar-brand\" style=\"cursor:pointer\">Taxi Service</a>\r\n        </div>\r\n        <div class=\"navbar-collapse collapse\" #responsiveNavbar collapse=\"navCollapsed\" >\r\n            <ul class=\"nav navbar-nav\">\r\n                <li routerLinkActive=\"active\" *ngIf=\"!userType || userType === 0\">\r\n                    <a routerLink=\"/login\" style=\"cursor: pointer;\">Login</a>\r\n                </li>\r\n                <li routerLinkActive=\"active\" class=\"dropdown\" appDropdown *ngIf=\"!userType || userType === 0\">\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Registration<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li><a routerLink=\"/registration\" [queryParams]=\"{type: 'customer'}\" style=\"cursor: pointer;\">New Customer</a></li>\r\n                        <li><a routerLink=\"/registration\" [queryParams]=\"{type: 'driver'}\" style=\"cursor: pointer;\">New Driver</a></li>\r\n                    </ul>\r\n                </li>\r\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType && userType !== 0\">\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Rides<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li *ngIf=\"userType && userType !== 2\"><a [routerLink]=\"['/home','rides','new']\" style=\"cursor: pointer;\">Add New</a></li>\r\n                        <li><a [routerLink]=\"['/home','rides']\" style=\"cursor: pointer;\">All Rides</a></li>\r\n                    </ul>\r\n                </li>\r\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType === 3\">\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Users<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li><a style=\"cursor: pointer;\" [routerLink]=\"['/home','users']\" routerLinkActive=\"router-link-active\" >All Users</a></li>\r\n                    </ul>\r\n                </li>\r\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType === 3\">\r\n                        <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Cars<span class=\"caret\"></span></a>\r\n                        <ul class=\"dropdown-menu\">\r\n                            <li><a [routerLink]=\"['/home','cars','new']\" style=\"cursor: pointer;\">Add New</a></li>\r\n                            <li><a [routerLink]=\"['/home','cars']\" style=\"cursor: pointer;\">All Cars</a></li>\r\n                        </ul>\r\n                    </li>\r\n            </ul>\r\n            <ul class=\"nav navbar-nav navbar-right\" *ngIf=\"userType && userType !== 0\">\r\n                <li class=\"dropdown\" appDropdown>\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Settings<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li><a routerLink=\"/profile\" style=\"cursor: pointer;\">User Profile</a></li>\r\n                        <li><a routerLink=\"/password-change\" style=\"cursor: pointer;\">Change Password</a></li>\r\n                        <li *ngIf=\"userType && userType !== 3\" ><a style=\"cursor: pointer;\" (click)=\"onDeleteAccount()\">Delete Account</a></li>\r\n                        <li><a style=\"cursor: pointer;\" (click)=\"onLogout()\">Logout</a></li>\r\n                    </ul>\r\n                </li>\r\n            </ul>\r\n        </div>\r\n    </div>\r\n</nav>"
+module.exports = "<nav class=\"navbar navbar-default\">\r\n    <div class=\"container-fluid\">\r\n        <div class=\"navbar-header\">\r\n            <button type=\"button\" class=\"navbar-toggle\" (click)=\"toogleCollapse()\">\r\n                    <span class=\"icon-bar\"></span>\r\n                    <span class=\"icon-bar\"></span>\r\n                    <span class=\"icon-bar\"></span>\r\n            </button>\r\n            <a routerLink=\"/home\" class=\"navbar-brand\" style=\"cursor:pointer\">Taxi Service</a>\r\n        </div>\r\n        <div class=\"navbar-collapse collapse\" #responsiveNavbar collapse=\"navCollapsed\" >\r\n            <ul *ngIf=\"!userBlocked\" class=\"nav navbar-nav\">\r\n                <li routerLinkActive=\"active\" *ngIf=\"!userType || userType === 0\">\r\n                    <a routerLink=\"/login\" style=\"cursor: pointer;\">Login</a>\r\n                </li>\r\n                <li routerLinkActive=\"active\" class=\"dropdown\" appDropdown *ngIf=\"!userType || userType === 0\">\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Registration<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li><a routerLink=\"/registration\" [queryParams]=\"{type: 'customer'}\" style=\"cursor: pointer;\">New Customer</a></li>\r\n                        <li><a routerLink=\"/registration\" [queryParams]=\"{type: 'driver'}\" style=\"cursor: pointer;\">New Driver</a></li>\r\n                    </ul>\r\n                </li>\r\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType && userType !== 0\">\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Rides<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li *ngIf=\"userType && userType !== 2\"><a [routerLink]=\"['/home','rides','new']\" style=\"cursor: pointer;\">Add New</a></li>\r\n                        <li><a [routerLink]=\"['/home','rides']\" style=\"cursor: pointer;\">All Rides</a></li>\r\n                    </ul>\r\n                </li>\r\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType === 3\">\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Users<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li><a style=\"cursor: pointer;\" [routerLink]=\"['/home','users']\" routerLinkActive=\"router-link-active\" >All Users</a></li>\r\n                    </ul>\r\n                </li>\r\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType === 3\">\r\n                        <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Cars<span class=\"caret\"></span></a>\r\n                        <ul class=\"dropdown-menu\">\r\n                            <li><a [routerLink]=\"['/home','cars','new']\" style=\"cursor: pointer;\">Add New</a></li>\r\n                            <li><a [routerLink]=\"['/home','cars']\" style=\"cursor: pointer;\">All Cars</a></li>\r\n                        </ul>\r\n                    </li>\r\n            </ul>\r\n            <ul class=\"nav navbar-nav navbar-right\" *ngIf=\"userType && userType !== 0\">\r\n                <li class=\"dropdown\" appDropdown>\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Settings<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li><a routerLink=\"/profile\" style=\"cursor: pointer;\">User Profile</a></li>\r\n                        <li><a routerLink=\"/password-change\" style=\"cursor: pointer;\">Change Password</a></li>\r\n                        <li *ngIf=\"userType && userType !== 3\" ><a style=\"cursor: pointer;\" (click)=\"onDeleteAccount()\">Delete Account</a></li>\r\n                        <li><a style=\"cursor: pointer;\" (click)=\"onLogout()\">Logout</a></li>\r\n                    </ul>\r\n                </li>\r\n            </ul>\r\n        </div>\r\n    </div>\r\n</nav>"
 
 /***/ }),
 
@@ -1023,10 +1023,13 @@ var HeaderComponent = /** @class */ (function () {
     HeaderComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.userType = this.authService.getUserType();
-        this.userSubscription = this.authService.userChanged.subscribe(function (user) {
+        this.userSubscription = this.authService.userChanged
+            .subscribe(function (user) {
             _this.userType = user.usertype;
             _this.username = user.username;
+            _this.userBlocked = user.blocked;
         });
+        this.userBlocked = this.authService.isUserBlocked();
     };
     HeaderComponent.prototype.ngOnDestroy = function () {
         this.userSubscription.unsubscribe();
@@ -1036,7 +1039,7 @@ var HeaderComponent = /** @class */ (function () {
         this.router.navigate(['/login']);
     };
     HeaderComponent.prototype.onDeleteAccount = function () {
-        this.usersService.removeUser(this.username);
+        this.usersService.removeUser(this.authService.getCurrentUsername());
     };
     HeaderComponent.prototype.toogleCollapse = function () {
         this.responsiveNavbar.nativeElement.classList.toggle('collapse');
@@ -1080,7 +1083,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<router-outlet></router-outlet>\r\n"
+module.exports = "<h2>Welcome to NS Taxi service!</h2>\r\n<hr>\r\n<h4 *ngIf=\"userBlocked\" style=\"color: red\">We are sorry but you are blocked from our services.</h4>\r\n<router-outlet></router-outlet>\r\n"
 
 /***/ }),
 
@@ -1095,6 +1098,7 @@ module.exports = "<router-outlet></router-outlet>\r\n"
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HomeComponent", function() { return HomeComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _services_auth_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/auth.service */ "./src/app/services/auth.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1105,10 +1109,14 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
 var HomeComponent = /** @class */ (function () {
-    function HomeComponent() {
+    function HomeComponent(authService) {
+        this.authService = authService;
+        this.userBlocked = false;
     }
     HomeComponent.prototype.ngOnInit = function () {
+        this.userBlocked = this.authService.isUserBlocked();
     };
     HomeComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -1116,7 +1124,7 @@ var HomeComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./home.component.html */ "./src/app/components/home/home.component.html"),
             styles: [__webpack_require__(/*! ./home.component.css */ "./src/app/components/home/home.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [_services_auth_service__WEBPACK_IMPORTED_MODULE_1__["AuthService"]])
     ], HomeComponent);
     return HomeComponent;
 }());
@@ -2073,17 +2081,29 @@ var EditUserComponent = /** @class */ (function () {
         this.router = router;
     }
     EditUserComponent.prototype.ngOnInit = function () {
+        var _this = this;
         var username = this.authService.getCurrentUsername();
-        this.editUser = this.usersService.getUser(username);
+        this.usersService.getUser(username).subscribe(function (data) {
+            _this.editUser = data;
+            _this.registrationForm.patchValue({
+                'email': _this.editUser.email,
+                'username': _this.editUser.username,
+                'name': _this.editUser.name,
+                'lastname': _this.editUser.lastname,
+                'jmbg': _this.editUser.jmbg,
+                'phone': _this.editUser.phone,
+            });
+        }, function (error) { return console.log(error); });
         this.registrationForm = new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormGroup"]({
-            email: new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"](this.editUser.email, [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].email]),
-            name: new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"](this.editUser.name),
-            lastname: new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"](this.editUser.lastname),
-            jmbg: new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"](this.editUser.jmbg, [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].pattern('[0-9]{13,13}'), this.jmbgValidator.bind(this)]),
-            phone: new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"](this.editUser.phone, [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].pattern('[0-9]*')]),
+            email: new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].email]),
+            name: new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"](null),
+            lastname: new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"](null),
+            jmbg: new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].pattern('[0-9]{13,13}'), this.jmbgValidator.bind(this)]),
+            phone: new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].pattern('[0-9]*')]),
         });
     };
     EditUserComponent.prototype.onEdit = function () {
+        var _this = this;
         var editUser = {
             username: this.editUser.username,
             password: this.registrationForm.value['password'],
@@ -2092,13 +2112,14 @@ var EditUserComponent = /** @class */ (function () {
             lastname: this.registrationForm.value['lastname'],
             jmbg: this.registrationForm.value['jmbg'],
             phone: this.registrationForm.value['phone'],
-            //in future if driver can change to read from form
-            carNumber: this.editUser.carNumber,
+            //in future if driver can change car, change to read from form
+            carId: this.editUser.carId,
             userType: this.authService.getUserType(),
             blocked: this.editUser.blocked
         };
-        this.usersService.updateUser(editUser);
-        this.router.navigate(['/profile']);
+        this.usersService.updateUser(editUser).subscribe(function (ok) {
+            _this.router.navigate(['/profile']);
+        }, function (error) { console.log(error); });
     };
     EditUserComponent.prototype.jmbgValidator = function (control) {
         if (!this.checkJmbg(control.value)) {
@@ -2163,7 +2184,7 @@ module.exports = "p{\r\n    font-size: 20px\r\n}"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Details</h2>\r\n<div class=\"list-group\">\r\n  <p>Name: {{user.name}}</p>\r\n  <p>Lastname: {{user.lastname}}</p>\r\n  <p>Username: {{user.username}}</p>\r\n  <p>Email: {{user.email}}</p>\r\n  <p>JMBG: {{user.jmbg}}</p>\r\n  <p>Phone: {{user.phone}}</p>\r\n  <p *ngIf=\"user && user.userType && user.userType === 2\">Car number: {{user.carNumber}}</p>\r\n</div>\r\n<hr>\r\n<div class=\"row\">\r\n  <button type=\"button\" class=\"col-sm-2 btn btn-primary\" (click)=\"onUserChange()\">Edit</button>\r\n</div>\r\n<br>\r\n<div class=\"row\">\r\n    <button type=\"button\" class=\"col-sm-2 btn btn-primary\" (click)=\"onPasswordChange()\">Change Password</button>\r\n</div>"
+module.exports = "<h2>Details</h2>\r\n<div class=\"list-group\">\r\n  <p>Name: {{user?.name}}</p>\r\n  <p>Lastname: {{user?.lastname}}</p>\r\n  <p>Username: {{user?.username}}</p>\r\n  <p>Email: {{user?.email}}</p>\r\n  <p>JMBG: {{user?.jmbg}}</p>\r\n  <p>Phone: {{user?.phone}}</p>\r\n  <p>Sex: {{user?.sex == 0 ? 'Male' : 'Female'}}</p>\r\n  <p *ngIf=\"user && user.userType && user.userType === 2\">Car number: {{user?.carId}}</p>\r\n</div>\r\n<hr>\r\n<div class=\"row\">\r\n  <button type=\"button\" class=\"col-sm-2 btn btn-primary\" (click)=\"onUserChange()\">Edit</button>\r\n</div>\r\n<br>\r\n<div class=\"row\">\r\n    <button type=\"button\" class=\"col-sm-2 btn btn-primary\" (click)=\"onPasswordChange()\">Change Password</button>\r\n</div>"
 
 /***/ }),
 
@@ -2199,10 +2220,27 @@ var FullUserDetailsComponent = /** @class */ (function () {
         this.authService = authService;
         this.usersService = usersService;
         this.router = router;
+        this.user = {
+            name: null,
+            lastname: null,
+            blocked: null,
+            phone: null,
+            carId: null,
+            email: null,
+            jmbg: null,
+            password: null,
+            username: null,
+            userType: null,
+        };
     }
     FullUserDetailsComponent.prototype.ngOnInit = function () {
+        var _this = this;
         var username = this.authService.getCurrentUsername();
-        this.user = this.usersService.getUser(username);
+        this.usersService.getUser(username)
+            .subscribe(function (data) {
+            _this.user = data;
+            console.log(data);
+        }, function (error) { return console.log(error); });
     };
     FullUserDetailsComponent.prototype.onUserChange = function () {
         this.router.navigate(['/edit-profile']);
@@ -2558,8 +2596,14 @@ var PasswordChangeComponent = /** @class */ (function () {
         return null;
     };
     PasswordChangeComponent.prototype.onConfirm = function () {
+        var _this = this;
         var username = this.authService.getCurrentUsername();
-        this.usersService.changePassword(username, this.passwordChangeForm.value.password);
+        this.usersService.changePassword(username, this.passwordChangeForm.value.password)
+            .subscribe(function (ok) {
+            _this.authService.logout();
+        }, function (error) {
+            console.log(error);
+        });
         this.authService.logout();
     };
     PasswordChangeComponent = __decorate([
@@ -2685,7 +2729,7 @@ var RegistrationComponent = /** @class */ (function () {
             lastname: this.registrationForm.value['lastname'],
             jmbg: this.registrationForm.value['jmbg'],
             phone: this.registrationForm.value['phone'],
-            carNumber: this.registrationForm.value['carNumber'],
+            carId: this.registrationForm.value['carNumber'],
             userType: this.isDriver ? _services_usertype_enum__WEBPACK_IMPORTED_MODULE_5__["Usertype"].Driver : _services_usertype_enum__WEBPACK_IMPORTED_MODULE_5__["Usertype"].Customer,
             blocked: false,
         };
@@ -3103,7 +3147,7 @@ var AuthService = /** @class */ (function () {
         this.router = router;
         this.http = http;
         this.externalApisDataService = externalApisDataService;
-        this.currentUser = { username: null, usertype: _usertype_enum__WEBPACK_IMPORTED_MODULE_1__["Usertype"].Guest, token: null };
+        this.currentUser = { username: null, usertype: _usertype_enum__WEBPACK_IMPORTED_MODULE_1__["Usertype"].Guest, token: null, blocked: null };
         this.authenticated = false;
         this.userChanged = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
         this.authStatus = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
@@ -3115,6 +3159,7 @@ var AuthService = /** @class */ (function () {
             this.currentUser.username = user.username;
             this.currentUser.usertype = user.usertype;
             this.currentUser.token = user.token;
+            this.currentUser.blocked = user.blocked;
             this.authenticated = true;
             this.userChanged.next(this.currentUser);
         }
@@ -3122,37 +3167,35 @@ var AuthService = /** @class */ (function () {
             this.authenticated = false;
         }
     }
-    /*authenticateUser(username:string,password:string) : Subject<boolean> | boolean{
-      if(this.authenticated){
-        return true;
-      }
-  
-      const url = this.externalApisDataService.getDataApiHostname() + '/access/login';
-      
-      this.http.post(url, {username:username, password:password}).subscribe(
-        data =>{
-          this.currentUser.username = username;
-          const dataSplit:string[] = (data as string).split(";");
-          console.log(dataSplit);
-          this.currentUser.token = dataSplit[0];
-          console.log(this.currentUser.token);
-          this.currentUser.usertype = +dataSplit[1];
-          console.log(this.currentUser.usertype);
-          this.authenticated = true;
-          const cookie = this.createCookie();
-          this.cookieService.setCookie('taxiServiceData',cookie, 365);
-          this.userChanged.next(this.currentUser);
-          this.authStatus.next(true);
-        },
-        error => {
-          console.log(error.status);
-          this.authStatus.next(false);
+    AuthService.prototype.authenticateUser = function (username, password) {
+        var _this = this;
+        if (this.authenticated) {
+            return true;
         }
-      );
-      return this.authStatus;
-    }*/
+        var url = this.externalApisDataService.getDataApiHostname() + '/access/login';
+        this.http.post(url, { username: username, password: password }).subscribe(function (data) {
+            _this.currentUser.username = username;
+            var dataSplit = data.split(";");
+            _this.currentUser.token = dataSplit[0];
+            _this.currentUser.usertype = +dataSplit[1];
+            _this.currentUser.blocked = dataSplit[2].toLowerCase() === 'true' ? true : false;
+            console.log(dataSplit[2]);
+            _this.authenticated = true;
+            var cookie = _this.createCookie();
+            _this.cookieService.setCookie('taxiServiceData', cookie, 365);
+            _this.userChanged.next(_this.currentUser);
+            _this.authStatus.next(true);
+        }, function (error) {
+            console.log(error.status);
+            _this.authStatus.next(false);
+        });
+        return this.authStatus;
+    };
     AuthService.prototype.isUserAuthenticated = function () {
         return this.authenticated;
+    };
+    AuthService.prototype.isUserBlocked = function () {
+        return this.currentUser.blocked;
     };
     AuthService.prototype.logout = function () {
         this.currentUser.username = null;
@@ -3175,7 +3218,7 @@ var AuthService = /** @class */ (function () {
     AuthService.prototype.createCookie = function () {
         //api token to be added later
         if (this.authenticated) {
-            return this.currentUser.username + ',' + this.currentUser.usertype + ',' + this.currentUser.token;
+            return this.currentUser.username + ',' + this.currentUser.usertype + ',' + this.currentUser.token + ',' + this.currentUser.blocked;
         }
         return '';
     };
@@ -3184,7 +3227,8 @@ var AuthService = /** @class */ (function () {
         return {
             username: split[0],
             usertype: +split[1],
-            token: split[2]
+            token: split[2],
+            blocked: split[3].toLowerCase() == "true" ? true : false,
         };
     };
     AuthService = __decorate([
@@ -3637,6 +3681,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 /* harmony import */ var _external_apis_data_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./external-apis-data.service */ "./src/app/services/external-apis-data.service.ts");
+/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! querystring */ "./node_modules/querystring/index.js");
+/* harmony import */ var querystring__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(querystring__WEBPACK_IMPORTED_MODULE_6__);
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3652,6 +3698,7 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var UsersService = /** @class */ (function () {
     function UsersService(http, authService, externApis) {
         this.http = http;
@@ -3660,9 +3707,9 @@ var UsersService = /** @class */ (function () {
         this.usersChanged = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
         this.driversChanged = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
         this.users = [
-            { username: 'c', password: 'c', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Customer, carNumber: null, email: 'customer@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
-            { username: 'd', password: 'd', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Driver, carNumber: 10, email: 'driver@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
-            { username: 'a', password: 'a', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Dispatcher, carNumber: null, email: 'dispatcher@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
+            { username: 'c', password: 'c', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Customer, carId: null, email: 'customer@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
+            { username: 'd', password: 'd', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Driver, carId: 10, email: 'driver@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
+            { username: 'a', password: 'a', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Dispatcher, carId: null, email: 'dispatcher@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
         ];
     }
     ;
@@ -3673,17 +3720,16 @@ var UsersService = /** @class */ (function () {
         this.http.post(url, newUser).subscribe(function (next) { console.log(next); }, function (error) { console.log(error.status); });
     };
     UsersService.prototype.updateUser = function (editUser) {
-        var user = this.getUser(editUser.username);
-        user.email = editUser.email;
-        user.jmbg = editUser.jmbg;
-        user.lastname = editUser.lastname;
-        user.name = editUser.name;
-        user.phone = editUser.phone;
-        user.carNumber = editUser.carNumber;
+        var url = this.externApis.getDataApiHostname() + '/users';
+        var data = {
+            data: editUser,
+            userHash: this.authService.getApiToken()
+        };
+        return this.http.put(url, data);
     };
     UsersService.prototype.removeUser = function (username) {
         var _this = this;
-        var url = this.externApis.getDataApiHostname() + '/users/' + username + '?';
+        var url = this.externApis.getDataApiHostname() + '/users/remove';
         var data = {
             data: username,
             userHash: this.authService.getApiToken()
@@ -3691,7 +3737,12 @@ var UsersService = /** @class */ (function () {
         this.http.post(url, data).subscribe(function (data) { _this.authService.logout(); }, function (error) { console.log(error); });
     };
     UsersService.prototype.getUser = function (username) {
-        return this.users.find(function (user) { return user.username === username; });
+        var data = {
+            data: username,
+            userHash: this.authService.getApiToken()
+        };
+        var url = this.externApis.getDataApiHostname() + '/users/mydata' + '?' + Object(querystring__WEBPACK_IMPORTED_MODULE_6__["stringify"])(data);
+        return this.http.get(url);
     };
     UsersService.prototype.getUserBasicInfo = function (username) {
         var url = this.externApis.getDataApiHostname() + '/users/' + username;
@@ -3720,7 +3771,12 @@ var UsersService = /** @class */ (function () {
         return this.http.post(url, data);
     };
     UsersService.prototype.changePassword = function (username, newPassword) {
-        this.getUser(username).password = newPassword;
+        var url = this.externApis.getDataApiHostname() + '/users/changepass';
+        var data = {
+            userHash: this.authService.getApiToken(),
+            data: newPassword
+        };
+        return this.http.put(url, data);
     };
     UsersService.prototype.getAllDrivers = function () {
         var drivers = [];
@@ -3827,7 +3883,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\srki1\Desktop\web project\clone2\TaxiService\TaxiService\AngularApp\TaxiServiceSPA\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! C:\Users\remoteUser\Desktop\Git\clone1\TaxiService\TaxiService\AngularApp\TaxiServiceSPA\src\main.ts */"./src/main.ts");
 
 
 /***/ })

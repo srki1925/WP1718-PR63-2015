@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { INewUser, IBasicUser, ApiRequest } from './interfaces';
 import { AuthService } from './auth.service';
 import { Usertype } from './usertype.enum';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { ExternalApisDataService } from './external-apis-data.service';
+import { stringify } from 'querystring';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,9 @@ export class UsersService {
   driversChanged = new Subject<string[]>();
 
   private users:INewUser[] = [
-    {username:'c', password: 'c', userType: Usertype.Customer, carNumber:null, email:'customer@test.com', jmbg:null, name:null, lastname:null, phone:null, blocked:false},
-    {username:'d', password: 'd', userType: Usertype.Driver, carNumber:10, email:'driver@test.com', jmbg:null, name:null, lastname:null, phone:null, blocked:false},
-    {username:'a', password: 'a', userType: Usertype.Dispatcher, carNumber:null, email:'dispatcher@test.com', jmbg:null, name:null, lastname:null, phone:null, blocked:false},
+    {username:'c', password: 'c', userType: Usertype.Customer, carId:null, email:'customer@test.com', jmbg:null, name:null, lastname:null, phone:null, blocked:false},
+    {username:'d', password: 'd', userType: Usertype.Driver, carId:10, email:'driver@test.com', jmbg:null, name:null, lastname:null, phone:null, blocked:false},
+    {username:'a', password: 'a', userType: Usertype.Dispatcher, carId:null, email:'dispatcher@test.com', jmbg:null, name:null, lastname:null, phone:null, blocked:false},
   ];;
   constructor(private http:HttpClient,
               private authService:AuthService,
@@ -34,17 +35,16 @@ export class UsersService {
   }
 
   updateUser(editUser: INewUser){
-    let user = this.getUser(editUser.username);
-    user.email = editUser.email;
-    user.jmbg = editUser.jmbg;
-    user.lastname = editUser.lastname;
-    user.name = editUser.name;
-    user.phone = editUser.phone;
-    user.carNumber = editUser.carNumber;
+    const url = this.externApis.getDataApiHostname() + '/users';
+    const data : ApiRequest = {
+      data : editUser,
+      userHash : this.authService.getApiToken()
+    };
+    return this.http.put(url, data);
   }
 
   removeUser(username:string){
-    const url = this.externApis.getDataApiHostname() + '/users/' + username +'?';
+    const url = this.externApis.getDataApiHostname() + '/users/remove';
     const data : ApiRequest = {
       data: username,
       userHash: this.authService.getApiToken()
@@ -56,7 +56,12 @@ export class UsersService {
   }
 
   getUser(username:string){
-    return this.users.find((user:INewUser) => {return user.username === username;})
+    const data : ApiRequest = {
+      data: username,
+      userHash: this.authService.getApiToken()
+    }
+    const url = this.externApis.getDataApiHostname() + '/users/mydata'+ '?' + stringify(data);
+    return this.http.get(url);
   }
 
   getUserBasicInfo(username:string) {
@@ -92,7 +97,12 @@ export class UsersService {
   }
 
   changePassword(username:string,newPassword:string){
-    this.getUser(username).password = newPassword;
+    const url = this.externApis.getDataApiHostname() + '/users/changepass'
+    const data : ApiRequest = {
+      userHash: this.authService.getApiToken(),
+      data: newPassword
+    };
+    return this.http.put(url, data);
   }
 
   getAllDrivers() : string[]{

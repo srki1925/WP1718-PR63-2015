@@ -22,7 +22,7 @@ export interface INewUser{
     lastname: string,
     jmbg: string,
     phone: number,
-    carNumber: number,
+    carId: number,
     userType: Usertype,
     blocked: boolean
 }

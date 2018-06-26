@@ -14,6 +14,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @ViewChild('responsiveNavbar') responsiveNavbar:ElementRef;
   userType : Usertype = Usertype.Guest;
   username : string = null;
+  userBlocked: boolean;
   private userSubscription : Subscription;
   constructor(private authService:AuthService,
               private router:Router,
@@ -21,10 +22,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
       this.userType = this.authService.getUserType();
-      this.userSubscription = this.authService.userChanged.subscribe((user:User)=>{
-      this.userType = user.usertype;
-      this.username = user.username;
-    });
+      this.userSubscription = this.authService.userChanged
+      .subscribe((user:User)=>{
+        this.userType = user.usertype;
+        this.username = user.username;
+        this.userBlocked = user.blocked;
+      });
+      this.userBlocked = this.authService.isUserBlocked();
   }
 
   ngOnDestroy(){
@@ -36,7 +40,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onDeleteAccount(){
-    this.usersService.removeUser(this.username);
+    this.usersService.removeUser(this.authService.getCurrentUsername());
   }
 
   toogleCollapse(){

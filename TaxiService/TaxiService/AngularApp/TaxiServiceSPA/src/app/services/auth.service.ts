@@ -12,7 +12,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class AuthService{
 
-  private currentUser:User = {username:null,usertype:Usertype.Guest,token:null};
+  private currentUser:User = {username:null,usertype:Usertype.Guest,token:null,blocked:null};
   private authenticated:boolean = false;
   
   userChanged = new Subject<User>();
@@ -31,6 +31,7 @@ export class AuthService{
       this.currentUser.username = user.username;
       this.currentUser.usertype = user.usertype;
       this.currentUser.token = user.token;
+      this.currentUser.blocked = user.blocked;
       this.authenticated = true;  
       this.userChanged.next(this.currentUser);
     }else{
@@ -38,7 +39,7 @@ export class AuthService{
     }
   }
 
-  /*authenticateUser(username:string,password:string) : Subject<boolean> | boolean{
+  authenticateUser(username:string,password:string) : Subject<boolean> | boolean{
     if(this.authenticated){
       return true;
     }
@@ -49,11 +50,10 @@ export class AuthService{
       data =>{
         this.currentUser.username = username;
         const dataSplit:string[] = (data as string).split(";");
-        console.log(dataSplit);
         this.currentUser.token = dataSplit[0];
-        console.log(this.currentUser.token);
         this.currentUser.usertype = +dataSplit[1];
-        console.log(this.currentUser.usertype);
+        this.currentUser.blocked = dataSplit[2].toLowerCase() === 'true' ? true : false;
+        console.log(dataSplit[2]);
         this.authenticated = true;
         const cookie = this.createCookie();
         this.cookieService.setCookie('taxiServiceData',cookie, 365);
@@ -66,12 +66,15 @@ export class AuthService{
       }
     );
     return this.authStatus;
-  }*/
+  }
 
   isUserAuthenticated(){
     return this.authenticated;
   }
 
+  isUserBlocked(){
+    return this.currentUser.blocked;
+  }
   logout(){
     this.currentUser.username = null;
     this.currentUser.usertype = Usertype.Guest;
@@ -97,7 +100,7 @@ export class AuthService{
   private createCookie() : string{
     //api token to be added later
     if(this.authenticated){
-      return this.currentUser.username + ',' + this.currentUser.usertype + ',' + this.currentUser.token;
+      return this.currentUser.username + ',' + this.currentUser.usertype + ',' + this.currentUser.token + ',' + this.currentUser.blocked;
     }
     return '';
   }
@@ -108,7 +111,8 @@ export class AuthService{
    return {
      username:split[0],
      usertype:+split[1],
-     token:split[2]
+     token:split[2],
+     blocked: split[3].toLowerCase() == "true" ? true : false,
    };
   }
 }
@@ -117,5 +121,6 @@ export class AuthService{
   export interface User{
     username:string,
     usertype:Usertype,
-    token:string
+    token:string,
+    blocked:boolean
   }

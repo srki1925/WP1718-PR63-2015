@@ -20,14 +20,27 @@ export class EditUserComponent implements OnInit {
 
   ngOnInit() {
     const username = this.authService.getCurrentUsername();
-    this.editUser = this.usersService.getUser(username);
+    this.usersService.getUser(username).subscribe(
+     (data:INewUser) => {
+       this.editUser = data;
+      this.registrationForm.patchValue({
+        'email':this.editUser.email,
+        'username':this.editUser.username,
+        'name':this.editUser.name,
+        'lastname':this.editUser.lastname,
+        'jmbg':this.editUser.jmbg,
+        'phone':this.editUser.phone,
+      });
+     },
+     error => console.log(error) 
+    );
 
     this.registrationForm = new FormGroup({
-      email: new FormControl(this.editUser.email, [Validators.required, Validators.email]),
-      name: new FormControl(this.editUser.name),
-      lastname: new FormControl(this.editUser.lastname),
-      jmbg: new FormControl(this.editUser.jmbg, [Validators.pattern('[0-9]{13,13}'), this.jmbgValidator.bind(this)]),
-      phone: new FormControl(this.editUser.phone, [Validators.required,Validators.pattern('[0-9]*')]),
+      email: new FormControl(null, [Validators.required, Validators.email]),
+      name: new FormControl(null),
+      lastname: new FormControl(null),
+      jmbg: new FormControl(null, [Validators.pattern('[0-9]{13,13}'), this.jmbgValidator.bind(this)]),
+      phone: new FormControl(null, [Validators.required,Validators.pattern('[0-9]*')]),
       //feature if driver can change cars
       //carNumber: new FormControl(null),
     });
@@ -42,14 +55,18 @@ export class EditUserComponent implements OnInit {
       lastname:this.registrationForm.value['lastname'],
       jmbg:this.registrationForm.value['jmbg'],
       phone:this.registrationForm.value['phone'],
-      //in future if driver can change to read from form
-      carNumber: this.editUser.carNumber,
+      //in future if driver can change car, change to read from form
+      carId: this.editUser.carId,
       userType : this.authService.getUserType(),
       blocked: this.editUser.blocked
     };
 
-    this.usersService.updateUser(editUser);
-    this.router.navigate(['/profile']);
+    this.usersService.updateUser(editUser).subscribe(
+      ok =>{
+        this.router.navigate(['/profile']);
+      },
+      error => {console.log(error);}
+    );
   }
   jmbgValidator(control:FormControl) : {[s:string]:boolean}{
     if(!this.checkJmbg(control.value)){

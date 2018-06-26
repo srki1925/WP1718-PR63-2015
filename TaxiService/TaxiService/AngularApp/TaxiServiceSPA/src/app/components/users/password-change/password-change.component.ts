@@ -35,7 +35,15 @@ export class PasswordChangeComponent implements OnInit {
 
   onConfirm(){
     const username = this.authService.getCurrentUsername();
-    this.usersService.changePassword(username, this.passwordChangeForm.value.password);
+    this.usersService.changePassword(username, this.passwordChangeForm.value.password)
+    .subscribe(
+      ok =>{
+        this.authService.logout();
+      },
+      error => {
+        console.log(error);
+      }
+    );
     this.authService.logout();
   }
 }
