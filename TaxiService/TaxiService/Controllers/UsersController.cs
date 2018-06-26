@@ -74,12 +74,12 @@ namespace TaxiService.Controllers
             return Ok();
         }
 
-        // DELETE: api/Users/5
-        [HttpDelete]
+        [HttpPost]
+        [Route("api/users/remove")]
         public IHttpActionResult Delete([FromUri]ApiRequest<string> request)
         {
-            if (request.UserHash == null)
-                return Unauthorized();
+            if (request == null || request.UserHash == null)
+                return BadRequest();
             if (!Repository.Instance.LoggedInUsers.TryGetValue(request.UserHash, out User user))
                 return Unauthorized();
 

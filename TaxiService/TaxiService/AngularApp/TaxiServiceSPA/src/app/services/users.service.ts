@@ -12,6 +12,7 @@ import { ExternalApisDataService } from './external-apis-data.service';
 export class UsersService {
 
   usersChanged = new Subject<string[]>();
+  driversChanged = new Subject<string[]>();
 
   private users:INewUser[] = [
     {username:'c', password: 'c', userType: Usertype.Customer, carNumber:null, email:'customer@test.com', jmbg:null, name:null, lastname:null, phone:null, blocked:false},
@@ -43,12 +44,15 @@ export class UsersService {
   }
 
   removeUser(username:string){
-    const index = this.users.findIndex((user:INewUser) =>{
-      return user.username === username;
-    })
-    if(index !== -1){
-      this.users.splice(index, 1);
+    const url = this.externApis.getDataApiHostname() + '/users/' + username +'?';
+    const data : ApiRequest = {
+      data: username,
+      userHash: this.authService.getApiToken()
     }
+    this.http.post(url, data).subscribe(
+      data => {this.authService.logout()},
+      error => {console.log(error)}
+    );
   }
 
   getUser(username:string){

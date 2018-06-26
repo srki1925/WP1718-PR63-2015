@@ -3122,29 +3122,35 @@ var AuthService = /** @class */ (function () {
             this.authenticated = false;
         }
     }
-    AuthService.prototype.authenticateUser = function (username, password) {
-        var _this = this;
-        if (this.authenticated) {
-            return true;
+    /*authenticateUser(username:string,password:string) : Subject<boolean> | boolean{
+      if(this.authenticated){
+        return true;
+      }
+  
+      const url = this.externalApisDataService.getDataApiHostname() + '/access/login';
+      
+      this.http.post(url, {username:username, password:password}).subscribe(
+        data =>{
+          this.currentUser.username = username;
+          const dataSplit:string[] = (data as string).split(";");
+          console.log(dataSplit);
+          this.currentUser.token = dataSplit[0];
+          console.log(this.currentUser.token);
+          this.currentUser.usertype = +dataSplit[1];
+          console.log(this.currentUser.usertype);
+          this.authenticated = true;
+          const cookie = this.createCookie();
+          this.cookieService.setCookie('taxiServiceData',cookie, 365);
+          this.userChanged.next(this.currentUser);
+          this.authStatus.next(true);
+        },
+        error => {
+          console.log(error.status);
+          this.authStatus.next(false);
         }
-        var url = this.externalApisDataService.getDataApiHostname() + '/access/login';
-        this.http.post(url, { username: username, password: password }).subscribe(function (data) {
-            _this.currentUser.username = username;
-            _this.currentUser.token = data;
-            console.log(_this.currentUser.token);
-            _this.currentUser.usertype = _usertype_enum__WEBPACK_IMPORTED_MODULE_1__["Usertype"].Dispatcher;
-            _this.authenticated = true;
-            var cookie = _this.createCookie();
-            _this.cookieService.setCookie('taxiServiceData', cookie, 365);
-            _this.userChanged.next(_this.currentUser);
-            _this.router.navigate(['/home']);
-            _this.authStatus.next(true);
-        }, function (error) {
-            console.log(error.status);
-            _this.authStatus.next(false);
-        });
-        return this.authStatus;
-    };
+      );
+      return this.authStatus;
+    }*/
     AuthService.prototype.isUserAuthenticated = function () {
         return this.authenticated;
     };
@@ -3652,6 +3658,7 @@ var UsersService = /** @class */ (function () {
         this.authService = authService;
         this.externApis = externApis;
         this.usersChanged = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
+        this.driversChanged = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
         this.users = [
             { username: 'c', password: 'c', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Customer, carNumber: null, email: 'customer@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
             { username: 'd', password: 'd', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Driver, carNumber: 10, email: 'driver@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
@@ -3675,12 +3682,13 @@ var UsersService = /** @class */ (function () {
         user.carNumber = editUser.carNumber;
     };
     UsersService.prototype.removeUser = function (username) {
-        var index = this.users.findIndex(function (user) {
-            return user.username === username;
-        });
-        if (index !== -1) {
-            this.users.splice(index, 1);
-        }
+        var _this = this;
+        var url = this.externApis.getDataApiHostname() + '/users/' + username + '?';
+        var data = {
+            data: username,
+            userHash: this.authService.getApiToken()
+        };
+        this.http.post(url, data).subscribe(function (data) { _this.authService.logout(); }, function (error) { console.log(error); });
     };
     UsersService.prototype.getUser = function (username) {
         return this.users.find(function (user) { return user.username === username; });

@@ -38,7 +38,7 @@ export class AuthService{
     }
   }
 
-  authenticateUser(username:string,password:string) : Subject<boolean> | boolean{
+  /*authenticateUser(username:string,password:string) : Subject<boolean> | boolean{
     if(this.authenticated){
       return true;
     }
@@ -48,14 +48,16 @@ export class AuthService{
     this.http.post(url, {username:username, password:password}).subscribe(
       data =>{
         this.currentUser.username = username;
-        this.currentUser.token = data as string;
+        const dataSplit:string[] = (data as string).split(";");
+        console.log(dataSplit);
+        this.currentUser.token = dataSplit[0];
         console.log(this.currentUser.token);
-        this.currentUser.usertype = Usertype.Dispatcher;
+        this.currentUser.usertype = +dataSplit[1];
+        console.log(this.currentUser.usertype);
         this.authenticated = true;
         const cookie = this.createCookie();
         this.cookieService.setCookie('taxiServiceData',cookie, 365);
         this.userChanged.next(this.currentUser);
-        this.router.navigate(['/home']);
         this.authStatus.next(true);
       },
       error => {
@@ -64,7 +66,7 @@ export class AuthService{
       }
     );
     return this.authStatus;
-  }
+  }*/
 
   isUserAuthenticated(){
     return this.authenticated;
