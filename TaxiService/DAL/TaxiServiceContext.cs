@@ -19,7 +19,6 @@ namespace DAL
             modelBuilder.Entity<Car>().HasOptional(x => x.Driver).WithMany().HasForeignKey(x => x.DriverId);
             modelBuilder.Entity<Ride>().HasOptional(x => x.Comment).WithMany().HasForeignKey(x => x.CommentId);
             modelBuilder.Entity<Comment>().HasOptional(x => x.Ride).WithMany().HasForeignKey(x => x.RideId);
-            base.OnModelCreating(modelBuilder);
         }
         public DbSet<User> Users { get; set; }
         public DbSet<Car> Cars { get; set; }

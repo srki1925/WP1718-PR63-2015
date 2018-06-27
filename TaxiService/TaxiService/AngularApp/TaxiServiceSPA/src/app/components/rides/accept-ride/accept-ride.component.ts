@@ -38,10 +38,10 @@ export class AcceptRideComponent implements OnInit {
     if(!this.isDriver){
       const drivers = this.userService.getAllDrivers();
       drivers.forEach((username:string)=>{
-        const rides = this.ridesService.getAllRidesForDriver(username);
-        if(!rides.find((ride:IRide)=>{return (ride.status !== RideStatus.sucessful && ride.status !== RideStatus.failed)})){
+        /*const rides = this.ridesService.getAllRidesForDriver(username);
+        if(!rides.find((ride:IRide)=>{return (ride.Status !== RideStatus.sucessful && ride.Status !== RideStatus.failed)})){
           this.drivers.push(username);
-        }
+        }*/
       });
       if(this.drivers.length === 0){
         this.noFreeDrivers = true;

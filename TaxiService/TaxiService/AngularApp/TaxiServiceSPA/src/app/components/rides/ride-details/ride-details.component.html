@@ -1,11 +1,11 @@
 <h2>Details</h2>
 <div *ngIf="ride" class="pull-left">
-  <p class="list-group-item-text" >Pickup location: {{ride.location.address}}</p>
-  <p *ngIf="ride.destination" class="list-group-item-text">Destination : {{ride.destination.address}}</p>
-  <p class="list-group-item-text">Created on: {{ride.time}}</p>
+  <p class="list-group-item-text" >Pickup location: {{ride.Location?.Address}}</p>
+  <p *ngIf="ride.destination" class="list-group-item-text">Destination : {{ride.Destination?.address}}</p>
+  <p class="list-group-item-text">Created on: {{ride.Time}}</p>
   <p class="list-group-item-text">Status: {{rideStatus}}</p>
-  <p class="list-group-item-text">Driver: {{ride.driver}}</p>
-  <p class="list-group-item-text">Fare: {{ride.fare}}</p>
+  <p class="list-group-item-text">Driver: {{ride.Driver}}</p>
+  <p class="list-group-item-text">Fare: {{ride.Fare}}</p>
   <app-comment-details *ngIf="ride && ride.comment" [comment]="ride.comment"></app-comment-details>
   <span class="help-block" *ngIf="cancelFailed">Failed to cancel ride, no longer in waiting.</span>
 </div>

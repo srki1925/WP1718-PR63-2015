@@ -2,9 +2,14 @@
 <h3 *ngIf="waiting">Waiting rides</h3>
 <h3 *ngIf="!waiting">All rides</h3>
 </div> -->
-<div class="row">
-  <button *ngIf="!waiting" class="btn btn-primary" (click)="onWaitingRides()">All rides</button>
-  <button *ngIf="waiting" class="btn btn-primary" (click)="onAllRides()">Waiting</button>
+<div *ngIf="userType === 3" class="row">
+  <button *ngIf="!waiting && myrides" class="btn btn-primary" (click)="onWaitingRides()">My Rides</button>
+  <button *ngIf="waiting && !myrides" class="btn btn-primary" (click)="onAllRides()">Waiting</button>
+  <button *ngIf="!waiting && !myrides" class="btn btn-primary" (click)="onMyRides()">All Rides</button>
+</div>
+<div *ngIf="userType === 2" class="row">
+  <button *ngIf="!waiting" class="btn btn-primary" (click)="onWaitingRides()">My Rides</button>
+  <button *ngIf="waiting" class="btn btn-primary" (click)="onMyRides()">Waiting</button>
 </div>
 <br>
 

@@ -48,25 +48,26 @@ export class NewRideComponent implements OnInit {
     const d = new Date();
     if(!this.editMode){
       let newRide : IRide = {
-        location : {
+        Location : {
           address: this.rideForm.value.address,
           lat: this.marker.lat,
           long: this.marker.lng
         },
-        comment: null,
-        destination: null,
-        driver: null,
-        fare: 0,
-        status: RideStatus.waiting,
-        time: null,
-        id: -1,
-        dispatcher:null,
-        customer: null
+        Comment: null,
+        Destination: null,
+        Driver: null,
+        Fare: 0,
+        Status: RideStatus.waiting,
+        Time: null,
+        Id: -1,
+        Dispatcher:null,
+        Customer: null,
+        CarType: null
       }
       if(this.isDispatcher){
-        newRide.dispatcher = this.authService.getCurrentUsername();
+        newRide.Dispatcher = this.authService.getCurrentUsername();
       }else{
-        newRide.customer = this.authService.getCurrentUsername();
+        newRide.Customer = this.authService.getCurrentUsername();
       }
 
       this.ridesService.newRide(newRide);
@@ -75,7 +76,13 @@ export class NewRideComponent implements OnInit {
     }
   }
 
+  onDragEnd(event){
+    console.log('sidojfsodifjoisdjf');
+    this.getAddressFromLocation();
+  }
+
   onChoseLocation(event){
+    console.log('928jf89jd89j')
     this.marker.lat = event.coords.lat;
     this.marker.lng = event.coords.lng;
     this.chosen = true;

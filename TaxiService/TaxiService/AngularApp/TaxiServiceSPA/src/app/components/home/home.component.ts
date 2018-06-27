@@ -9,10 +9,11 @@ import { AuthService } from '../../services/auth.service';
 export class HomeComponent implements OnInit {
 
   userBlocked = false;
+  username = '';
   constructor(private authService:AuthService) { }
 
   ngOnInit() {
     this.userBlocked = this.authService.isUserBlocked()
+    this.username = this.authService.getCurrentUsername();
   }
-
 }

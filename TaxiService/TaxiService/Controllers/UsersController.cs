@@ -160,7 +160,6 @@ namespace TaxiService.Controllers
                     Sex = user.Sex,
                     Car = car,
                     Blocked = false,
-                    Rides = new List<Ride>()
                 };
                 car.Driver = newDriver;
                 Repository.Instance.TaxiServiceRepository.Drivers.Add(newDriver);
@@ -179,7 +178,6 @@ namespace TaxiService.Controllers
                     Role = user.UserType,
                     Sex = user.Sex,
                     Blocked = false,
-                    Rides = new List<Ride>()
                 };
                 Repository.Instance.TaxiServiceRepository.Users.Add(newUser);
                 Repository.Instance.TaxiServiceRepository.SaveChanges();

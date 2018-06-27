@@ -11,6 +11,10 @@ namespace DataModel
     public enum UserRole { Guest, Customer, Driver, Dispatcher }
     public class User
     {
+        public User()
+        {
+
+        }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
@@ -24,6 +28,7 @@ namespace DataModel
         public string Email { get; set; }
         public bool Blocked { get; set; }
         public UserRole Role { get; set; }
-        public List<Ride> Rides { get; set; }
+        //public int? RidesId { get; set; }
+        public virtual List<Ride> Rides { get; set; }
     }
 }

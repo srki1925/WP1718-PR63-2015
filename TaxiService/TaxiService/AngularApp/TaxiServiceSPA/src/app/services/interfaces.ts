@@ -35,12 +35,6 @@ export interface IBasicUser{
     blocked: boolean
 }
 
-export interface IComment{
-    description: string,
-    time: string,
-    rating: number
-}
-
 export interface ILocation{
     lat:number,
     long:number,
@@ -48,18 +42,24 @@ export interface ILocation{
 }
 
 export interface IRide{
-    id: number,
-    location: ILocation,
-    destination: ILocation,
-    customer: string,
-    driver: string,
-    dispatcher:string,
-    fare: number,
-    comment: IComment,
-    time:string,
-    status: RideStatus
+    Id: number,
+    Location: ILocation,
+    Destination: ILocation,
+    Customer: string,
+    Driver: string,
+    Dispatcher:string,
+    Fare: number,
+    Comment: IComment,
+    Time:string,
+    Status: RideStatus
+    CarType: CarType
 }
 
+export interface IComment{
+    description: string,
+    time: string,
+    rating: number
+}
 export enum RideStatus{
     ordered,
     processed,

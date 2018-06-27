@@ -207,6 +207,8 @@
     <Compile Include="Models\ApiRequest.cs" />
     <Compile Include="Models\AuthorizationService.cs" />
     <Compile Include="Models\BasicUserData.cs" />
+    <Compile Include="Models\CommentResponse.cs" />
+    <Compile Include="Models\LocationResponse.cs" />
     <Compile Include="Models\LoginParameters.cs" />
     <Compile Include="Models\NewUser.cs" />
     <Compile Include="Models\ResponseCar.cs" />

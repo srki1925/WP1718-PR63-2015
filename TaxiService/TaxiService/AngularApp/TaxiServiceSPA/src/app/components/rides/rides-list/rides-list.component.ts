@@ -15,8 +15,8 @@ export class RidesListComponent implements OnInit, OnDestroy {
   rides: IRide[] = [];
   userType:Usertype;
   private ridesSubscription = new Subscription();
-  private waiting = false;
-
+  waiting = false;
+  myrides = false;
   constructor(private ridesService: RidesService,
               private authService: AuthService) { }
 
@@ -25,7 +25,7 @@ export class RidesListComponent implements OnInit, OnDestroy {
     this.ridesSubscription = this.ridesService.ridesChanged.subscribe((rides:IRide[]) =>{
       this.rides = rides;
     });
-    this.rides = this.ridesService.getAllRides();
+    this.onMyRides();
   }
 
   ngOnDestroy(){
@@ -34,19 +34,29 @@ export class RidesListComponent implements OnInit, OnDestroy {
 
   onAllRides(){
     this.waiting = false;
-    this.ridesSubscription.unsubscribe();
-    this.ridesSubscription = this.ridesService.ridesChanged.subscribe((rides:IRide[]) =>{
-      this.rides = rides;
-    });
-    this.rides = this.ridesService.getAllRides();
+    this.myrides = false;
+    this.ridesService.getAllRides().subscribe(
+      (data:IRide[]) =>{
+        console.log(data);
+        this.rides = data;
+        console.log(this.rides);
+      },
+      error =>{
+        console.log(error);
+      }
+    );
   }
 
   onWaitingRides(){
     this.waiting = true;
-    this.ridesSubscription.unsubscribe();
-    this.ridesSubscription = this.ridesService.waitingRidesChanged.subscribe((rides:IRide[]) =>{
-      this.rides = rides;
-    });
-    this.rides = this.ridesService.getAllWaitingRides();
+    this.myrides = false;
+    this.ridesService.getAllWaitingRides();
+  }
+
+  onMyRides(){
+    console.log('jsdfjsiod');
+    this.myrides = true;
+    this.waiting = false;
+    this.ridesService.getMyRides();
   }
 }

@@ -3,7 +3,7 @@
 
 <!--Google maps component-->
 <agm-map [zoom]="zoom" [latitude]="latitude" [longitude]="longitude" (mapClick)="onChoseLocation($event)">
-  <agm-marker *ngIf="chosen" [longitude]="marker.lng" [latitude]="marker.lat" [markerDraggable]="draggable"></agm-marker>
+  <agm-marker *ngIf="chosen" [longitude]="marker.lng" [latitude]="marker.lat" [markerDraggable]="draggable" (dragEnd)="onDragEnd($event)"></agm-marker>
 </agm-map>
 
 <form [formGroup]="rideForm" (submit)="onSubmit()">

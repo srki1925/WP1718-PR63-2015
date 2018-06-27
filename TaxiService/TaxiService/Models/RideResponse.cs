@@ -10,25 +10,47 @@ namespace TaxiService.Models
     {
         public int Id { get; set; }
         public RideStatus Status  { get; set; }
-        public Location CustomerLocation { get; set; }
-        public Location Destination { get; set; }
         public CarType CarType { get; set; }
-        public int CustomerId { get; set; }
-        public int CommentId { get; set; }
-        public string OrderTime { get; set; }
+        public string Customer { get; set; }
+        public string Driver { get; set; }
+        public string Dispatcher { get; set; }
+        public LocationResponse Location { get; set; }
+        public LocationResponse Destination { get; set; }
+        public CommentResponse Comment { get; set; }
+        public string Time { get; set; }
+        public decimal Fare { get; set; }
 
         public static RideResponse Convert(Ride source)
         {
+            if (source == null)
+                return null;
             return new RideResponse()
             {
                 Id = source.Id,
                 CarType = source.CarType,
-                CommentId = (int)source.CommentId,
-                CustomerId = (int)source.CustomerId,
-                CustomerLocation = source.CustomerLocation,
-                Destination = source.Destination,
+                Comment = source.Comment == null ? null : new CommentResponse() {
+                    description = source.Comment.Description,
+                    rating = (int)source.Comment.Rate,
+                    time = source.Comment.PublishDate.ToString()
+                },
+                Customer = source.Customer?.Username,
+                Dispatcher = source.Dispatcher?.Username,
+                Driver = source.Driver?.Username,
+                Location = source.CustomerLocation == null ? null : new LocationResponse()
+                {
+                    lat = source.CustomerLocation.Latitude,
+                    lng = source.CustomerLocation.Longitude,
+                    address = source.CustomerLocation.Address
+                },
+                Destination = source.Destination == null ? null : new LocationResponse()
+                {
+                    lat = source.Destination.Latitude,
+                    lng = source.Destination.Longitude,
+                    address = source.Destination.Address
+                },
                 Status = source.Status,
-                OrderTime = source.OrderTime.ToString()
+                Time = source.OrderTime.ToString(),
+                Fare = source.Fare
             };
         }
     }

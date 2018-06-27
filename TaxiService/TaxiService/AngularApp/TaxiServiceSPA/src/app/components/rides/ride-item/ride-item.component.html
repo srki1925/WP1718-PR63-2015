@@ -1,6 +1,6 @@
-<a [routerLink]="[ride.id]" routerLinkActive="active" style="cursor:pointer" class="list-group-item clearfix" >
+<a [routerLink]="[ride.Id]" routerLinkActive="active" style="cursor:pointer" class="list-group-item clearfix" >
   <div class="pull-left">
-      <h4 class="list-group-item-heading">{{ride.location.address}}</h4>
-      <h4 class="list-group-item-heading">{{ride.time}}</h4>
+      <h4 class="list-group-item-heading">{{ride.Location?.address}}</h4>
+      <h4 class="list-group-item-heading">{{ride.Time}}</h4>
   </div>
 </a>

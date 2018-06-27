@@ -18,7 +18,7 @@ namespace TaxiService.Controllers
         /// <returns></returns>
         public IEnumerable<RideResponse> Get()
         {
-            return Repository.Instance.TaxiServiceRepository.Rides.Select(x => RideResponse.Convert(x)).AsEnumerable();
+            return Repository.Instance.TaxiServiceRepository.Rides.ToList().Select(x => RideResponse.Convert(x));
         }
         /// <summary>
         /// Returns basic ride data in compliance with GDPR
@@ -28,6 +28,38 @@ namespace TaxiService.Controllers
         public RideResponse Get(int id)
         {
             return RideResponse.Convert(Repository.Instance.TaxiServiceRepository.Rides.Find(id));
+        }
+        [HttpGet]
+        [Route("api/rides/user/{username}")]
+        public IHttpActionResult Get(string username)
+        {
+            if (!Repository.Instance.UserExists(username))
+                return NotFound();
+
+            var user = Repository.Instance.TaxiServiceRepository.Users.FirstOrDefault(x => x.Username == username);
+            IEnumerable<Ride> rides;
+            switch (user.Role)
+            {
+                case UserRole.Customer:
+                    {
+                        rides = Repository.Instance.TaxiServiceRepository.Rides.Where(x => x.CustomerId == user.Id).ToList();
+                    }
+                    break;
+                case UserRole.Driver:
+                    {
+                        rides = Repository.Instance.TaxiServiceRepository.Rides.Where(x => x.DriverId == user.Id).ToList();
+                    }
+                    break;
+                case UserRole.Dispatcher:
+                    {
+                        rides = Repository.Instance.TaxiServiceRepository.Rides.Where(x => x.DispatcherId == user.Id).ToList();
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            return Ok();
         }
 
         public IHttpActionResult Post([FromBody]ApiRequest<RideRequest> requestedRide)
@@ -52,7 +84,7 @@ namespace TaxiService.Controllers
                     DispatcherId = user.Id,
                     DriverId = requestedRide.Data.DriverId
                 };
-                customer.Rides.Add(persistentRide);
+                //customer.CustomerRides.Add(persistentRide);
             }
             else if (user.Role == UserRole.Customer)
             {
@@ -64,7 +96,6 @@ namespace TaxiService.Controllers
                     Status = RideStatus.Waiting,
                     CustomerLocation = requestedRide.Data.Location,
                 };
-                user.Rides.Add(persistentRide);
             }
             else
             {
@@ -82,10 +113,10 @@ namespace TaxiService.Controllers
                 return Unauthorized();
             if (user.Blocked)
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Forbidden));
-            if (changedRide.Data.RideId == null || !user.Rides.Exists(x => x.Id == changedRide.Data.RideId))
+            if (changedRide.Data.RideId == null || Repository.Instance.TaxiServiceRepository.Rides.FirstOrDefault(x => x.Id == changedRide.Data.RideId) == null)
                 return BadRequest("InvalidRideId");
 
-            var ride = user.Rides.Find(x => x.Id == changedRide.Data.RideId);
+            var ride = Repository.Instance.TaxiServiceRepository.Rides.Find(changedRide.Data.RideId);
             ride.CarType = changedRide.Data.CarType;
             ride.CustomerLocation = changedRide.Data.Location;
             Repository.Instance.TaxiServiceRepository.SaveChanges();
