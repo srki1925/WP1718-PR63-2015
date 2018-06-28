@@ -15,5 +15,6 @@ namespace DataModel
         public Location Location { get; set; }
         public int? CarId { get; set; }
         public Car Car { get; set; }
+        public bool Free { get; set; } = true;
     }
 }

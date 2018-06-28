@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { RidesService } from '../../../services/rides.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ExternalApisDataService } from '../../../services/external-apis-data.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { IRide, RideStatus } from '../../../services/interfaces';
+import { IRide, RideStatus, IRideRequest, IDriver, ILocation } from '../../../services/interfaces';
 import { stringify } from 'querystring';
 import { AuthService } from '../../../services/auth.service';
 import { Usertype } from '../../../services/usertype.enum';
+import { UsersService } from '../../../services/users.service';
 
 @Component({
   selector: 'app-new-ride',
@@ -19,7 +20,12 @@ export class NewRideComponent implements OnInit {
   rideForm:FormGroup;
   editMode = false;
   isDispatcher = false;
-  
+  userType : Usertype;
+  availableDrivers : string[] = [];
+
+  //destination set
+  destination = false;
+  rideId:number;
   //google maps specific
   latitude = 45.260656;
   longitude = 19.832157;
@@ -30,7 +36,9 @@ export class NewRideComponent implements OnInit {
   error = false;
 
   constructor(private ridesService:RidesService,
+              private userService:UsersService,
               private route:ActivatedRoute,
+              private router:Router,
               private apisServices:ExternalApisDataService,
               private http:HttpClient,
               private authService:AuthService) { }
@@ -39,61 +47,127 @@ export class NewRideComponent implements OnInit {
     this.rideForm = new FormGroup({
       address: new FormControl(null, Validators.required),
       cartype: new FormControl(0),
-      driver: new FormControl(),
+      driver: new FormControl(null),
+      fare: new FormControl(Validators.required,Validators.min(0))
     });
     this.isDispatcher = this.authService.getUserType() === Usertype.Dispatcher;
+    this.userType = this.authService.getUserType();
+    
+    this.rideId = this.route.snapshot.queryParams['id'];
+    this.destination = this.route.snapshot.queryParams['destination'];
+    console.log(this.rideId);
+    console.log(this.destination);
   }
 
   onSubmit(){
-    const d = new Date();
-    if(!this.editMode){
-      let newRide : IRide = {
-        Location : {
+    if(this.userType === Usertype.Driver){
+      if(this.destination){
+        const location : ILocation = {
           address: this.rideForm.value.address,
           lat: this.marker.lat,
-          long: this.marker.lng
-        },
-        Comment: null,
-        Destination: null,
-        Driver: null,
-        Fare: 0,
-        Status: RideStatus.waiting,
-        Time: null,
-        Id: -1,
-        Dispatcher:null,
-        Customer: null,
-        CarType: null
+          lng: this.marker.lng
+        }
+        console.log(location);
+        this.ridesService.finishRide(location, this.rideId, this.rideForm.value.fare).subscribe(
+          ok => {
+            this.router.navigate(['../../'], {relativeTo:this.route});
+          }
+        );
+      }else
+      {
+        const location : ILocation = {
+          address: this.rideForm.value.address,
+          lat: this.marker.lat,
+          lng: this.marker.lng
+        }
+        this.userService.changeDriverLocation(location)
+        .subscribe(
+          ok =>{ this.router.navigate(['/home','rides']), {relativeTo: this.route} },
+          error => {console.log(error)}
+        );
       }
-      if(this.isDispatcher){
-        newRide.Dispatcher = this.authService.getCurrentUsername();
-      }else{
-        newRide.Customer = this.authService.getCurrentUsername();
+    }
+    else{
+      if(!this.editMode){
+        let newRide : IRideRequest = {
+          location : {
+            address: this.rideForm.value.address,
+            lat: this.marker.lat,
+            lng: this.marker.lng
+          },
+          destination: null,
+          driver: this.rideForm.value.driver,
+          fare: 0,
+          cartype: this.rideForm.value.cartype,
+          rideid:null
+        }
+        console.log(newRide);
+        this.ridesService.newRide(newRide)
+        .subscribe(
+          ok =>{this.router.navigate(["../"], {relativeTo:this.route})},
+          error =>{
+            if(error.status === 403 || error.status === 401){
+              this.authService.logout();
+            }
+            console.log(error);
+          }
+        );
       }
-
-      this.ridesService.newRide(newRide);
-    }else{
-
     }
   }
 
-  onDragEnd(event){
-    console.log('sidojfsodifjoisdjf');
+  private populateDrivers(){
+    this.userService.getAllDrivers()
+    .subscribe(
+      (data:IDriver[]) =>{
+        let tmpDrivers: {username:string,distance:number}[] = [];
+        let carFilter = data.filter(x => {return x.cartype == this.rideForm.value.cartype && x.Free});
+        console.log(carFilter);
+        carFilter.forEach((driver) =>{
+          const driverDistance = {
+            username: driver.username,
+            distance: this.getDriverDistance(driver.location.lat, driver.location.lng)
+          }
+          tmpDrivers.push(driverDistance);
+        });
+        tmpDrivers = tmpDrivers.sort((a,b) =>{
+          return a.distance - b.distance;
+        })
+        this.availableDrivers = tmpDrivers.map(x => x.username).slice(0,4);
+        this.rideForm.patchValue({
+          'driver':this.availableDrivers[0]
+        })
+      },
+      error =>{
+        console.log(error);
+      }
+    )
+  }
+
+  onMarkerDrag(event){
+    this.marker.lat = event.coords.lat;
+    this.marker.lng = event.coords.lng;
     this.getAddressFromLocation();
   }
 
   onChoseLocation(event){
-    console.log('928jf89jd89j')
     this.marker.lat = event.coords.lat;
     this.marker.lng = event.coords.lng;
     this.chosen = true;
+    this.populateDrivers();
     this.getAddressFromLocation();
+  }
+
+  getDriverDistance(lat:number, lng:number){
+    let dlat = Math.pow((this.marker.lat - lat),2);
+    let dlng = Math.pow((this.marker.lng - lng),2);
+    return Math.sqrt(dlat + dlng); 
   }
 
   getAddressFromLocation(){
     //here maps reverse geocoding api
     let requestString = 'https://reverse.geocoder.cit.api.here.com/6.2/reversegeocode.json?prox='+this.marker.lat+'%2C'+this.marker.lng+'%2C250&mode=retrieveAddresses&maxresults=1&gen=8&app_id='+this.apisServices.getHereAppId()+'&app_code='+this.apisServices.getHereAppCode()+'&language=en-US';
     this.http.get(requestString).subscribe((response) =>{
-      console.log(response);
       const address = response['Response']['View'][0]['Result'][0]['Location']['Address']['Label'];
       this.rideForm.patchValue({address: address});
     });
@@ -114,7 +188,9 @@ export class NewRideComponent implements OnInit {
         this.marker.lat = location['Latitude'];
         this.marker.lng = location['Longitude'];
         this.chosen = true;
-        console.log(location);
+        //center map over marker for easier user orientation
+        this.latitude = this.marker.lat;
+        this.longitude = this.marker.lng;
       }
     })
   }

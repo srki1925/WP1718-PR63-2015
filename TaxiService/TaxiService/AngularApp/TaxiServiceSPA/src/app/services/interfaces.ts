@@ -22,7 +22,7 @@ export interface INewUser{
     lastname: string,
     jmbg: string,
     phone: number,
-    carId: number,
+    CarNumber: number,
     userType: Usertype,
     blocked: boolean
 }
@@ -37,8 +37,15 @@ export interface IBasicUser{
 
 export interface ILocation{
     lat:number,
-    long:number,
+    lng:number,
     address: string
+}
+
+export interface IDriver{
+    username:string,
+    cartype:CarType,
+    location:ILocation,
+    Free:boolean
 }
 
 export interface IRide{
@@ -55,10 +62,20 @@ export interface IRide{
     CarType: CarType
 }
 
+export interface IRideRequest{
+    location:ILocation,
+    destination:ILocation,
+    driver:string,
+    cartype:CarType,
+    rideid:number,
+    fare:number
+}
+
 export interface IComment{
     description: string,
     time: string,
-    rating: number
+    rating: number,
+    rideid:number,
 }
 export enum RideStatus{
     ordered,

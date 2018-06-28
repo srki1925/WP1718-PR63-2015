@@ -46,9 +46,9 @@
             </select>
           </div>
           <div class="form-group" *ngIf="isDriver">
-            <label for="carNumber">Car Number</label>
+            <label for="carNumber">Car Number *</label>
             <select id="carNumber" formControlName="carNumber" class="form-control">
-              <option *ngFor="let car of freeCars" [value]="car.carNumber">{{car.carNumber}}</option>
+              <option *ngFor="let car of freeCars" [value]="car.CarNumber">{{car.CarNumber}} - {{car.CarType === 0 ? 'Sedan' : 'Van'}}</option>
             </select>
           </div>
           <br>

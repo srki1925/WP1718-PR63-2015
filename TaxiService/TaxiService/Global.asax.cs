@@ -27,39 +27,41 @@ namespace TaxiService
             Repository.Instance.TaxiServiceRepository.Drivers.DefaultIfEmpty(null);
             Repository.Instance.TaxiServiceRepository.Rides.DefaultIfEmpty(null);
             Repository.Instance.TaxiServiceRepository.Cars.DefaultIfEmpty(null);
+            Repository.Instance.TaxiServiceRepository.Locations.DefaultIfEmpty(null);
+            Repository.Instance.TaxiServiceRepository.Comments.DefaultIfEmpty(null);
 
             ReadDispatchers();
             InitCars();
             InitDrivers();
             InitCustomers();
 
-            if (Repository.Instance.TaxiServiceRepository.Rides.ToList().Count == 0) {
-                var customer = Repository.Instance.TaxiServiceRepository.Users.Find(1);
-                var driver = Repository.Instance.TaxiServiceRepository.Drivers.Find(3);
-                var dispatcher = Repository.Instance.TaxiServiceRepository.Users.Find(5);
-                var ride1 = new Ride()
-                {
-                    OrderTime = DateTime.Now,
-                    CarType = CarType.Sedan,
-                    Customer = customer,
-                    Driver = driver,
-                    Dispatcher = dispatcher,
-                    Status = RideStatus.Waiting
-                };
-                var ride2 = new Ride()
-                {
-                    OrderTime = DateTime.Now,
-                    CarType = CarType.Sedan,
-                    Customer = customer,
-                    Driver = driver,
-                    Dispatcher = dispatcher,
-                    Status = RideStatus.Succesful
-                };
+            //if (Repository.Instance.TaxiServiceRepository.Rides.ToList().Count == 0) {
+            //    var dispatcher = Repository.Instance.TaxiServiceRepository.Users.Find(1);
+            //    var driver = Repository.Instance.TaxiServiceRepository.Drivers.Find(3);
+            //    var customer = Repository.Instance.TaxiServiceRepository.Users.Find(5);
+            //    var ride1 = new Ride()
+            //    {
+            //        OrderTime = DateTime.Now,
+            //        CarType = CarType.Sedan,
+            //        Customer = customer,
+            //        Driver = driver,
+            //        Dispatcher = dispatcher,
+            //        Status = RideStatus.Waiting
+            //    };
+            //    var ride2 = new Ride()
+            //    {
+            //        OrderTime = DateTime.Now,
+            //        CarType = CarType.Sedan,
+            //        Customer = customer,
+            //        Driver = driver,
+            //        Dispatcher = dispatcher,
+            //        Status = RideStatus.Succesful
+            //    };
 
-                Repository.Instance.TaxiServiceRepository.Rides.Add(ride1);
-                Repository.Instance.TaxiServiceRepository.Rides.Add(ride2);
-                Repository.Instance.TaxiServiceRepository.SaveChanges();
-            }
+            //    Repository.Instance.TaxiServiceRepository.Rides.Add(ride1);
+            //    Repository.Instance.TaxiServiceRepository.Rides.Add(ride2);
+            //    Repository.Instance.TaxiServiceRepository.SaveChanges();
+            //}
             foreach (var item in Repository.Instance.TaxiServiceRepository.Users.ToList())
             {
                 var hash = AuthorizationService.ComputeSha512(item.Username + item.Password);

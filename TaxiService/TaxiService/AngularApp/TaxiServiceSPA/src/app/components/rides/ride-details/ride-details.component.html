@@ -1,16 +1,25 @@
-<h2>Details</h2>
-<div *ngIf="ride" class="pull-left">
-  <p class="list-group-item-text" >Pickup location: {{ride.Location?.Address}}</p>
-  <p *ngIf="ride.destination" class="list-group-item-text">Destination : {{ride.Destination?.address}}</p>
-  <p class="list-group-item-text">Created on: {{ride.Time}}</p>
-  <p class="list-group-item-text">Status: {{rideStatus}}</p>
-  <p class="list-group-item-text">Driver: {{ride.Driver}}</p>
-  <p class="list-group-item-text">Fare: {{ride.Fare}}</p>
-  <app-comment-details *ngIf="ride && ride.comment" [comment]="ride.comment"></app-comment-details>
-  <span class="help-block" *ngIf="cancelFailed">Failed to cancel ride, no longer in waiting.</span>
+<div class="row">
+  <h2>Details</h2>
+  <div *ngIf="ride" class="pull-left">
+    <p class="list-group-item-text" >Pickup location: {{ride.Location?.address}}</p>
+    <p *ngIf="ride.Destination" class="list-group-item-text">Destination : {{ride.Destination?.address}}</p>
+    <p class="list-group-item-text">Created on: {{ride.Time}}</p>
+    <p class="list-group-item-text">Status: {{rideStatus}}</p>
+    <p *ngIf="ride.Customer" class="list-group-item-text">Customer: {{ride.Customer}}</p>
+    <p class="list-group-item-text">Driver: {{ride.Driver}}</p>
+    <p *ngIf="ride.Dispatcher" class="list-group-item-text">Dispatcher: {{ride.Dispatcher}}</p>
+    <p *ngIf="ride.Fare !== 0" class="list-group-item-text">Fare: {{ride.Fare}}</p>
+    <app-comment-details *ngIf="ride && ride.comment" [comment]="ride.comment"></app-comment-details>
+    <span class="help-block" *ngIf="cancelFailed">Failed to cancel ride, no longer in waiting.</span>
+  </div>
+
+  <div class="pull-right">
+    <a *ngIf="(userType === 3 || userType === 2) && ride.Status === 2 || (userType === 2 && driverFree && ride.Status === 2)" [routerLink]="['accept']" class="btn btn-success">Accept</a>
+    <button *ngIf="userType === 2 && (ride.Status === 1 || ride.Status === 3)" class="btn btn-danger" (click)="onFailed()">Failed</button>
+    <button *ngIf="userType === 2 && (ride.Status === 1 || ride.Status === 3)" class="btn btn-success" (click)="onSuccess()">Success</button>
+    <button *ngIf="userType === 1 && ride.Status === 5 && !ride.Comment"  class="btn btn-primary" (click)="onComment()">Comment</button>  
+    <button *ngIf="userType === 1 && ride.Status === 2"  class="btn btn-danger" (click)="onCancel()">Cancel</button>
+  </div>
 </div>
 
-<div class="pull-right">
-  <a *ngIf="(userType === 3 || userType === 2) && ride.status === 2 && (userType === 2 && driverFree)" [routerLink]="['accept']" class="btn btn-success">Accept</a>
-  <button *ngIf="userType === 1 && ride.status === 2"  class="btn btn-danger" (click)="onCancel()">Cancel</button>
-</div>
+<app-comment-details class="row pull-left" *ngIf="ride.Comment" [comment]="ride.Comment"></app-comment-details>

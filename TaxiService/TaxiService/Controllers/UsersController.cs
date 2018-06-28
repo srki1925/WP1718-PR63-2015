@@ -41,20 +41,7 @@ namespace TaxiService.Controllers
             var users = Repository.Instance.TaxiServiceRepository.Users.Where(x => x.Role != UserRole.Dispatcher).ToList();
             return users.Select(user => user.Username);
         }
-        //GET: api/users/username
-        public BasicUserData Get(string id)
-        {
-            if (!Repository.Instance.UserExists(id))
-                return null;
-            return Repository.Instance.TaxiServiceRepository.Users.Where(x => x.Username == id).Select(x => new BasicUserData()
-            {
-                username = x.Username,
-                blocked = x.Blocked,
-                email = x.Email,
-                phone = x.PhoneNumber,
-                type = x.Role
-            }).ToArray()[0];
-        }
+        
         [HttpPut]
         // PUT: api/Users
         public IHttpActionResult Put([FromBody]ApiRequest<UserFullData> request)
@@ -72,6 +59,38 @@ namespace TaxiService.Controllers
 
             Repository.Instance.TaxiServiceRepository.SaveChanges();
 
+            return Ok();
+        }
+
+        [HttpPut]
+        [Route("api/users/driver/location")]
+        public IHttpActionResult Location([FromBody]ApiRequest<LocationResponse> request)
+        {
+            if (request == null || request.UserHash == null)
+                return BadRequest("Token missing");
+            if (!Repository.Instance.LoggedInUsers.TryGetValue(request.UserHash, out User user))
+                return BadRequest("Driver not found");
+            if (user.Role != UserRole.Driver)
+                return BadRequest("This user is not a driver");
+            var driver = user as Driver;
+
+            if (driver.Location == null)
+            {
+                var location = new Location()
+                {
+                    Address = request.Data.address,
+                    Latitude = (double)request.Data.lat,
+                    Longitude = (double)request.Data.lng
+                };
+                driver.Location = location;
+            }
+            else
+            {
+                driver.Location.Address = request.Data.address;
+                driver.Location.Latitude = (double)request.Data.lat;
+                driver.Location.Longitude = (double)request.Data.lng;
+            }
+            Repository.Instance.TaxiServiceRepository.SaveChanges();
             return Ok();
         }
 
@@ -144,7 +163,7 @@ namespace TaxiService.Controllers
             {
                 if(user.CarNumber == null)
                     return BadRequest("carNumber is null");
-                if (Repository.Instance.CarExists((int)user.CarNumber))
+                if (!Repository.Instance.CarExists((int)user.CarNumber))
                     return BadRequest("carNumber doesn't exist");
                 var car = Repository.Instance.TaxiServiceRepository.Cars.FirstOrDefault(x => x.CarNumber == user.CarNumber);
                 var newDriver = new Driver()
@@ -185,5 +204,40 @@ namespace TaxiService.Controllers
 
             return Created(user.Username, user);
         }
+        [HttpGet]
+        [Route("api/users/drivers")]
+        public IHttpActionResult GetDriversBasicData()
+        {
+            var drivers = Repository.Instance.TaxiServiceRepository.Drivers.ToList().Select(x => new DriverResponse()
+            {
+                username = x.Username,
+                cartype = x.Car.Type,
+                location = new LocationResponse()
+                {
+                    address = x.Location?.Address,
+                    lat = x.Location?.Latitude,
+                    lng = x.Location?.Longitude
+                },
+                Free = x.Free
+            });
+
+            return Ok(drivers);
+        }
+        //GET: api/users/username
+        public BasicUserData Get(string id)
+        {
+            if (!Repository.Instance.UserExists(id))
+                return null;
+            return Repository.Instance.TaxiServiceRepository.Users.Where(x => x.Username == id).Select(x => new BasicUserData()
+            {
+                username = x.Username,
+                blocked = x.Blocked,
+                email = x.Email,
+                phone = x.PhoneNumber,
+                type = x.Role
+            }).ToArray()[0];
+        }
+
+
     }
 }

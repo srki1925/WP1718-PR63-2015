@@ -56,7 +56,7 @@ export class EditUserComponent implements OnInit {
       jmbg:this.registrationForm.value['jmbg'],
       phone:this.registrationForm.value['phone'],
       //in future if driver can change car, change to read from form
-      carId: this.editUser.carId,
+      CarNumber: this.editUser.CarNumber,
       userType : this.authService.getUserType(),
       blocked: this.editUser.blocked
     };

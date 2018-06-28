@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { IRide } from '../../../services/interfaces';
+import { IRide, RideStatus } from '../../../services/interfaces';
 import { Subscription } from 'rxjs';
 import { RidesService } from '../../../services/rides.service';
 import { AuthService } from '../../../services/auth.service';
@@ -17,6 +17,7 @@ export class RidesListComponent implements OnInit, OnDestroy {
   private ridesSubscription = new Subscription();
   waiting = false;
   myrides = false;
+  private interval;
   constructor(private ridesService: RidesService,
               private authService: AuthService) { }
 
@@ -25,11 +26,15 @@ export class RidesListComponent implements OnInit, OnDestroy {
     this.ridesSubscription = this.ridesService.ridesChanged.subscribe((rides:IRide[]) =>{
       this.rides = rides;
     });
+    this.interval = setInterval(() =>{
+      this.onMyRides()
+    },10000);
     this.onMyRides();
   }
 
   ngOnDestroy(){
     this.ridesSubscription.unsubscribe();
+    clearInterval(this.interval);
   }
 
   onAllRides(){
@@ -37,9 +42,7 @@ export class RidesListComponent implements OnInit, OnDestroy {
     this.myrides = false;
     this.ridesService.getAllRides().subscribe(
       (data:IRide[]) =>{
-        console.log(data);
         this.rides = data;
-        console.log(this.rides);
       },
       error =>{
         console.log(error);
@@ -50,13 +53,33 @@ export class RidesListComponent implements OnInit, OnDestroy {
   onWaitingRides(){
     this.waiting = true;
     this.myrides = false;
-    this.ridesService.getAllWaitingRides();
+    this.ridesService.getAllRides()
+    .subscribe(
+      (data:IRide[])=>{
+        this.rides = [];
+        data.forEach(ride =>{
+          if(ride.Status == RideStatus.waiting){
+            this.rides.push(ride);
+          }
+        });
+      },
+      error =>{
+        console.log(error);
+      }
+    );
   }
 
   onMyRides(){
-    console.log('jsdfjsiod');
     this.myrides = true;
     this.waiting = false;
-    this.ridesService.getMyRides();
+    this.ridesService.getAllRidesForUser()
+    .subscribe(
+      (data:IRide[]) =>{
+        this.rides = data;
+      },
+      error =>{
+        console.log(error);
+      }
+    );
   }
 }

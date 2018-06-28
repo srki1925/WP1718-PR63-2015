@@ -82,21 +82,6 @@ export class CarsDataService implements OnInit {
     return this.carsChanged;
   }
 
-  getFreeCars(){
-    let retCars : ICar[] = [];
-    this.cars.forEach((car:ICar) =>{
-      if(!car.driver){
-        retCars.push(car);
-      }
-    });
-    return retCars;
-  }
-
-  anyFreeCars(){
-    const index = this.cars.findIndex((car:ICar) => {return car.driver === null;})
-    return index !== -1 ? true : false;
-  }
-
   updateCar(car:ICar){
     const url = this.externApis.getDataApiHostname() + '/cars/' + car.carNumber;
     let data : ApiRequest = {

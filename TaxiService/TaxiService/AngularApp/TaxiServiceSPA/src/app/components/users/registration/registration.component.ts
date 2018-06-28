@@ -16,7 +16,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   registrationForm: FormGroup;
   isDriver = false;
-  freeCars : ICar[];
+  freeCars : ICar[] = [];
   private typeSubscription:Subscription;
   constructor(private route:ActivatedRoute,
               private router:Router,
@@ -32,13 +32,20 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       }else{
         if(type === 'driver'){
           this.isDriver = true;
-          this.freeCars = this.carsService.getFreeCars();
-          if(this.freeCars.length == 0){
-            this.router.navigate(['/driver-registration-error']);
-          }
+          this.carsService.carsChanged.subscribe((cars) =>{
+            cars.forEach((car) =>{
+              if(!car['Driver']){
+                this.freeCars.push(car);
+              }
+            })
+            if(this.freeCars.length == 0){
+              this.router.navigate(['/driver-registration-error']);
+            }
+          });
+          this.carsService.getAllCars();
         }else{
-          this.isDriver = false;
           this.freeCars = [];
+          this.isDriver = false;
         }
       }
     });
@@ -52,9 +59,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       lastname: new FormControl(null),
       jmbg: new FormControl(null, [Validators.pattern('[0-9]{13,13}'), this.jmbgValidator.bind(this)]),
       phone: new FormControl(null, [Validators.required,Validators.pattern('[0-9]*')]),
-      carNumber: new FormControl(null),
       sex: new FormControl(0)
     });
+    if(this.isDriver){
+      this.registrationForm.addControl('carNumber', new FormControl(null, Validators.required));
+    }
   }
 
   ngOnDestroy(){
@@ -69,10 +78,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
       lastname:this.registrationForm.value['lastname'],
       jmbg:this.registrationForm.value['jmbg'],
       phone:this.registrationForm.value['phone'],
-      carId:this.registrationForm.value['carNumber'],
+      CarNumber:this.registrationForm.value['carNumber'],
       userType: this.isDriver ? Usertype.Driver : Usertype.Customer,
       blocked: false,
     };
+    console.log(newUser);
     this.usersService.addNewUser(newUser);
   }
 

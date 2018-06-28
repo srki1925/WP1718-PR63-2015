@@ -3,7 +3,7 @@ import { AuthService } from '../../../services/auth.service';
 import { Usertype } from '../../../services/usertype.enum';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { RidesService } from '../../../services/rides.service';
-import { IRide, RideStatus } from '../../../services/interfaces';
+import { IRide, RideStatus, IDriver, ILocation } from '../../../services/interfaces';
 import { UsersService } from '../../../services/users.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
@@ -18,6 +18,8 @@ export class AcceptRideComponent implements OnInit {
   isDriver = false;
   noFreeDrivers = true;
   rideId:number;
+  ride: IRide;
+  destination:boolean;
   acceptForm = new FormGroup({
     driver : new FormControl(null, Validators.required)
   });
@@ -34,32 +36,73 @@ export class AcceptRideComponent implements OnInit {
       this.rideId = params.id;
     });
 
+    this.route.queryParams.subscribe((params:Params) =>{
+      this.destination = (params.destination !== null && params.destination !== undefined);
+    })
+
     this.isDriver = this.authService.getUserType() === Usertype.Driver;
-    if(!this.isDriver){
-      const drivers = this.userService.getAllDrivers();
-      drivers.forEach((username:string)=>{
-        /*const rides = this.ridesService.getAllRidesForDriver(username);
-        if(!rides.find((ride:IRide)=>{return (ride.Status !== RideStatus.sucessful && ride.Status !== RideStatus.failed)})){
-          this.drivers.push(username);
-        }*/
-      });
-      if(this.drivers.length === 0){
-        this.noFreeDrivers = true;
-      }else{
-        this.noFreeDrivers = false;
-        this.acceptForm.patchValue({driver:drivers[0]});
-      }
+    if(this.isDriver){
+      this.ridesService.acceptRide(null, this.rideId)
+      .subscribe(
+        ok =>{
+          console.log('ok');
+        }
+      )
     }else{
+      this.ridesService.getRideById(this.rideId).subscribe(
+        (data : IRide) =>{
+          this.ride = data;
+          this.populateDrivers();
+        }
+      )
       this.onAccept();
     }
   }
 
   onAccept(){
     if(!this.isDriver){
-      this.ridesService.acceptRide(this.authService.getCurrentUsername(), this.acceptForm.value.driver, this.rideId,Usertype.Dispatcher);
+        this.ridesService.acceptRide(this.acceptForm.value.driver, this.rideId).subscribe(
+          ok =>{
+            this.router.navigate(['../'], {relativeTo:this.route});
+          } 
+        ); 
     }else{
-      this.ridesService.acceptRide(null, this.authService.getCurrentUsername(), this.rideId,Usertype.Driver);      
+      this.ridesService.acceptRide(null, this.rideId).subscribe(
+       ok =>{
+         this.router.navigate(['../'], {relativeTo:this.route});
+       } 
+      );      
     }
-    this.router.navigate(['../'], {relativeTo: this.route});
+  }
+
+  private populateDrivers(){
+    this.userService.getAllDrivers()
+    .subscribe(
+      (data:IDriver[]) =>{
+        let tmpDrivers: {username:string,distance:number}[] = [];
+        let Filter = data.filter(x => {return x.cartype == this.ride.CarType && x.Free});
+        Filter.forEach((driver) =>{
+          const driverDistance = {
+            username: driver.username,
+            distance: this.getDriverDistance(driver.location.lat, driver.location.lng)
+          }
+          tmpDrivers.push(driverDistance);
+        });
+        tmpDrivers = tmpDrivers.sort((a,b) =>{
+          return a.distance - b.distance;
+        })
+        this.drivers = tmpDrivers.map(x => x.username).slice(0,4);
+        console.log(this.drivers);
+      },
+      error =>{
+        console.log(error);
+      }
+    )
+  }
+
+  getDriverDistance(lat:number, lng:number){
+    let dlat = Math.pow((this.ride.Location.lat - lat),2);
+    let dlng = Math.pow((this.ride.Location.lng - lng),2);
+    return Math.sqrt(dlat + dlng); 
   }
 }

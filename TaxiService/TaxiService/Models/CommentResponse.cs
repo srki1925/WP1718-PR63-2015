@@ -9,6 +9,7 @@ namespace TaxiService.Models
     {
         public string description { get; set; }
         public string time { get; set; }
-        public int rating { get; set; }
+        public int? rating { get; set; }
+        public int? rideId { get; set; }
     }
 }

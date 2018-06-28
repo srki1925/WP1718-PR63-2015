@@ -49,9 +49,7 @@ namespace DAL
 
         public bool CarExists(int carNumber)
         {
-            return (from car in _taxiServiceRepository.Cars
-                    where car.CarNumber == carNumber
-                    select car).ToArray().Length != 0;
+            return TaxiServiceRepository.Cars.Find(carNumber) != null;
         }
     }
 }

@@ -1,3 +1,6 @@
-<p>
-  comment-details works!
-</p>
+<h4>Comment</h4>
+<div *ngIf="comment" class="pull-left">
+  <p>Description: {{comment.description}}</p>
+  <p>Rating: {{comment.rating}}</p>
+  <p>Post time: {{comment.time}}</p>
+</div>

@@ -20,6 +20,7 @@ import { NewRideComponent } from '../components/rides/new-ride/new-ride.componen
 import { AcceptRideComponent } from '../components/rides/accept-ride/accept-ride.component';
 import { RideDetailsComponent } from '../components/rides/ride-details/ride-details.component';
 import { NoDriverGuard } from '../route-guards/no-driver.guard';
+import { AddCommentComponent } from '../components/rides/add-comment/add-comment.component';
 
 const appRoutes : Routes = [
   {path:'login', component: LoginComponent, canActivate:[LoginGuard]},
@@ -28,11 +29,13 @@ const appRoutes : Routes = [
   {path: 'edit-profile', component: EditUserComponent, canActivate:[AuthGuard]},
   {path: 'password-change', component: PasswordChangeComponent, canActivate:[AuthGuard]},
   {path:'driver-registration-error', component: NoCarsErrorComponent},
+  {path: 'location', component: NewRideComponent},
   {path:'home', component: HomeComponent, canActivate:[AuthGuard], children:[
     {path: 'rides', component: RidesComponent, children:[
-      {path: 'new', component: NewRideComponent, canActivate:[NoDriverGuard]},
+      {path: 'new', component: NewRideComponent},
       {path: ':id/edit', component: NewRideComponent},
       {path: ':id/accept', component: AcceptRideComponent},
+      {path: ':id/comment', component: AddCommentComponent},
       {path: ':id', component: RideDetailsComponent},
     ]},
     {path: 'users', component: UsersComponent, children:[

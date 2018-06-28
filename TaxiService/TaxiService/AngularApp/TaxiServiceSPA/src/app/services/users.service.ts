@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { INewUser, IBasicUser, ApiRequest } from './interfaces';
+import { INewUser, IBasicUser, ApiRequest, ILocation } from './interfaces';
 import { AuthService } from './auth.service';
 import { Usertype } from './usertype.enum';
 import { Subject, Observable } from 'rxjs';
@@ -16,9 +16,9 @@ export class UsersService {
   driversChanged = new Subject<string[]>();
 
   private users:INewUser[] = [
-    {username:'c', password: 'c', userType: Usertype.Customer, carId:null, email:'customer@test.com', jmbg:null, name:null, lastname:null, phone:null, blocked:false},
-    {username:'d', password: 'd', userType: Usertype.Driver, carId:10, email:'driver@test.com', jmbg:null, name:null, lastname:null, phone:null, blocked:false},
-    {username:'a', password: 'a', userType: Usertype.Dispatcher, carId:null, email:'dispatcher@test.com', jmbg:null, name:null, lastname:null, phone:null, blocked:false},
+    {username:'c', password: 'c', userType: Usertype.Customer, CarNumber:null, email:'customer@test.com', jmbg:null, name:null, lastname:null, phone:null, blocked:false},
+    {username:'d', password: 'd', userType: Usertype.Driver, CarNumber:10, email:'driver@test.com', jmbg:null, name:null, lastname:null, phone:null, blocked:false},
+    {username:'a', password: 'a', userType: Usertype.Dispatcher, CarNumber:null, email:'dispatcher@test.com', jmbg:null, name:null, lastname:null, phone:null, blocked:false},
   ];;
   constructor(private http:HttpClient,
               private authService:AuthService,
@@ -69,8 +69,23 @@ export class UsersService {
     return this.http.get(url);
   }
 
+  getAllDrivers(){
+    const url = this.externApis.getDataApiHostname() + '/users/drivers';
+    return this.http.get(url);
+  }
+
+  changeDriverLocation(location:ILocation){
+    const url = this.externApis.getDataApiHostname() + '/users/driver/location';
+    const request : ApiRequest = {
+      data : location,
+      userHash : this.authService.getApiToken()
+    }
+    return this.http.put(url, request);
+  }
+
   getAllUsersUsernames(){
     const url = this.externApis.getDataApiHostname() + '/users';
+    console.log(url);
     this.http.get(url).subscribe(
       (data:string[]) => {this.usersChanged.next(data)},
       error => console.log(error)
@@ -103,17 +118,5 @@ export class UsersService {
       data: newPassword
     };
     return this.http.put(url, data);
-  }
-
-  getAllDrivers() : string[]{
-    let drivers : string[] = [];
-
-    this.users.forEach((user:INewUser) =>{
-      if(user.userType === Usertype.Driver){
-        drivers.push(user.username);
-      }
-    })
-    
-    return drivers;
   }
 }

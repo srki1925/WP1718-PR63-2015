@@ -31,7 +31,6 @@ export class RideDetailsComponent implements OnInit {
       this.id = +params['id'];
       this.ridesService.getRideById(this.id).subscribe(
        (data : IRide) =>{
-         console.log(data);
         this.ride = data;
         switch(this.ride.Status){
           case RideStatus.waiting : this.rideStatus = 'Waiting';break;
@@ -50,33 +49,58 @@ export class RideDetailsComponent implements OnInit {
       );
       
     });
-    // this.userType = this.authService.getUserType();
-    // this.ridesService.ridesChanged.subscribe((rides:IRide[]) =>{
-    //   this.updateDriverStatus();
-    // });
-    // if(this.userType === Usertype.Driver){
-    //   this.updateDriverStatus();
-    // }
+    this.userType = this.authService.getUserType();
+    this.ridesService.ridesChanged.subscribe((rides:IRide[]) =>{
+      this.updateDriverStatus();
+    });
+    if(this.userType === Usertype.Driver){
+      this.updateDriverStatus();
+    }
   }
 
   private updateDriverStatus() {
-    /*let driverRides = this.ridesService.getAllRidesForDriver(this.authService.getCurrentUsername());
-    let driverBusy = false;
-    driverRides.forEach((ride: IRide) => {
-      if (ride.Status !== RideStatus.waiting && ride.Status !== RideStatus.sucessful && ride.Status !== RideStatus.failed) {
-        driverBusy = true;
+    this.ridesService.getAllRidesForUser()
+    .subscribe(
+      (data : IRide[]) =>{
+        let driverBusy = false;
+        if(data.length !== 0){
+          data.forEach((ride: IRide) => {
+            if (ride.Status !== RideStatus.waiting && ride.Status !== RideStatus.sucessful && ride.Status !== RideStatus.failed) {
+              driverBusy = true;
+            }
+          });
+        }
+        this.driverFree = !driverBusy;
       }
-    });
-    this.driverFree = !driverBusy;*/
+    );
   }
 
   onCancel(){
-    if(!this.ridesService.cancelRide(this.ride.Id)){
-      this.cancelFailed = true;
-      setTimeout(() => {
-        this.cancelFailed = false;
-      }, 2000);
-    }
-    this.router.navigate(['../'], {relativeTo: this.route});
+    this.ridesService.cancelRide(this.ride.Id).subscribe(
+      ok =>{ 
+        this.router.navigate(['comment'], {relativeTo: this.route});
+      },
+      error =>{
+        this.cancelFailed = true;
+        setTimeout(() =>{
+          this.router.navigate(['../'], {relativeTo: this.route});
+        },2000);
+      }
+    )
+  }
+
+  onSuccess(){
+    this.router.navigate(['../','new'], {relativeTo:this.route, queryParams:{id:this.ride.Id,destination:true}})
+  }
+  onFailed(){
+    this.ridesService.failRide(this.ride.Id).subscribe(
+      ok =>{
+        this.router.navigate(['comment'], {relativeTo: this.route});
+      }
+    )
+  }
+
+  onComment(){
+    this.router.navigate(['comment'], {relativeTo:this.route});
   }
 }

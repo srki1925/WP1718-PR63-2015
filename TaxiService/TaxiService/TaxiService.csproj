@@ -208,6 +208,7 @@
     <Compile Include="Models\AuthorizationService.cs" />
     <Compile Include="Models\BasicUserData.cs" />
     <Compile Include="Models\CommentResponse.cs" />
+    <Compile Include="Models\DriverResponse.cs" />
     <Compile Include="Models\LocationResponse.cs" />
     <Compile Include="Models\LoginParameters.cs" />
     <Compile Include="Models\NewUser.cs" />

@@ -54,7 +54,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_rides_new_ride_new_ride_component__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../components/rides/new-ride/new-ride.component */ "./src/app/components/rides/new-ride/new-ride.component.ts");
 /* harmony import */ var _components_rides_accept_ride_accept_ride_component__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../components/rides/accept-ride/accept-ride.component */ "./src/app/components/rides/accept-ride/accept-ride.component.ts");
 /* harmony import */ var _components_rides_ride_details_ride_details_component__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../components/rides/ride-details/ride-details.component */ "./src/app/components/rides/ride-details/ride-details.component.ts");
-/* harmony import */ var _route_guards_no_driver_guard__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../route-guards/no-driver.guard */ "./src/app/route-guards/no-driver.guard.ts");
+/* harmony import */ var _components_rides_add_comment_add_comment_component__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../components/rides/add-comment/add-comment.component */ "./src/app/components/rides/add-comment/add-comment.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -90,11 +90,13 @@ var appRoutes = [
     { path: 'edit-profile', component: _components_users_edit_user_edit_user_component__WEBPACK_IMPORTED_MODULE_14__["EditUserComponent"], canActivate: [_route_guards_auth_guard__WEBPACK_IMPORTED_MODULE_4__["AuthGuard"]] },
     { path: 'password-change', component: _components_users_password_change_password_change_component__WEBPACK_IMPORTED_MODULE_15__["PasswordChangeComponent"], canActivate: [_route_guards_auth_guard__WEBPACK_IMPORTED_MODULE_4__["AuthGuard"]] },
     { path: 'driver-registration-error', component: _components_errors_no_cars_error_no_cars_error_component__WEBPACK_IMPORTED_MODULE_9__["NoCarsErrorComponent"] },
+    { path: 'location', component: _components_rides_new_ride_new_ride_component__WEBPACK_IMPORTED_MODULE_18__["NewRideComponent"] },
     { path: 'home', component: _components_home_home_component__WEBPACK_IMPORTED_MODULE_3__["HomeComponent"], canActivate: [_route_guards_auth_guard__WEBPACK_IMPORTED_MODULE_4__["AuthGuard"]], children: [
             { path: 'rides', component: _components_rides_rides_component__WEBPACK_IMPORTED_MODULE_17__["RidesComponent"], children: [
-                    { path: 'new', component: _components_rides_new_ride_new_ride_component__WEBPACK_IMPORTED_MODULE_18__["NewRideComponent"], canActivate: [_route_guards_no_driver_guard__WEBPACK_IMPORTED_MODULE_21__["NoDriverGuard"]] },
+                    { path: 'new', component: _components_rides_new_ride_new_ride_component__WEBPACK_IMPORTED_MODULE_18__["NewRideComponent"] },
                     { path: ':id/edit', component: _components_rides_new_ride_new_ride_component__WEBPACK_IMPORTED_MODULE_18__["NewRideComponent"] },
                     { path: ':id/accept', component: _components_rides_accept_ride_accept_ride_component__WEBPACK_IMPORTED_MODULE_19__["AcceptRideComponent"] },
+                    { path: ':id/comment', component: _components_rides_add_comment_add_comment_component__WEBPACK_IMPORTED_MODULE_21__["AddCommentComponent"] },
                     { path: ':id', component: _components_rides_ride_details_ride_details_component__WEBPACK_IMPORTED_MODULE_20__["RideDetailsComponent"] },
                 ] },
             { path: 'users', component: _components_users_users_component__WEBPACK_IMPORTED_MODULE_5__["UsersComponent"], children: [
@@ -979,7 +981,7 @@ module.exports = ".active{\r\n    font-weight: bold\r\n}"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-default\">\r\n    <div class=\"container-fluid\">\r\n        <div class=\"navbar-header\">\r\n            <button type=\"button\" class=\"navbar-toggle\" (click)=\"toogleCollapse()\">\r\n                    <span class=\"icon-bar\"></span>\r\n                    <span class=\"icon-bar\"></span>\r\n                    <span class=\"icon-bar\"></span>\r\n            </button>\r\n            <a routerLink=\"/home\" class=\"navbar-brand\" style=\"cursor:pointer\">Taxi Service</a>\r\n        </div>\r\n        <div class=\"navbar-collapse collapse\" #responsiveNavbar collapse=\"navCollapsed\" >\r\n            <ul *ngIf=\"!userBlocked\" class=\"nav navbar-nav\">\r\n                <li routerLinkActive=\"active\" *ngIf=\"!userType || userType === 0\">\r\n                    <a routerLink=\"/login\" style=\"cursor: pointer;\">Login</a>\r\n                </li>\r\n                <li routerLinkActive=\"active\" class=\"dropdown\" appDropdown *ngIf=\"!userType || userType === 0\">\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Registration<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li><a routerLink=\"/registration\" [queryParams]=\"{type: 'customer'}\" style=\"cursor: pointer;\">New Customer</a></li>\r\n                        <li><a routerLink=\"/registration\" [queryParams]=\"{type: 'driver'}\" style=\"cursor: pointer;\">New Driver</a></li>\r\n                    </ul>\r\n                </li>\r\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType && userType !== 0\">\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Rides<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li *ngIf=\"userType && userType !== 2\"><a [routerLink]=\"['/home','rides','new']\" style=\"cursor: pointer;\">Add New</a></li>\r\n                        <li><a [routerLink]=\"['/home','rides']\" style=\"cursor: pointer;\">All Rides</a></li>\r\n                    </ul>\r\n                </li>\r\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType === 3\">\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Users<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li><a style=\"cursor: pointer;\" [routerLink]=\"['/home','users']\" routerLinkActive=\"router-link-active\" >All Users</a></li>\r\n                    </ul>\r\n                </li>\r\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType === 3\">\r\n                        <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Cars<span class=\"caret\"></span></a>\r\n                        <ul class=\"dropdown-menu\">\r\n                            <li><a [routerLink]=\"['/home','cars','new']\" style=\"cursor: pointer;\">Add New</a></li>\r\n                            <li><a [routerLink]=\"['/home','cars']\" style=\"cursor: pointer;\">All Cars</a></li>\r\n                        </ul>\r\n                    </li>\r\n            </ul>\r\n            <ul class=\"nav navbar-nav navbar-right\" *ngIf=\"userType && userType !== 0\">\r\n                <li class=\"dropdown\" appDropdown>\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Settings<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li><a routerLink=\"/profile\" style=\"cursor: pointer;\">User Profile</a></li>\r\n                        <li><a routerLink=\"/password-change\" style=\"cursor: pointer;\">Change Password</a></li>\r\n                        <li *ngIf=\"userType && userType !== 3\" ><a style=\"cursor: pointer;\" (click)=\"onDeleteAccount()\">Delete Account</a></li>\r\n                        <li><a style=\"cursor: pointer;\" (click)=\"onLogout()\">Logout</a></li>\r\n                    </ul>\r\n                </li>\r\n            </ul>\r\n        </div>\r\n    </div>\r\n</nav>"
+module.exports = "<nav class=\"navbar navbar-default\">\r\n    <div class=\"container-fluid\">\r\n        <div class=\"navbar-header\">\r\n            <button type=\"button\" class=\"navbar-toggle\" (click)=\"toogleCollapse()\">\r\n                    <span class=\"icon-bar\"></span>\r\n                    <span class=\"icon-bar\"></span>\r\n                    <span class=\"icon-bar\"></span>\r\n            </button>\r\n            <a routerLink=\"/home\" class=\"navbar-brand\" style=\"cursor:pointer\">Taxi Service</a>\r\n        </div>\r\n        <div class=\"navbar-collapse collapse\" #responsiveNavbar collapse=\"navCollapsed\" >\r\n            <ul *ngIf=\"!userBlocked\" class=\"nav navbar-nav\">\r\n                <li routerLinkActive=\"active\" *ngIf=\"!userType || userType === 0\">\r\n                    <a routerLink=\"/login\" style=\"cursor: pointer;\">Login</a>\r\n                </li>\r\n                <li routerLinkActive=\"active\" class=\"dropdown\" appDropdown *ngIf=\"!userType || userType === 0\">\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Registration<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li><a routerLink=\"/registration\" [queryParams]=\"{type: 'customer'}\" style=\"cursor: pointer;\">New Customer</a></li>\r\n                        <li><a routerLink=\"/registration\" [queryParams]=\"{type: 'driver'}\" style=\"cursor: pointer;\">New Driver</a></li>\r\n                    </ul>\r\n                </li>\r\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType && userType !== 0\">\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Rides<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li *ngIf=\"userType && userType !== 2\"><a [routerLink]=\"['/home','rides','new']\" style=\"cursor: pointer;\">Add New</a></li>\r\n                        <li><a [routerLink]=\"['/home','rides']\" style=\"cursor: pointer;\">All Rides</a></li>\r\n                    </ul>\r\n                </li>\r\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType === 3\">\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Users<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li><a style=\"cursor: pointer;\" [routerLink]=\"['/home','users']\" routerLinkActive=\"router-link-active\" >All Users</a></li>\r\n                    </ul>\r\n                </li>\r\n                <li class=\"dropdown\" appDropdown *ngIf=\"userType === 3\">\r\n                        <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Cars<span class=\"caret\"></span></a>\r\n                        <ul class=\"dropdown-menu\">\r\n                            <li><a [routerLink]=\"['/home','cars','new']\" style=\"cursor: pointer;\">Add New</a></li>\r\n                            <li><a [routerLink]=\"['/home','cars']\" style=\"cursor: pointer;\">All Cars</a></li>\r\n                        </ul>\r\n                    </li>\r\n            </ul>\r\n            <ul class=\"nav navbar-nav navbar-right\" *ngIf=\"userType && userType !== 0\">\r\n                <li class=\"dropdown\" appDropdown>\r\n                    <a class=\"dropdown-toggle\" role=\"button\" style=\"cursor: pointer;\" >Settings<span class=\"caret\"></span></a>\r\n                    <ul class=\"dropdown-menu\">\r\n                        <li><a routerLink=\"/profile\" style=\"cursor: pointer;\">User Profile</a></li>\r\n                        <li><a routerLink=\"/password-change\" style=\"cursor: pointer;\">Change Password</a></li>\r\n                        <li *ngIf=\"userType && userType !== 3\" ><a style=\"cursor: pointer;\" (click)=\"onDeleteAccount()\">Delete Account</a></li>\r\n                        <li *ngIf=\"userType && userType === 2\"><a routerLink=\"/location\" style=\"cursor: pointer;\">Change Location</a></li>                        \r\n                        <li><a style=\"cursor: pointer;\" (click)=\"onLogout()\">Logout</a></li>\r\n                    </ul>\r\n                </li>\r\n            </ul>\r\n        </div>\r\n    </div>\r\n</nav>"
 
 /***/ }),
 
@@ -1245,7 +1247,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<form *ngIf=\"!isDriver\" [formGroup]=\"acceptForm\" (submit)=\"onAccept()\">\r\n<div class=\"form-group\">\r\n  <label for=\"driver\">Select Driver</label>\r\n  <select id=\"driver\" formControlName=\"driver\" class=\"form-control\">\r\n    <option *ngFor=\"let driver of drivers\" [value]=\"driver\">{{driver}}</option>\r\n  </select>\r\n</div>\r\n<br>\r\n<span class=\"help-block\" *ngIf=\"noFreeDrivers\">Fields marked with * are required.</span>\r\n<button [disabled]=\"!acceptForm.valid\" type=\"submit\" class=\"btn btn-default\">Accept</button>\r\n</form>"
+module.exports = "<form *ngIf=\"!isDriver\" [formGroup]=\"acceptForm\" (submit)=\"onAccept()\">\r\n<div class=\"form-group\">\r\n  <label for=\"driver\">Select Driver</label>\r\n  <select id=\"driver\" formControlName=\"driver\" class=\"form-control\">\r\n    <option *ngFor=\"let driver of drivers\" [value]=\"driver\">{{driver}}</option>\r\n  </select>\r\n</div>\r\n<br>\r\n<span class=\"help-block\" *ngIf=\"noFreeDrivers\">No free drivers!</span>\r\n<button [disabled]=\"!acceptForm.valid\" type=\"submit\" class=\"btn btn-default\">Accept</button>\r\n</form>"
 
 /***/ }),
 
@@ -1301,35 +1303,63 @@ var AcceptRideComponent = /** @class */ (function () {
         this.route.params.subscribe(function (params) {
             _this.rideId = params.id;
         });
+        this.route.queryParams.subscribe(function (params) {
+            _this.destination = (params.destination !== null && params.destination !== undefined);
+        });
         this.isDriver = this.authService.getUserType() === _services_usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Driver;
-        if (!this.isDriver) {
-            var drivers = this.userService.getAllDrivers();
-            drivers.forEach(function (username) {
-                /*const rides = this.ridesService.getAllRidesForDriver(username);
-                if(!rides.find((ride:IRide)=>{return (ride.Status !== RideStatus.sucessful && ride.Status !== RideStatus.failed)})){
-                  this.drivers.push(username);
-                }*/
+        if (this.isDriver) {
+            this.ridesService.acceptRide(null, this.rideId)
+                .subscribe(function (ok) {
+                console.log('ok');
             });
-            if (this.drivers.length === 0) {
-                this.noFreeDrivers = true;
-            }
-            else {
-                this.noFreeDrivers = false;
-                this.acceptForm.patchValue({ driver: drivers[0] });
-            }
         }
         else {
+            this.ridesService.getRideById(this.rideId).subscribe(function (data) {
+                _this.ride = data;
+                _this.populateDrivers();
+            });
             this.onAccept();
         }
     };
     AcceptRideComponent.prototype.onAccept = function () {
+        var _this = this;
         if (!this.isDriver) {
-            this.ridesService.acceptRide(this.authService.getCurrentUsername(), this.acceptForm.value.driver, this.rideId, _services_usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Dispatcher);
+            this.ridesService.acceptRide(this.acceptForm.value.driver, this.rideId).subscribe(function (ok) {
+                _this.router.navigate(['../'], { relativeTo: _this.route });
+            });
         }
         else {
-            this.ridesService.acceptRide(null, this.authService.getCurrentUsername(), this.rideId, _services_usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Driver);
+            this.ridesService.acceptRide(null, this.rideId).subscribe(function (ok) {
+                _this.router.navigate(['../'], { relativeTo: _this.route });
+            });
         }
-        this.router.navigate(['../'], { relativeTo: this.route });
+    };
+    AcceptRideComponent.prototype.populateDrivers = function () {
+        var _this = this;
+        this.userService.getAllDrivers()
+            .subscribe(function (data) {
+            var tmpDrivers = [];
+            var Filter = data.filter(function (x) { return x.cartype == _this.ride.CarType && x.Free; });
+            Filter.forEach(function (driver) {
+                var driverDistance = {
+                    username: driver.username,
+                    distance: _this.getDriverDistance(driver.location.lat, driver.location.lng)
+                };
+                tmpDrivers.push(driverDistance);
+            });
+            tmpDrivers = tmpDrivers.sort(function (a, b) {
+                return a.distance - b.distance;
+            });
+            _this.drivers = tmpDrivers.map(function (x) { return x.username; }).slice(0, 4);
+            console.log(_this.drivers);
+        }, function (error) {
+            console.log(error);
+        });
+    };
+    AcceptRideComponent.prototype.getDriverDistance = function (lat, lng) {
+        var dlat = Math.pow((this.ride.Location.lat - lat), 2);
+        var dlng = Math.pow((this.ride.Location.lng - lng), 2);
+        return Math.sqrt(dlat + dlng);
     };
     AcceptRideComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -1368,7 +1398,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\r\n  add-comment works!\r\n</p>\r\n"
+module.exports = "<form [formGroup]=\"commentForm\" (submit)=\"onSubmit()\">\r\n  <div class=\"form-group\">\r\n    <label for=\"description\">Description</label>\r\n    <br>\r\n    <textarea id=\"description\" formControlName=\"description\"></textarea>\r\n  </div>\r\n  <div class=\"form-group\">\r\n    <label for=\"rate\">Rating *</label>\r\n    <select id=\"rate\" formControlName=\"rate\" class=\"form-control\">\r\n      <option value=\"1\">1</option>\r\n      <option value=\"2\">2</option>\r\n      <option value=\"3\">3</option>\r\n      <option value=\"4\">4</option>\r\n      <option value=\"5\">5</option>\r\n    </select>\r\n  </div>\r\n  <br>\r\n  <span class=\"help-block\" class=\"\">Fields marked with * are required.</span>\r\n  <button [disabled]=\"!commentForm.valid\" type=\"submit\" class=\"btn btn-default\">Submit</button>\r\n</form>"
 
 /***/ }),
 
@@ -1383,6 +1413,9 @@ module.exports = "<p>\r\n  add-comment works!\r\n</p>\r\n"
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AddCommentComponent", function() { return AddCommentComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _services_rides_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/rides.service */ "./src/app/services/rides.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1393,10 +1426,40 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
+
 var AddCommentComponent = /** @class */ (function () {
-    function AddCommentComponent() {
+    function AddCommentComponent(route, router, ridesService) {
+        this.route = route;
+        this.router = router;
+        this.ridesService = ridesService;
+        this.commentForm = new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroup"]({
+            description: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required),
+            rate: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null)
+        });
     }
     AddCommentComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.route.params.subscribe(function (params) {
+            _this.rideId = params['id'];
+            if (!_this.rideId) {
+                _this.router.navigate(['/home/rides']);
+            }
+        });
+    };
+    AddCommentComponent.prototype.onSubmit = function () {
+        var _this = this;
+        var comment = {
+            time: null,
+            rating: this.commentForm.value.rate,
+            description: this.commentForm.value.description,
+            rideid: this.rideId
+        };
+        console.log(comment);
+        this.ridesService.postComment(comment).subscribe(function (ok) {
+            _this.router.navigate(['../'], { relativeTo: _this.route });
+        });
     };
     AddCommentComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -1404,7 +1467,9 @@ var AddCommentComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./add-comment.component.html */ "./src/app/components/rides/add-comment/add-comment.component.html"),
             styles: [__webpack_require__(/*! ./add-comment.component.css */ "./src/app/components/rides/add-comment/add-comment.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["ActivatedRoute"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"],
+            _services_rides_service__WEBPACK_IMPORTED_MODULE_3__["RidesService"]])
     ], AddCommentComponent);
     return AddCommentComponent;
 }());
@@ -1431,7 +1496,7 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\r\n  comment-details works!\r\n</p>\r\n"
+module.exports = "<h4>Comment</h4>\r\n<div *ngIf=\"comment\" class=\"pull-left\">\r\n  <p>Description: {{comment.description}}</p>\r\n  <p>Rating: {{comment.rating}}</p>\r\n  <p>Post time: {{comment.time}}</p>\r\n</div>"
 
 /***/ }),
 
@@ -1498,7 +1563,7 @@ module.exports = "agm-map{\r\n    height: 300px;\r\n}"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h3 *ngIf=\"!editMode\">New ride</h3>\r\n<h3 *ngIf=\"editMode\">Edit ride</h3>\r\n\r\n<!--Google maps component-->\r\n<agm-map [zoom]=\"zoom\" [latitude]=\"latitude\" [longitude]=\"longitude\" (mapClick)=\"onChoseLocation($event)\">\r\n  <agm-marker *ngIf=\"chosen\" [longitude]=\"marker.lng\" [latitude]=\"marker.lat\" [markerDraggable]=\"draggable\" (dragEnd)=\"onDragEnd($event)\"></agm-marker>\r\n</agm-map>\r\n\r\n<form [formGroup]=\"rideForm\" (submit)=\"onSubmit()\">\r\n  <div class=\"form-group\">\r\n    <label for=\"address\">Address</label>\r\n    <input type=\"text\" id=\"address\" formControlName=\"address\" class=\"form-control\">\r\n  </div>\r\n  <button class=\"btn btn-default\" type=\"button\" (click)=\"onCheckAddress()\">Check Address</button>\r\n  <div class=\"form-group\">\r\n    <label for=\"cartype\">Car type</label>\r\n    <select id=\"type\" formControlName=\"cartype\" class=\"form-control\">\r\n      <option value=0>Sedan</option>\r\n      <option value=1>Van</option>\r\n    </select>\r\n  </div>\r\n  <hr>\r\n  <button type=\"submit\" class=\"btn btn-primary\">{{editMode ? 'Edit' : 'Add'}}</button>\r\n</form>"
+module.exports = "<h3 *ngIf=\"!editMode\">New ride</h3>\r\n<h3 *ngIf=\"editMode\">Edit ride</h3>\r\n\r\n<!--Google maps component-->\r\n<agm-map [zoom]=\"zoom\" [latitude]=\"latitude\" [longitude]=\"longitude\" (mapClick)=\"onChoseLocation($event)\">\r\n  <agm-marker *ngIf=\"chosen\" [longitude]=\"marker.lng\" [latitude]=\"marker.lat\" [markerDraggable]=\"draggable\" (dragEnd)=\"onMarkerDrag($event)\"></agm-marker>\r\n</agm-map>\r\n\r\n<form [formGroup]=\"rideForm\" (submit)=\"onSubmit()\">\r\n  <div class=\"form-group\">\r\n    <label for=\"address\">Address</label>\r\n    <input type=\"text\" id=\"address\" formControlName=\"address\" class=\"form-control\">\r\n  </div>\r\n  <button class=\"btn btn-default\" type=\"button\" (click)=\"onCheckAddress()\">Check Address</button>\r\n  <div *ngIf=\"userType !== 2\" class=\"form-group\">\r\n    <label for=\"cartype\">Car type</label>\r\n    <select id=\"type\" formControlName=\"cartype\" class=\"form-control\">\r\n      <option value=0>Sedan</option>\r\n      <option value=1>Van</option>\r\n    </select>\r\n  </div>\r\n  <div *ngIf=\"userType === 3\" class=\"form-group\">\r\n    <label for=\"driver\">Driver</label>\r\n    <select id=\"type\" formControlName=\"cartype\" class=\"form-control\">\r\n      <option *ngFor=\"let driver of availableDrivers\" [value]=\"driver\">{{driver}}</option>\r\n    </select>\r\n  </div>\r\n  <div *ngIf=\"destination\" class=\"form-group\">\r\n    <label for=\"fare\">Fare</label>\r\n    <input type=\"number\" id=\"fare\" formControlName=\"fare\" class=\"form-control\">\r\n  </div>\r\n  <hr>\r\n  <button *ngIf=\"userType !== 2\" type=\"submit\" class=\"btn btn-primary\">{{editMode ? 'Edit' : 'Add'}}</button>\r\n  <button *ngIf=\"userType === 2\" type=\"submit\" class=\"btn btn-primary\" [disabled]=\"!rideForm.valid\">Change</button>\r\n</form>"
 
 /***/ }),
 
@@ -1518,9 +1583,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _services_external_apis_data_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/external-apis-data.service */ "./src/app/services/external-apis-data.service.ts");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var _services_interfaces__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../services/interfaces */ "./src/app/services/interfaces.ts");
-/* harmony import */ var _services_auth_service__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../services/auth.service */ "./src/app/services/auth.service.ts");
-/* harmony import */ var _services_usertype_enum__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../services/usertype.enum */ "./src/app/services/usertype.enum.ts");
+/* harmony import */ var _services_auth_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../services/auth.service */ "./src/app/services/auth.service.ts");
+/* harmony import */ var _services_usertype_enum__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../services/usertype.enum */ "./src/app/services/usertype.enum.ts");
+/* harmony import */ var _services_users_service__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../services/users.service */ "./src/app/services/users.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1540,14 +1605,19 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 var NewRideComponent = /** @class */ (function () {
-    function NewRideComponent(ridesService, route, apisServices, http, authService) {
+    function NewRideComponent(ridesService, userService, route, router, apisServices, http, authService) {
         this.ridesService = ridesService;
+        this.userService = userService;
         this.route = route;
+        this.router = router;
         this.apisServices = apisServices;
         this.http = http;
         this.authService = authService;
         this.editMode = false;
         this.isDispatcher = false;
+        this.availableDrivers = [];
+        //destination set
+        this.destination = false;
         //google maps specific
         this.latitude = 45.260656;
         this.longitude = 19.832157;
@@ -1561,58 +1631,112 @@ var NewRideComponent = /** @class */ (function () {
         this.rideForm = new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormGroup"]({
             address: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required),
             cartype: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](0),
-            driver: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](),
+            driver: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null),
+            fare: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].min(0))
         });
-        this.isDispatcher = this.authService.getUserType() === _services_usertype_enum__WEBPACK_IMPORTED_MODULE_8__["Usertype"].Dispatcher;
+        this.isDispatcher = this.authService.getUserType() === _services_usertype_enum__WEBPACK_IMPORTED_MODULE_7__["Usertype"].Dispatcher;
+        this.userType = this.authService.getUserType();
+        this.rideId = this.route.snapshot.queryParams['id'];
+        this.destination = this.route.snapshot.queryParams['destination'];
+        console.log(this.rideId);
+        console.log(this.destination);
     };
     NewRideComponent.prototype.onSubmit = function () {
-        var d = new Date();
-        if (!this.editMode) {
-            var newRide = {
-                Location: {
+        var _this = this;
+        if (this.userType === _services_usertype_enum__WEBPACK_IMPORTED_MODULE_7__["Usertype"].Driver) {
+            if (this.destination) {
+                var location_1 = {
                     address: this.rideForm.value.address,
                     lat: this.marker.lat,
-                    long: this.marker.lng
-                },
-                Comment: null,
-                Destination: null,
-                Driver: null,
-                Fare: 0,
-                Status: _services_interfaces__WEBPACK_IMPORTED_MODULE_6__["RideStatus"].waiting,
-                Time: null,
-                Id: -1,
-                Dispatcher: null,
-                Customer: null,
-                CarType: null
-            };
-            if (this.isDispatcher) {
-                newRide.Dispatcher = this.authService.getCurrentUsername();
+                    lng: this.marker.lng
+                };
+                console.log(location_1);
+                this.ridesService.finishRide(location_1, this.rideId, this.rideForm.value.fare).subscribe(function (ok) {
+                    _this.router.navigate(['../../'], { relativeTo: _this.route });
+                });
             }
             else {
-                newRide.Customer = this.authService.getCurrentUsername();
+                var location_2 = {
+                    address: this.rideForm.value.address,
+                    lat: this.marker.lat,
+                    lng: this.marker.lng
+                };
+                this.userService.changeDriverLocation(location_2)
+                    .subscribe(function (ok) { _this.router.navigate(['/home', 'rides']), { relativeTo: _this.route }; }, function (error) { console.log(error); });
             }
-            this.ridesService.newRide(newRide);
         }
         else {
+            if (!this.editMode) {
+                var newRide = {
+                    location: {
+                        address: this.rideForm.value.address,
+                        lat: this.marker.lat,
+                        lng: this.marker.lng
+                    },
+                    destination: null,
+                    driver: this.rideForm.value.driver,
+                    fare: 0,
+                    cartype: this.rideForm.value.cartype,
+                    rideid: null
+                };
+                console.log(newRide);
+                this.ridesService.newRide(newRide)
+                    .subscribe(function (ok) { _this.router.navigate(["../"], { relativeTo: _this.route }); }, function (error) {
+                    if (error.status === 403 || error.status === 401) {
+                        _this.authService.logout();
+                    }
+                    console.log(error);
+                });
+            }
         }
     };
-    NewRideComponent.prototype.onDragEnd = function (event) {
-        console.log('sidojfsodifjoisdjf');
+    NewRideComponent.prototype.populateDrivers = function () {
+        var _this = this;
+        this.userService.getAllDrivers()
+            .subscribe(function (data) {
+            var tmpDrivers = [];
+            var carFilter = data.filter(function (x) { return x.cartype == _this.rideForm.value.cartype && x.Free; });
+            console.log(carFilter);
+            carFilter.forEach(function (driver) {
+                var driverDistance = {
+                    username: driver.username,
+                    distance: _this.getDriverDistance(driver.location.lat, driver.location.lng)
+                };
+                tmpDrivers.push(driverDistance);
+            });
+            tmpDrivers = tmpDrivers.sort(function (a, b) {
+                return a.distance - b.distance;
+            });
+            _this.availableDrivers = tmpDrivers.map(function (x) { return x.username; }).slice(0, 4);
+            _this.rideForm.patchValue({
+                'driver': _this.availableDrivers[0]
+            });
+        }, function (error) {
+            console.log(error);
+        });
+    };
+    NewRideComponent.prototype.onMarkerDrag = function (event) {
+        this.marker.lat = event.coords.lat;
+        this.marker.lng = event.coords.lng;
         this.getAddressFromLocation();
     };
     NewRideComponent.prototype.onChoseLocation = function (event) {
-        console.log('928jf89jd89j');
         this.marker.lat = event.coords.lat;
         this.marker.lng = event.coords.lng;
         this.chosen = true;
+        this.populateDrivers();
         this.getAddressFromLocation();
+    };
+    NewRideComponent.prototype.getDriverDistance = function (lat, lng) {
+        var dlat = Math.pow((this.marker.lat - lat), 2);
+        var dlng = Math.pow((this.marker.lng - lng), 2);
+        return Math.sqrt(dlat + dlng);
     };
     NewRideComponent.prototype.getAddressFromLocation = function () {
         var _this = this;
         //here maps reverse geocoding api
         var requestString = 'https://reverse.geocoder.cit.api.here.com/6.2/reversegeocode.json?prox=' + this.marker.lat + '%2C' + this.marker.lng + '%2C250&mode=retrieveAddresses&maxresults=1&gen=8&app_id=' + this.apisServices.getHereAppId() + '&app_code=' + this.apisServices.getHereAppCode() + '&language=en-US';
         this.http.get(requestString).subscribe(function (response) {
-            console.log(response);
             var address = response['Response']['View'][0]['Result'][0]['Location']['Address']['Label'];
             _this.rideForm.patchValue({ address: address });
         });
@@ -1630,11 +1754,13 @@ var NewRideComponent = /** @class */ (function () {
             }
             else {
                 _this.error = false;
-                var location_1 = data[0]['Result'][0]['Location']['NavigationPosition'][0];
-                _this.marker.lat = location_1['Latitude'];
-                _this.marker.lng = location_1['Longitude'];
+                var location_3 = data[0]['Result'][0]['Location']['NavigationPosition'][0];
+                _this.marker.lat = location_3['Latitude'];
+                _this.marker.lng = location_3['Longitude'];
                 _this.chosen = true;
-                console.log(location_1);
+                //center map over marker for easier user orientation
+                _this.latitude = _this.marker.lat;
+                _this.longitude = _this.marker.lng;
             }
         });
     };
@@ -1648,10 +1774,12 @@ var NewRideComponent = /** @class */ (function () {
             styles: [__webpack_require__(/*! ./new-ride.component.css */ "./src/app/components/rides/new-ride/new-ride.component.css")]
         }),
         __metadata("design:paramtypes", [_services_rides_service__WEBPACK_IMPORTED_MODULE_2__["RidesService"],
+            _services_users_service__WEBPACK_IMPORTED_MODULE_8__["UsersService"],
             _angular_router__WEBPACK_IMPORTED_MODULE_3__["ActivatedRoute"],
+            _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"],
             _services_external_apis_data_service__WEBPACK_IMPORTED_MODULE_4__["ExternalApisDataService"],
             _angular_common_http__WEBPACK_IMPORTED_MODULE_5__["HttpClient"],
-            _services_auth_service__WEBPACK_IMPORTED_MODULE_7__["AuthService"]])
+            _services_auth_service__WEBPACK_IMPORTED_MODULE_6__["AuthService"]])
     ], NewRideComponent);
     return NewRideComponent;
 }());
@@ -1678,7 +1806,7 @@ module.exports = ".help-block{\r\n    color: red;\r\n    font-size: 20px;\r\n}\r
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<h2>Details</h2>\r\n<div *ngIf=\"ride\" class=\"pull-left\">\r\n  <p class=\"list-group-item-text\" >Pickup location: {{ride.Location?.Address}}</p>\r\n  <p *ngIf=\"ride.destination\" class=\"list-group-item-text\">Destination : {{ride.Destination?.address}}</p>\r\n  <p class=\"list-group-item-text\">Created on: {{ride.Time}}</p>\r\n  <p class=\"list-group-item-text\">Status: {{rideStatus}}</p>\r\n  <p class=\"list-group-item-text\">Driver: {{ride.Driver}}</p>\r\n  <p class=\"list-group-item-text\">Fare: {{ride.Fare}}</p>\r\n  <app-comment-details *ngIf=\"ride && ride.comment\" [comment]=\"ride.comment\"></app-comment-details>\r\n  <span class=\"help-block\" *ngIf=\"cancelFailed\">Failed to cancel ride, no longer in waiting.</span>\r\n</div>\r\n\r\n<div class=\"pull-right\">\r\n  <a *ngIf=\"(userType === 3 || userType === 2) && ride.status === 2 && (userType === 2 && driverFree)\" [routerLink]=\"['accept']\" class=\"btn btn-success\">Accept</a>\r\n  <button *ngIf=\"userType === 1 && ride.status === 2\"  class=\"btn btn-danger\" (click)=\"onCancel()\">Cancel</button>\r\n</div>"
+module.exports = "<div class=\"row\">\r\n  <h2>Details</h2>\r\n  <div *ngIf=\"ride\" class=\"pull-left\">\r\n    <p class=\"list-group-item-text\" >Pickup location: {{ride.Location?.address}}</p>\r\n    <p *ngIf=\"ride.Destination\" class=\"list-group-item-text\">Destination : {{ride.Destination?.address}}</p>\r\n    <p class=\"list-group-item-text\">Created on: {{ride.Time}}</p>\r\n    <p class=\"list-group-item-text\">Status: {{rideStatus}}</p>\r\n    <p *ngIf=\"ride.Customer\" class=\"list-group-item-text\">Customer: {{ride.Customer}}</p>\r\n    <p class=\"list-group-item-text\">Driver: {{ride.Driver}}</p>\r\n    <p *ngIf=\"ride.Dispatcher\" class=\"list-group-item-text\">Dispatcher: {{ride.Dispatcher}}</p>\r\n    <p *ngIf=\"ride.Fare !== 0\" class=\"list-group-item-text\">Fare: {{ride.Fare}}</p>\r\n    <app-comment-details *ngIf=\"ride && ride.comment\" [comment]=\"ride.comment\"></app-comment-details>\r\n    <span class=\"help-block\" *ngIf=\"cancelFailed\">Failed to cancel ride, no longer in waiting.</span>\r\n  </div>\r\n\r\n  <div class=\"pull-right\">\r\n    <a *ngIf=\"(userType === 3 || userType === 2) && ride.Status === 2 || (userType === 2 && driverFree && ride.Status === 2)\" [routerLink]=\"['accept']\" class=\"btn btn-success\">Accept</a>\r\n    <button *ngIf=\"userType === 2 && (ride.Status === 1 || ride.Status === 3)\" class=\"btn btn-danger\" (click)=\"onFailed()\">Failed</button>\r\n    <button *ngIf=\"userType === 2 && (ride.Status === 1 || ride.Status === 3)\" class=\"btn btn-success\" (click)=\"onSuccess()\">Success</button>\r\n    <button *ngIf=\"userType === 1 && ride.Status === 5 && !ride.Comment\"  class=\"btn btn-primary\" (click)=\"onComment()\">Comment</button>  \r\n    <button *ngIf=\"userType === 1 && ride.Status === 2\"  class=\"btn btn-danger\" (click)=\"onCancel()\">Cancel</button>\r\n  </div>\r\n</div>\r\n\r\n<app-comment-details class=\"row pull-left\" *ngIf=\"ride.Comment\" [comment]=\"ride.Comment\"></app-comment-details>"
 
 /***/ }),
 
@@ -1696,7 +1824,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _services_rides_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../services/rides.service */ "./src/app/services/rides.service.ts");
 /* harmony import */ var _services_interfaces__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/interfaces */ "./src/app/services/interfaces.ts");
-/* harmony import */ var _services_auth_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/auth.service */ "./src/app/services/auth.service.ts");
+/* harmony import */ var _services_usertype_enum__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/usertype.enum */ "./src/app/services/usertype.enum.ts");
+/* harmony import */ var _services_auth_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../services/auth.service */ "./src/app/services/auth.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1706,6 +1835,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -1725,7 +1855,6 @@ var RideDetailsComponent = /** @class */ (function () {
         this.route.params.subscribe(function (params) {
             _this.id = +params['id'];
             _this.ridesService.getRideById(_this.id).subscribe(function (data) {
-                console.log(data);
                 _this.ride = data;
                 switch (_this.ride.Status) {
                     case _services_interfaces__WEBPACK_IMPORTED_MODULE_3__["RideStatus"].waiting:
@@ -1755,33 +1884,51 @@ var RideDetailsComponent = /** @class */ (function () {
                 _this.router.navigate(['../'], { relativeTo: _this.route });
             });
         });
-        // this.userType = this.authService.getUserType();
-        // this.ridesService.ridesChanged.subscribe((rides:IRide[]) =>{
-        //   this.updateDriverStatus();
-        // });
-        // if(this.userType === Usertype.Driver){
-        //   this.updateDriverStatus();
-        // }
+        this.userType = this.authService.getUserType();
+        this.ridesService.ridesChanged.subscribe(function (rides) {
+            _this.updateDriverStatus();
+        });
+        if (this.userType === _services_usertype_enum__WEBPACK_IMPORTED_MODULE_4__["Usertype"].Driver) {
+            this.updateDriverStatus();
+        }
     };
     RideDetailsComponent.prototype.updateDriverStatus = function () {
-        /*let driverRides = this.ridesService.getAllRidesForDriver(this.authService.getCurrentUsername());
-        let driverBusy = false;
-        driverRides.forEach((ride: IRide) => {
-          if (ride.Status !== RideStatus.waiting && ride.Status !== RideStatus.sucessful && ride.Status !== RideStatus.failed) {
-            driverBusy = true;
-          }
+        var _this = this;
+        this.ridesService.getAllRidesForUser()
+            .subscribe(function (data) {
+            var driverBusy = false;
+            if (data.length !== 0) {
+                data.forEach(function (ride) {
+                    if (ride.Status !== _services_interfaces__WEBPACK_IMPORTED_MODULE_3__["RideStatus"].waiting && ride.Status !== _services_interfaces__WEBPACK_IMPORTED_MODULE_3__["RideStatus"].sucessful && ride.Status !== _services_interfaces__WEBPACK_IMPORTED_MODULE_3__["RideStatus"].failed) {
+                        driverBusy = true;
+                    }
+                });
+            }
+            _this.driverFree = !driverBusy;
         });
-        this.driverFree = !driverBusy;*/
     };
     RideDetailsComponent.prototype.onCancel = function () {
         var _this = this;
-        if (!this.ridesService.cancelRide(this.ride.Id)) {
-            this.cancelFailed = true;
+        this.ridesService.cancelRide(this.ride.Id).subscribe(function (ok) {
+            _this.router.navigate(['comment'], { relativeTo: _this.route });
+        }, function (error) {
+            _this.cancelFailed = true;
             setTimeout(function () {
-                _this.cancelFailed = false;
+                _this.router.navigate(['../'], { relativeTo: _this.route });
             }, 2000);
-        }
-        this.router.navigate(['../'], { relativeTo: this.route });
+        });
+    };
+    RideDetailsComponent.prototype.onSuccess = function () {
+        this.router.navigate(['../', 'new'], { relativeTo: this.route, queryParams: { id: this.ride.Id, destination: true } });
+    };
+    RideDetailsComponent.prototype.onFailed = function () {
+        var _this = this;
+        this.ridesService.failRide(this.ride.Id).subscribe(function (ok) {
+            _this.router.navigate(['comment'], { relativeTo: _this.route });
+        });
+    };
+    RideDetailsComponent.prototype.onComment = function () {
+        this.router.navigate(['comment'], { relativeTo: this.route });
     };
     RideDetailsComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -1792,7 +1939,7 @@ var RideDetailsComponent = /** @class */ (function () {
         __metadata("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_1__["ActivatedRoute"],
             _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"],
             _services_rides_service__WEBPACK_IMPORTED_MODULE_2__["RidesService"],
-            _services_auth_service__WEBPACK_IMPORTED_MODULE_4__["AuthService"]])
+            _services_auth_service__WEBPACK_IMPORTED_MODULE_5__["AuthService"]])
     ], RideDetailsComponent);
     return RideDetailsComponent;
 }());
@@ -1901,9 +2048,10 @@ module.exports = "<!-- <div class=\"row\">\r\n<h3 *ngIf=\"waiting\">Waiting ride
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RidesListComponent", function() { return RidesListComponent; });
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
-/* harmony import */ var _services_rides_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../services/rides.service */ "./src/app/services/rides.service.ts");
-/* harmony import */ var _services_auth_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/auth.service */ "./src/app/services/auth.service.ts");
+/* harmony import */ var _services_interfaces__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../services/interfaces */ "./src/app/services/interfaces.ts");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var _services_rides_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../services/rides.service */ "./src/app/services/rides.service.ts");
+/* harmony import */ var _services_auth_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../services/auth.service */ "./src/app/services/auth.service.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1917,12 +2065,13 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 
 
 
+
 var RidesListComponent = /** @class */ (function () {
     function RidesListComponent(ridesService, authService) {
         this.ridesService = ridesService;
         this.authService = authService;
         this.rides = [];
-        this.ridesSubscription = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subscription"]();
+        this.ridesSubscription = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subscription"]();
         this.waiting = false;
         this.myrides = false;
     }
@@ -1932,33 +2081,51 @@ var RidesListComponent = /** @class */ (function () {
         this.ridesSubscription = this.ridesService.ridesChanged.subscribe(function (rides) {
             _this.rides = rides;
         });
+        this.interval = setInterval(function () {
+            _this.onMyRides();
+        }, 10000);
         this.onMyRides();
     };
     RidesListComponent.prototype.ngOnDestroy = function () {
         this.ridesSubscription.unsubscribe();
+        clearInterval(this.interval);
     };
     RidesListComponent.prototype.onAllRides = function () {
         var _this = this;
         this.waiting = false;
         this.myrides = false;
         this.ridesService.getAllRides().subscribe(function (data) {
-            console.log(data);
             _this.rides = data;
-            console.log(_this.rides);
         }, function (error) {
             console.log(error);
         });
     };
     RidesListComponent.prototype.onWaitingRides = function () {
+        var _this = this;
         this.waiting = true;
         this.myrides = false;
-        this.ridesService.getAllWaitingRides();
+        this.ridesService.getAllRides()
+            .subscribe(function (data) {
+            _this.rides = [];
+            data.forEach(function (ride) {
+                if (ride.Status == _services_interfaces__WEBPACK_IMPORTED_MODULE_1__["RideStatus"].waiting) {
+                    _this.rides.push(ride);
+                }
+            });
+        }, function (error) {
+            console.log(error);
+        });
     };
     RidesListComponent.prototype.onMyRides = function () {
-        console.log('jsdfjsiod');
+        var _this = this;
         this.myrides = true;
         this.waiting = false;
-        this.ridesService.getMyRides();
+        this.ridesService.getAllRidesForUser()
+            .subscribe(function (data) {
+            _this.rides = data;
+        }, function (error) {
+            console.log(error);
+        });
     };
     RidesListComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
@@ -1966,8 +2133,8 @@ var RidesListComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./rides-list.component.html */ "./src/app/components/rides/rides-list/rides-list.component.html"),
             styles: [__webpack_require__(/*! ./rides-list.component.css */ "./src/app/components/rides/rides-list/rides-list.component.css")]
         }),
-        __metadata("design:paramtypes", [_services_rides_service__WEBPACK_IMPORTED_MODULE_2__["RidesService"],
-            _services_auth_service__WEBPACK_IMPORTED_MODULE_3__["AuthService"]])
+        __metadata("design:paramtypes", [_services_rides_service__WEBPACK_IMPORTED_MODULE_3__["RidesService"],
+            _services_auth_service__WEBPACK_IMPORTED_MODULE_4__["AuthService"]])
     ], RidesListComponent);
     return RidesListComponent;
 }());
@@ -2129,7 +2296,7 @@ var EditUserComponent = /** @class */ (function () {
             jmbg: this.registrationForm.value['jmbg'],
             phone: this.registrationForm.value['phone'],
             //in future if driver can change car, change to read from form
-            carId: this.editUser.carId,
+            CarNumber: this.editUser.CarNumber,
             userType: this.authService.getUserType(),
             blocked: this.editUser.blocked
         };
@@ -2241,7 +2408,7 @@ var FullUserDetailsComponent = /** @class */ (function () {
             lastname: null,
             blocked: null,
             phone: null,
-            carId: null,
+            CarNumber: null,
             email: null,
             jmbg: null,
             password: null,
@@ -2656,7 +2823,7 @@ module.exports = "input.ng-invalid.ng-touched{\r\n    border: 1px red solid\r\n}
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\r\n    <div class=\"row\">\r\n      <div class=\"col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2\">\r\n        <form [formGroup]=\"registrationForm\" (submit)=\"onRegistration()\">\r\n          <div class=\"form-group\">\r\n            <label for=\"username\">Username *</label>\r\n            <input type=\"text\" id=\"username\" formControlName=\"username\" class=\"form-control\">\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('username').touched && registrationForm.get('username').invalid\">This fields is required</span>\r\n            <span></span>\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"password\">Password *</label>\r\n            <input type=\"password\" id=\"password\" formControlName=\"password\" class=\"form-control\">\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('password').touched && registrationForm.get('password').invalid\">This fields is required</span>\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"email\">Email *</label>\r\n            <input type=\"email\" id=\"email\" formControlName=\"email\" class=\"form-control\">\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['required']\">This fields is required</span>\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['email']\">Invalid email format</span>\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"name\">Name</label>\r\n            <input type=\"text\" id=\"name\" formControlName=\"name\" class=\"form-control\">\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"lastname\">Lastname</label>\r\n            <input type=\"text\" id=\"lastname\" formControlName=\"lastname\" class=\"form-control\">\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"jmbg\">JMBG</label>\r\n            <input type=\"text\" id=\"jmbg\" formControlName=\"jmbg\" class=\"form-control\">\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('jmbg').invalid && registrationForm.get('jmbg').touched && registrationForm.get('jmbg').errors['jmbgInvalid']\">Invalid JMBG</span>\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"phone\">Phone *</label>\r\n            <input type=\"text\" id=\"phone\" formControlName=\"phone\" class=\"form-control\">\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['required']\">This fields is required.</span>\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['pattern']\">Phone can contain only numbers.</span>\r\n          </div>\r\n          <div class=\"form-group\" >\r\n            <label for=\"sex\">Sex</label>\r\n            <select id=\"sex\" formControlName=\"sex\" class=\"form-control\">\r\n              <option value=0>Male</option>\r\n              <option value=1>Female</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group\" *ngIf=\"isDriver\">\r\n            <label for=\"carNumber\">Car Number</label>\r\n            <select id=\"carNumber\" formControlName=\"carNumber\" class=\"form-control\">\r\n              <option *ngFor=\"let car of freeCars\" [value]=\"car.carNumber\">{{car.carNumber}}</option>\r\n            </select>\r\n          </div>\r\n          <br>\r\n          <span class=\"help-block\">Fields marked with * are required.</span>\r\n          <button [disabled]=\"!registrationForm.valid\" type=\"submit\" class=\"btn btn-default\">Submit</button>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>"
+module.exports = "<div class=\"container\">\r\n    <div class=\"row\">\r\n      <div class=\"col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2\">\r\n        <form [formGroup]=\"registrationForm\" (submit)=\"onRegistration()\">\r\n          <div class=\"form-group\">\r\n            <label for=\"username\">Username *</label>\r\n            <input type=\"text\" id=\"username\" formControlName=\"username\" class=\"form-control\">\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('username').touched && registrationForm.get('username').invalid\">This fields is required</span>\r\n            <span></span>\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"password\">Password *</label>\r\n            <input type=\"password\" id=\"password\" formControlName=\"password\" class=\"form-control\">\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('password').touched && registrationForm.get('password').invalid\">This fields is required</span>\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"email\">Email *</label>\r\n            <input type=\"email\" id=\"email\" formControlName=\"email\" class=\"form-control\">\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['required']\">This fields is required</span>\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('email').invalid && registrationForm.get('email').touched && registrationForm.get('email').errors['email']\">Invalid email format</span>\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"name\">Name</label>\r\n            <input type=\"text\" id=\"name\" formControlName=\"name\" class=\"form-control\">\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"lastname\">Lastname</label>\r\n            <input type=\"text\" id=\"lastname\" formControlName=\"lastname\" class=\"form-control\">\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"jmbg\">JMBG</label>\r\n            <input type=\"text\" id=\"jmbg\" formControlName=\"jmbg\" class=\"form-control\">\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('jmbg').invalid && registrationForm.get('jmbg').touched && registrationForm.get('jmbg').errors['jmbgInvalid']\">Invalid JMBG</span>\r\n          </div>\r\n          <div class=\"form-group\">\r\n            <label for=\"phone\">Phone *</label>\r\n            <input type=\"text\" id=\"phone\" formControlName=\"phone\" class=\"form-control\">\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['required']\">This fields is required.</span>\r\n            <span class=\"help-block\" *ngIf=\"registrationForm.get('phone').invalid && registrationForm.get('phone').touched && registrationForm.get('phone').errors['pattern']\">Phone can contain only numbers.</span>\r\n          </div>\r\n          <div class=\"form-group\" >\r\n            <label for=\"sex\">Sex</label>\r\n            <select id=\"sex\" formControlName=\"sex\" class=\"form-control\">\r\n              <option value=0>Male</option>\r\n              <option value=1>Female</option>\r\n            </select>\r\n          </div>\r\n          <div class=\"form-group\" *ngIf=\"isDriver\">\r\n            <label for=\"carNumber\">Car Number *</label>\r\n            <select id=\"carNumber\" formControlName=\"carNumber\" class=\"form-control\">\r\n              <option *ngFor=\"let car of freeCars\" [value]=\"car.CarNumber\">{{car.CarNumber}} - {{car.CarType === 0 ? 'Sedan' : 'Van'}}</option>\r\n            </select>\r\n          </div>\r\n          <br>\r\n          <span class=\"help-block\">Fields marked with * are required.</span>\r\n          <button [disabled]=\"!registrationForm.valid\" type=\"submit\" class=\"btn btn-default\">Submit</button>\r\n        </form>\r\n      </div>\r\n    </div>\r\n  </div>"
 
 /***/ }),
 
@@ -2698,6 +2865,7 @@ var RegistrationComponent = /** @class */ (function () {
         this.carsService = carsService;
         this.usersService = usersService;
         this.isDriver = false;
+        this.freeCars = [];
     }
     RegistrationComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -2710,14 +2878,21 @@ var RegistrationComponent = /** @class */ (function () {
             else {
                 if (type === 'driver') {
                     _this.isDriver = true;
-                    _this.freeCars = _this.carsService.getFreeCars();
-                    if (_this.freeCars.length == 0) {
-                        _this.router.navigate(['/driver-registration-error']);
-                    }
+                    _this.carsService.carsChanged.subscribe(function (cars) {
+                        cars.forEach(function (car) {
+                            if (!car['Driver']) {
+                                _this.freeCars.push(car);
+                            }
+                        });
+                        if (_this.freeCars.length == 0) {
+                            _this.router.navigate(['/driver-registration-error']);
+                        }
+                    });
+                    _this.carsService.getAllCars();
                 }
                 else {
-                    _this.isDriver = false;
                     _this.freeCars = [];
+                    _this.isDriver = false;
                 }
             }
         });
@@ -2729,9 +2904,11 @@ var RegistrationComponent = /** @class */ (function () {
             lastname: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null),
             jmbg: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].pattern('[0-9]{13,13}'), this.jmbgValidator.bind(this)]),
             phone: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, [_angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].pattern('[0-9]*')]),
-            carNumber: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null),
             sex: new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](0)
         });
+        if (this.isDriver) {
+            this.registrationForm.addControl('carNumber', new _angular_forms__WEBPACK_IMPORTED_MODULE_1__["FormControl"](null, _angular_forms__WEBPACK_IMPORTED_MODULE_1__["Validators"].required));
+        }
     };
     RegistrationComponent.prototype.ngOnDestroy = function () {
         this.typeSubscription.unsubscribe();
@@ -2745,10 +2922,11 @@ var RegistrationComponent = /** @class */ (function () {
             lastname: this.registrationForm.value['lastname'],
             jmbg: this.registrationForm.value['jmbg'],
             phone: this.registrationForm.value['phone'],
-            carId: this.registrationForm.value['carNumber'],
+            CarNumber: this.registrationForm.value['carNumber'],
             userType: this.isDriver ? _services_usertype_enum__WEBPACK_IMPORTED_MODULE_5__["Usertype"].Driver : _services_usertype_enum__WEBPACK_IMPORTED_MODULE_5__["Usertype"].Customer,
             blocked: false,
         };
+        console.log(newUser);
         this.usersService.addNewUser(newUser);
     };
     RegistrationComponent.prototype.jmbgValidator = function (control) {
@@ -3018,60 +3196,6 @@ var LoginGuard = /** @class */ (function () {
             _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]])
     ], LoginGuard);
     return LoginGuard;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/route-guards/no-driver.guard.ts":
-/*!*************************************************!*\
-  !*** ./src/app/route-guards/no-driver.guard.ts ***!
-  \*************************************************/
-/*! exports provided: NoDriverGuard */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NoDriverGuard", function() { return NoDriverGuard; });
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var _services_auth_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../services/auth.service */ "./src/app/services/auth.service.ts");
-/* harmony import */ var _services_usertype_enum__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../services/usertype.enum */ "./src/app/services/usertype.enum.ts");
-var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (undefined && undefined.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-var NoDriverGuard = /** @class */ (function () {
-    function NoDriverGuard(authService, router) {
-        this.authService = authService;
-        this.router = router;
-    }
-    NoDriverGuard.prototype.canActivate = function (next, state) {
-        if (this.authService.getUserType() === _services_usertype_enum__WEBPACK_IMPORTED_MODULE_3__["Usertype"].Driver) {
-            this.router.navigate(['/home', 'rides']);
-        }
-        else {
-            return true;
-        }
-    };
-    NoDriverGuard = __decorate([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
-            providedIn: 'root'
-        }),
-        __metadata("design:paramtypes", [_services_auth_service__WEBPACK_IMPORTED_MODULE_2__["AuthService"],
-            _angular_router__WEBPACK_IMPORTED_MODULE_1__["Router"]])
-    ], NoDriverGuard);
-    return NoDriverGuard;
 }());
 
 
@@ -3356,19 +3480,6 @@ var CarsDataService = /** @class */ (function () {
         });
         return this.carsChanged;
     };
-    CarsDataService.prototype.getFreeCars = function () {
-        var retCars = [];
-        this.cars.forEach(function (car) {
-            if (!car.driver) {
-                retCars.push(car);
-            }
-        });
-        return retCars;
-    };
-    CarsDataService.prototype.anyFreeCars = function () {
-        var index = this.cars.findIndex(function (car) { return car.driver === null; });
-        return index !== -1 ? true : false;
-    };
     CarsDataService.prototype.updateCar = function (car) {
         var _this = this;
         var url = this.externApis.getDataApiHostname() + '/cars/' + car.carNumber;
@@ -3582,21 +3693,59 @@ var RidesService = /** @class */ (function () {
         this.waitingRidesChanged = new rxjs__WEBPACK_IMPORTED_MODULE_1__["Subject"]();
     }
     RidesService.prototype.newRide = function (ride) {
+        var url = this.externApis.getDataApiHostname() + '/rides';
+        var data = {
+            data: ride,
+            userHash: this.authService.getApiToken()
+        };
+        return this.http.post(url, data);
     };
-    RidesService.prototype.getAllWaitingRides = function () {
-    };
-    RidesService.prototype.getAllRidesForDriver = function () {
+    RidesService.prototype.getAllRidesForUser = function () {
+        var url = this.externApis.getDataApiHostname() + '/rides/user/' + this.authService.getCurrentUsername();
+        console.log(url);
+        return this.http.get(url);
     };
     RidesService.prototype.getAllRides = function () {
         var url = this.externApis.getDataApiHostname() + '/rides';
         return this.http.get(url);
     };
-    RidesService.prototype.getMyRides = function () {
+    RidesService.prototype.finishRide = function (destination, rideId, fare) {
+        var url = this.externApis.getDataApiHostname() + '/rides/finish';
+        var request = {
+            userHash: this.authService.getApiToken(),
+            data: {
+                location: destination,
+                rideId: rideId,
+                fare: fare
+            }
+        };
+        console.log(request);
+        return this.http.post(url, request);
     };
-    RidesService.prototype.changeRideStatus = function (rideId, status) {
+    RidesService.prototype.failRide = function (rideId) {
+        var url = this.externApis.getDataApiHostname() + '/rides/fail';
+        var request = {
+            userHash: this.authService.getApiToken(),
+            data: rideId
+        };
+        console.log(request);
+        return this.http.post(url, request);
+    };
+    RidesService.prototype.postComment = function (comment) {
+        var url = this.externApis.getDataApiHostname() + '/rides/comment';
+        var data = {
+            userHash: this.authService.getApiToken(),
+            data: comment
+        };
+        return this.http.post(url, data);
     };
     RidesService.prototype.cancelRide = function (rideId) {
-        return null;
+        var url = this.externApis.getDataApiHostname() + '/rides/cancel';
+        var data = {
+            userHash: this.authService.getApiToken(),
+            data: rideId
+        };
+        return this.http.post(url, data);
     };
     RidesService.prototype.updateRideLocation = function (rideId, location) {
     };
@@ -3604,25 +3753,22 @@ var RidesService = /** @class */ (function () {
         var url = this.externApis.getDataApiHostname() + '/rides/' + id;
         return this.http.get(url);
     };
-    RidesService.prototype.acceptRide = function (dispatcher, driver, rideId, userType) {
-        // let ride = this.rides.find((ride:IRide) =>{ 
-        //   return ride.Id == rideId;
-        // });
-        // if(!ride){
-        //   return false;
-        // }
-        // if(userType === Usertype.Driver){
-        //   ride.status = RideStatus.accepted;
-        //   ride.driver = driver;
-        // }else{
-        //   console.log('dispatcher');
-        //   ride.status = RideStatus.processed;
-        //   ride.dispatcher = dispatcher;
-        //   ride.driver = driver;
-        // }
-        // this.ridesChanged.next(this.getAllRides());
-        // this.waitingRidesChanged.next(this.getAllWaitingRides());
-        // return true;
+    RidesService.prototype.acceptRide = function (driver, rideId) {
+        var url = this.externApis.getDataApiHostname() + '/rides/accept';
+        var data = {
+            driver: driver,
+            rideid: rideId,
+            cartype: null,
+            destination: null,
+            fare: null,
+            location: null
+        };
+        var request = {
+            userHash: this.authService.getApiToken(),
+            data: data
+        };
+        console.log(request);
+        return this.http.post(url, request);
     };
     RidesService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
@@ -3681,9 +3827,9 @@ var UsersService = /** @class */ (function () {
         this.usersChanged = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
         this.driversChanged = new rxjs__WEBPACK_IMPORTED_MODULE_3__["Subject"]();
         this.users = [
-            { username: 'c', password: 'c', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Customer, carId: null, email: 'customer@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
-            { username: 'd', password: 'd', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Driver, carId: 10, email: 'driver@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
-            { username: 'a', password: 'a', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Dispatcher, carId: null, email: 'dispatcher@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
+            { username: 'c', password: 'c', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Customer, CarNumber: null, email: 'customer@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
+            { username: 'd', password: 'd', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Driver, CarNumber: 10, email: 'driver@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
+            { username: 'a', password: 'a', userType: _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Dispatcher, CarNumber: null, email: 'dispatcher@test.com', jmbg: null, name: null, lastname: null, phone: null, blocked: false },
         ];
     }
     ;
@@ -3722,9 +3868,22 @@ var UsersService = /** @class */ (function () {
         var url = this.externApis.getDataApiHostname() + '/users/' + username;
         return this.http.get(url);
     };
+    UsersService.prototype.getAllDrivers = function () {
+        var url = this.externApis.getDataApiHostname() + '/users/drivers';
+        return this.http.get(url);
+    };
+    UsersService.prototype.changeDriverLocation = function (location) {
+        var url = this.externApis.getDataApiHostname() + '/users/driver/location';
+        var request = {
+            data: location,
+            userHash: this.authService.getApiToken()
+        };
+        return this.http.put(url, request);
+    };
     UsersService.prototype.getAllUsersUsernames = function () {
         var _this = this;
         var url = this.externApis.getDataApiHostname() + '/users';
+        console.log(url);
         this.http.get(url).subscribe(function (data) { _this.usersChanged.next(data); }, function (error) { return console.log(error); });
         return this.usersChanged;
     };
@@ -3751,15 +3910,6 @@ var UsersService = /** @class */ (function () {
             data: newPassword
         };
         return this.http.put(url, data);
-    };
-    UsersService.prototype.getAllDrivers = function () {
-        var drivers = [];
-        this.users.forEach(function (user) {
-            if (user.userType === _usertype_enum__WEBPACK_IMPORTED_MODULE_2__["Usertype"].Driver) {
-                drivers.push(user.username);
-            }
-        });
-        return drivers;
     };
     UsersService = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Injectable"])({
@@ -3857,7 +4007,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\remoteUser\Desktop\Git\clone1\TaxiService\TaxiService\AngularApp\TaxiServiceSPA\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! C:\Users\remoteUser\Desktop\Git\clone3\TaxiService\TaxiService\AngularApp\TaxiServiceSPA\src\main.ts */"./src/main.ts");
 
 
 /***/ })

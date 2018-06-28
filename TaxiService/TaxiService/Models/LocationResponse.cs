@@ -7,8 +7,8 @@ namespace TaxiService.Models
 {
     public class LocationResponse
     {
-        public double lat { get; set; }
-        public double lng { get; set; }
+        public double? lat { get; set; }
+        public double? lng { get; set; }
         public string address { get; set; }
     }
 }

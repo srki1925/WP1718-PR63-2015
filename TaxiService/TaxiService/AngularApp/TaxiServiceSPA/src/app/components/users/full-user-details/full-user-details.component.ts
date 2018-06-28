@@ -16,7 +16,7 @@ export class FullUserDetailsComponent implements OnInit {
     lastname:null,
     blocked:null,
     phone:null,
-    carId:null,
+    CarNumber:null,
     email:null,
     jmbg:null,
     password:null,
